@@ -2059,6 +2059,7 @@ function webSample(url){
     try { r = await fetch(url, {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({messages:turns}), signal:opts && opts.signal}); }
     catch(e){ throw {code: e && e.name === "AbortError" ? "cancelled" : "network"}; }
     if (r.status === 429) throw {code:"rate_limited"};
+    if (r.status === 503) throw {code:"no_key"};
     if (!r.ok) throw {code:"server"};
     const d = await r.json(); return d.text || "";
   };
@@ -2081,7 +2082,7 @@ function paintAiNote(){
   const n = $("aiNote"); if (!n) return;
   if (!sample){ n.textContent = "El asistente funciona cuando abrís Bambú desde Claude. Igual podés anotar gastos desde el Inicio."; return; }
   const left = aiAllowance();
-  n.textContent = "Asistente con Claude, de Anthropic. Responde con lo que cargaste en Bambú. Antes de cambiar algo, te pide confirmación. No es asesoramiento financiero. " + (isPlus() ? (plusInfo().plus ? "Con Bambú+" : "En tu mes de prueba") + " podés mandar hasta " + AI_HOUR + " mensajes por hora: te quedan " + Math.max(0, left) + "." : "En la versión gratis tenés " + AI_DAY_FREE + " mensajes por día: te quedan " + Math.max(0, left) + ". Con Bambú+, hasta " + AI_HOUR + " por hora.");
+  n.textContent = "Asistente con Claude, de Anthropic. Para responderte, envía a Claude un resumen de lo que cargaste en Bambú; no se envían tu mail ni datos bancarios. Antes de cambiar algo, te pide confirmación. No es asesoramiento financiero. " + (isPlus() ? (plusInfo().plus ? "Con Bambú+" : "En tu mes de prueba") + " podés mandar hasta " + AI_HOUR + " mensajes por hora: te quedan " + Math.max(0, left) + "." : "En la versión gratis tenés " + AI_DAY_FREE + " mensajes por día: te quedan " + Math.max(0, left) + ". Con Bambú+, hasta " + AI_HOUR + " por hora.");
 }
 function contextSummary(){
   const pl = plan(), st = monthStats(ym(now())), q = S.quiz, ta = todayAllowance();
@@ -2157,6 +2158,7 @@ async function askAi(text){
     wait.className = "bubble ai";
     wait.textContent = code === "not_granted" || code === "sampling_disabled" || code === "capability_disabled" ? "El asistente no está habilitado en esta vista. Podés seguir usando todo lo demás." :
       code === "rate_limited" ? "Hubo muchas consultas seguidas. Esperá un rato y volvé a preguntar." :
+      code === "no_key" ? "El asistente llega pronto en la versión web. Mientras, podés anotar desde el Inicio escribiendo, por ejemplo, «gasté 5.000 en el súper»." :
       code === "cancelled" ? "Cancelado." :
       code === "invalid_json" && e.text ? e.text.slice(0, 600) :
       "No pude responder ahora. Probá de nuevo en un momento.";

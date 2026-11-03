@@ -15,6 +15,7 @@ module.exports = async function handler(req, res) {
   if (h.length >= LIMIT) return res.status(429).json({error: "rate_limited"});
   h.push(now); hits.set(ip, h);
 
+  if (!process.env.ANTHROPIC_API_KEY) return res.status(503).json({error: "no_key"});
   let msgs = (req.body && req.body.messages) || [];
   if (!Array.isArray(msgs) || !msgs.length) return res.status(400).json({error: "empty"});
   // Limpia, recorta y junta turnos seguidos del mismo rol
