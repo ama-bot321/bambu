@@ -1,0 +1,2247 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#090C0A"><title>Bambú</title><meta name="description" content="Bambú: entendé cómo te llevás con tu plata y armá hábitos que duren.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{box-sizing:border-box}html,body{margin:0}
+
+/* Layout: app de celular de una columna, estética negra y verde (un solo tema, elegido a propósito).
+   Antes de entrar: test → perfil → cuenta → 3 números. Adentro: 5 espacios con barra inferior + campana de alertas. */
+:root{
+  --bg:#090C0A; --surface:#121814; --surface2:#19211B; --ink:#EAF2EC; --muted:#8FA196; --line:#243028;
+  --green:#4BD583; --green-soft:#16301F; --on-green:#06110A;
+  --gold:#E6B450; --gold-soft:#2E2614; --bad:#F07A63; --bad-soft:#331A15;
+  --b-fijos:#3987e5; --b-disfrute:#d95926; --b-futuro:#199e70; --b-margen:#c98500;
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Helvetica Neue",Arial,system-ui,sans-serif;
+  --r:20px; color-scheme:dark;
+}
+html,body{min-height:100%}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.45;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:16px 40px; overflow-x:hidden;
+}
+body.in-app{padding-bottom:calc(100px + env(safe-area-inset-bottom, 0px))}
+.app{max-width:540px; margin:0 auto; display:flex; flex-direction:column; gap:18px}
+header.brand{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.logo{display:flex; align-items:center; gap:9px; font-family:var(--display); font-weight:800; font-size:21px}
+.logo svg{width:26px; height:26px}
+.hright{display:flex; align-items:center; gap:8px}
+.step{font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:600}
+.curt{display:flex; background:var(--surface); border:1.5px solid var(--line); border-radius:999px; padding:3px}
+.curt button{border:0; background:none; border-radius:999px; padding:5px 10px; font-size:13px; font-weight:700; color:var(--muted)}
+.curt button.on{background:var(--green); color:var(--on-green)}
+.bell{position:relative; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); background:var(--surface); display:grid; place-items:center; color:var(--ink)}
+.bell svg{width:20px; height:20px}
+.bell b{position:absolute; top:-4px; right:-4px; min-width:20px; height:20px; border-radius:10px; background:var(--bad); color:var(--on-green); font-size:12px; display:grid; place-items:center; padding:0 5px}
+
+h2,h3{font-family:var(--display); text-wrap:balance; margin:0; letter-spacing:-.02em}
+h2{font-size:clamp(26px,7vw,32px); line-height:1.1; font-weight:700}
+h3{font-size:19px; font-weight:700}
+p{margin:0}
+.muted{color:var(--muted)} .small{font-size:14px}
+.eyebrow{font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--green)}
+.screen{display:flex; flex-direction:column; gap:16px}
+.num{font-variant-numeric:tabular-nums}
+
+button{font:inherit; color:inherit; cursor:pointer}
+.btn{border:0; border-radius:16px; padding:16px 20px; font-weight:700; font-size:17px; background:var(--green); color:var(--on-green); width:100%; transition:transform .12s, filter .2s}
+.btn:hover{filter:brightness(1.08)} .btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent; color:var(--ink); border:2px solid var(--line)}
+.btn.sm{width:auto; padding:10px 14px; font-size:15px; border-radius:12px}
+.btn.danger{background:var(--bad)}
+.btn[disabled]{opacity:.5; cursor:default}
+.link{background:none; border:0; color:var(--green); font-weight:700; padding:4px 0; font-size:15px}
+:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+
+.card{background:var(--surface); border:1.5px solid var(--line); border-radius:var(--r); padding:16px; display:flex; flex-direction:column; gap:12px; min-width:0}
+.row{display:flex; align-items:center; justify-content:space-between; gap:12px}
+
+/* ---------- test ---------- */
+.stalk{display:grid; grid-template-columns:repeat(10,1fr); gap:4px; height:12px}
+.stalk span{background:var(--line); border-radius:4px; transform-origin:left}
+.stalk span.on{background:var(--green); animation:grow .35s ease}
+@keyframes grow{from{transform:scaleX(.2)} to{transform:none}}
+.scene{font-size:64px; line-height:1; height:80px; display:flex; align-items:center}
+.scene span{display:inline-block; animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(.4) rotate(-12deg); opacity:0} to{transform:none; opacity:1}}
+.options{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.opt{text-align:left; background:var(--surface); border:2px solid var(--line); border-radius:var(--r); padding:16px 14px; min-height:92px; font-size:17px; font-weight:600; display:flex; flex-direction:column; justify-content:space-between; gap:8px; transition:border-color .2s, background .2s, transform .15s}
+.opt .em{font-size:28px; line-height:1}
+.opt:hover{border-color:var(--green); transform:translateY(-2px)}
+.opt.picked{border-color:var(--green); background:var(--green-soft)}
+.below{display:flex; justify-content:space-between; align-items:center; min-height:36px; gap:12px}
+.back{background:none; border:0; color:var(--muted); font-size:15px; padding:6px 0}
+.back[disabled]{visibility:hidden}
+.react{font-weight:700; color:var(--green); opacity:0; transition:opacity .2s}
+.react.show{opacity:1}
+.banner{background:var(--gold-soft); color:var(--ink); border-radius:14px; padding:10px 14px; font-weight:600; font-size:15px}
+.reveal{align-items:center; text-align:center; padding-block:40px}
+.grow{display:flex; flex-direction:column-reverse; align-items:center; gap:3px; height:180px}
+.grow i{display:block; width:22px; height:30px; border-radius:6px; background:var(--green); transform:scaleY(0); transform-origin:bottom; animation:seg .25s ease forwards}
+@keyframes seg{to{transform:none}}
+.badge{font-size:72px; line-height:1; animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+.big{font-family:var(--display); font-weight:800; font-size:clamp(52px,15vw,72px); line-height:.92; color:var(--green); letter-spacing:-.03em}
+.tag{font-size:20px; font-weight:500}
+.map{display:grid; grid-template-columns:auto 1fr 1fr; grid-template-rows:auto 1fr 1fr; gap:6px}
+.axis{font-size:11px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; display:flex; align-items:center; justify-content:center; font-weight:700}
+.axis.row{writing-mode:vertical-rl; transform:rotate(180deg)}
+.cell{aspect-ratio:1.7/1; max-width:100%; border-radius:14px; background:var(--surface); border:2px solid var(--line); display:flex; flex-direction:column; justify-content:space-between; padding:8px 10px; font-size:14px; font-weight:700; color:var(--muted)}
+.cell .e{font-size:20px}
+.cell.me{background:var(--green); border-color:var(--green); color:var(--on-green)}
+.match{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.match div{border-radius:var(--r); padding:14px; display:flex; flex-direction:column; gap:4px; min-width:0}
+.match .good{background:var(--green-soft)} .match .bad{background:var(--gold-soft)}
+.match small{font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.match b{font-family:var(--display); font-size:21px}
+.match span{font-size:14px; color:var(--muted)}
+.locked{position:relative; border-radius:var(--r); overflow:hidden; border:1.5px solid var(--line); background:var(--surface)}
+.locked .preview{padding:18px; display:flex; flex-direction:column; gap:12px; filter:blur(5px); pointer-events:none}
+.locked .preview div{height:12px; border-radius:6px; background:var(--line)}
+.locked .over{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; gap:10px; padding:18px; background:color-mix(in srgb, var(--surface) 60%, transparent)}
+.locked .over b{font-family:var(--display); font-size:22px; line-height:1.15}
+.toast{font-size:15px; color:var(--green); text-align:center; min-height:20px; font-weight:600; overflow-wrap:anywhere}
+
+/* ---------- formularios ---------- */
+form{display:flex; flex-direction:column; gap:14px}
+label{display:flex; flex-direction:column; gap:6px; font-size:15px; font-weight:700}
+label .hint{font-weight:500; color:var(--muted); font-size:14px}
+input,select{font:inherit; font-size:17px; padding:13px 15px; border-radius:14px; border:2px solid var(--line); background:var(--surface2); color:var(--ink); width:100%; min-width:0}
+input::placeholder{color:#5F6F65}
+input:focus,select:focus{border-color:var(--green); outline:none}
+.money{position:relative; display:block}
+.money::before{content:"$"; position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--muted); font-weight:700}
+.money input{padding-left:30px}
+.err{color:var(--bad); font-size:15px; min-height:18px; font-weight:600}
+.fine{font-size:13px; color:var(--muted); text-align:center}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.grid2 > *{min-width:0}
+.full{grid-column:1/-1}
+
+/* ---------- app ---------- */
+.hello{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.hello h2{font-size:26px}
+.avatar{width:44px; height:44px; border-radius:50%; background:var(--green-soft); display:grid; place-items:center; font-size:22px; flex:none; border:1.5px solid var(--line)}
+.pills{display:flex; flex-wrap:wrap; gap:8px}
+.pill{display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:7px 12px; font-weight:700; font-size:14px; background:var(--surface); border:1.5px solid var(--line); color:var(--ink)}
+.pill.g{border-color:var(--green); color:var(--green)}
+.hero{background:linear-gradient(150deg, #1E5C38 0%, #10301F 60%, #0D1F15 100%); border:1.5px solid #2B6B45; border-radius:24px; padding:20px; display:flex; flex-direction:column; gap:6px; position:relative; overflow:hidden}
+.hero .lbl{font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#A9E8C2}
+.hero .val{font-family:var(--display); font-weight:800; font-size:56px; line-height:1; letter-spacing:-.03em; color:#F2FFF6}
+.hero .val small{font-size:20px; font-weight:700; letter-spacing:0}
+.hero p{color:#CFEBD9; font-size:15px; max-width:36ch}
+.hero svg{position:absolute; right:-14px; bottom:-18px; width:130px; height:130px; color:var(--green); opacity:.22}
+.kpis{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.kpi{background:var(--surface); border:1.5px solid var(--line); border-radius:var(--r); padding:14px; display:flex; flex-direction:column; gap:2px; min-width:0}
+.kpi .l{font-size:13px; font-weight:700; color:var(--muted)}
+.kpi .v{font-family:var(--display); font-size:24px; font-weight:700; font-variant-numeric:tabular-nums; overflow-wrap:anywhere}
+.kpi.in .v{color:var(--green)} .kpi.out .v{color:var(--bad)}
+
+.split{display:flex; height:16px; gap:2px; border-radius:8px; overflow:hidden}
+.split i{display:block; height:100%; min-width:4px}
+.pockets{display:flex; flex-direction:column; gap:12px; margin:0; padding:0; list-style:none}
+.pocket{display:grid; grid-template-columns:14px 1fr auto; gap:10px; align-items:center}
+.pocket .sw{width:14px; height:14px; border-radius:4px}
+.pocket .name{font-weight:700}
+.pocket .why{font-size:13px; color:var(--muted)}
+.pocket .amt{font-weight:700; font-variant-numeric:tabular-nums; text-align:right}
+.pocket .pct{display:block; font-size:12px; color:var(--muted); font-weight:600}
+.meter{height:8px; border-radius:6px; background:var(--line); overflow:hidden}
+.meter i{display:block; height:100%; border-radius:6px; background:var(--green); max-width:100%}
+.meter.warn i{background:var(--gold)} .meter.over i{background:var(--bad)}
+.segbar{display:grid; grid-template-columns:repeat(10,1fr); gap:3px}
+.segbar i{height:9px; border-radius:3px; background:var(--line)}
+.segbar i.on{background:var(--green)} .segbar.warn i.on{background:var(--gold)} .segbar.over i.on{background:var(--bad)}
+.state{font-size:12px; font-weight:700; border-radius:999px; padding:3px 9px}
+.state.ok{background:var(--green-soft); color:var(--green)} .state.warn{background:var(--gold-soft); color:var(--gold)} .state.over{background:var(--bad-soft); color:var(--bad)}
+
+.quick{display:flex; gap:8px}
+.quick input{flex:1}
+.quick .btn{width:auto; padding:0 18px}
+.alerts{display:flex; flex-direction:column; gap:8px}
+.alert{display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:14px; font-size:15px; font-weight:600; border:1.5px solid transparent}
+.alert.warn{background:var(--gold-soft); border-color:#4A3C1C} .alert.bad{background:var(--bad-soft); border-color:#4D2820} .alert.ok{background:var(--green-soft); border-color:#22442E}
+
+.list{display:flex; flex-direction:column; margin:0; padding:0; list-style:none}
+.list li{display:grid; grid-template-columns:40px 1fr auto; gap:12px; align-items:center; padding:12px 0; border-bottom:1.5px solid var(--line)}
+.list li:last-child{border-bottom:0}
+.list .ic{width:40px; height:40px; border-radius:12px; background:var(--surface2); display:grid; place-items:center; font-size:20px}
+.list .t{font-weight:600; overflow-wrap:anywhere}
+.list .s{font-size:13px; color:var(--muted)}
+.list .a{font-weight:700; font-variant-numeric:tabular-nums; text-align:right}
+.list .a.in{color:var(--green)} .list .a.sav{color:var(--b-futuro)}
+.side{display:flex; flex-direction:column; align-items:flex-end; gap:4px}
+.del{background:none; border:0; color:var(--muted); font-size:13px; padding:2px 0}
+.empty{text-align:center; color:var(--muted); padding:18px 8px; font-size:15px}
+
+.seg{display:flex; gap:4px; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:4px; overflow-x:auto}
+.seg button{flex:1; border:0; background:none; padding:9px 10px; border-radius:10px; font-weight:700; font-size:14px; color:var(--muted); white-space:nowrap}
+.seg button.on{background:var(--green); color:var(--on-green)}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{border:1.5px solid var(--line); background:var(--surface2); border-radius:999px; padding:7px 12px; font-weight:600; font-size:14px; color:var(--ink)}
+.chip.on{border-color:var(--green); background:var(--green-soft); color:var(--green)}
+
+.item{display:flex; flex-direction:column; gap:8px; padding:14px 0; border-bottom:1.5px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item .top{display:flex; justify-content:space-between; gap:10px; font-weight:700}
+.item .sub{display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--muted); flex-wrap:wrap}
+.inline{display:flex; gap:8px}
+.inline > *{min-width:0}
+.inline .money{flex:1}
+
+.mood{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
+.mood button{border:1.5px solid var(--line); background:var(--surface2); border-radius:14px; padding:12px 4px; font-size:26px; display:flex; flex-direction:column; align-items:center; gap:4px}
+.mood button small{font-size:12px; font-weight:700; color:var(--muted)}
+.mood button.on{border-color:var(--green); background:var(--green-soft)}
+.bias{min-height:150px; justify-content:space-between}
+.bias .bt{font-family:var(--display); font-size:22px; font-weight:700}
+.dots{display:flex; gap:6px}
+.dots i{width:8px; height:8px; border-radius:50%; background:var(--line)}
+.dots i.on{background:var(--green)}
+.steps{display:flex; flex-direction:column; gap:10px; margin:0; padding:0; list-style:none}
+.steps li{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; background:var(--surface); border:1.5px solid var(--line); border-radius:var(--r); padding:14px; cursor:pointer}
+.steps li.done{background:var(--green-soft); border-color:var(--green)}
+.steps .tick{width:30px; height:30px; border-radius:50%; border:2px solid var(--line); display:grid; place-items:center; font-weight:800; color:var(--on-green)}
+.steps li.done .tick{background:var(--green); border-color:var(--green)}
+.steps b{display:block}
+.steps span{color:var(--muted); font-size:15px}
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.pair > div{background:var(--surface); border:1.5px solid var(--line); border-radius:var(--r); padding:14px; display:flex; flex-direction:column; gap:4px; min-width:0}
+.k{font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase}
+.k.up{color:var(--green)} .k.down{color:var(--gold)}
+.foot{font-size:12px; color:var(--muted); text-align:center}
+
+/* nivel y logros */
+.stages{display:grid; grid-template-columns:repeat(5,1fr); gap:4px; text-align:center; position:relative}
+.stages div{display:flex; flex-direction:column; align-items:center; gap:4px; font-size:12px; font-weight:700; color:var(--muted)}
+.stages .dot{width:42px; height:42px; border-radius:50%; background:var(--surface2); border:2px solid var(--line); display:grid; place-items:center; font-size:19px; filter:grayscale(1); opacity:.55}
+.stages .reached .dot{filter:none; opacity:1; border-color:var(--green); background:var(--green-soft)}
+.stages .now .dot{box-shadow:0 0 0 4px color-mix(in srgb, var(--green) 35%, transparent)}
+.stages .reached{color:var(--ink)}
+.xpbar{display:flex; flex-direction:column; gap:6px}
+.xpbar .row{font-size:14px; color:var(--muted); font-weight:600}
+.statgrid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.stat{background:var(--surface2); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:2px; min-width:0}
+.stat .v{font-family:var(--display); font-size:30px; font-weight:800; line-height:1}
+.stat .l{font-size:13px; color:var(--muted); font-weight:600}
+.badges{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+.badges div{border:1.5px dashed var(--line); border-radius:16px; padding:12px 6px; display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; font-size:12px; color:var(--muted); min-width:0}
+.badges .bi{font-size:26px; filter:grayscale(1); opacity:.45}
+.badges b{font-size:13px; color:var(--muted)}
+.badges .got{border-style:solid; border-color:var(--green); background:var(--green-soft)}
+.badges .got .bi{filter:none; opacity:1} .badges .got b{color:var(--ink)}
+
+/* historial */
+.legend{display:flex; gap:14px; font-size:13px; color:var(--muted); font-weight:600; flex-wrap:wrap}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{width:12px; height:12px; border-radius:3px; display:inline-block}
+.months{display:flex; flex-direction:column; gap:12px}
+.mrow{display:grid; grid-template-columns:40px 1fr 92px; gap:10px; align-items:center}
+.mrow .ml{font-size:13px; font-weight:700; color:var(--muted); text-transform:capitalize}
+.mrow .bars{display:flex; flex-direction:column; gap:3px; min-width:0}
+.mrow .bars i{display:block; height:9px; border-radius:0 4px 4px 0; min-width:2px}
+.mrow .net{font-size:14px; font-weight:700; font-variant-numeric:tabular-nums; text-align:right}
+.net.pos{color:var(--green)} .net.neg{color:var(--bad)}
+.sim{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.sim .stat .v{font-size:22px; overflow-wrap:anywhere}
+
+nav.tabs{position:fixed; left:0; right:0; bottom:0; z-index:4; background:#0D120F; border-top:1.5px solid var(--line);
+  padding:8px max(8px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px))}
+nav.tabs .in{max-width:540px; margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr); gap:4px}
+nav.tabs button{background:none; border:0; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 2px; border-radius:12px; font-size:12px; font-weight:700; color:var(--muted)}
+nav.tabs svg{width:24px; height:24px}
+nav.tabs button.on{color:var(--green); background:var(--green-soft)}
+
+canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:6}
+@keyframes rise{from{transform:translateY(10px); opacity:.3} to{transform:none; opacity:1}}
+.enter{animation:rise .3s ease both}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important; transition:none!important} .grow i{transform:none} }
+@media (max-width:380px){ .badges{grid-template-columns:repeat(2,1fr)} .stages .dot{width:34px;height:34px;font-size:16px} }
+
+/* ---------- v1: agregados ---------- */
+.welcome{padding-block:24px 8px; gap:20px}
+.welcome h1{font-family:var(--display); font-size:clamp(38px,11vw,54px); line-height:1; letter-spacing:-.03em; margin:0; text-wrap:balance}
+.welcome .lead{font-size:18px; color:var(--muted); max-width:38ch}
+.facts{display:flex; flex-wrap:wrap; gap:8px}
+.optlist{display:flex; flex-direction:column; gap:10px}
+.optlist .opt{min-height:0; flex-direction:row; align-items:center; justify-content:flex-start; padding:15px 16px}
+.quizfoot{font-size:13px; color:var(--muted)}
+.trait{display:grid; grid-template-columns:104px 1fr 46px; gap:10px; align-items:center}
+.trait .tn{font-weight:600; font-size:15px}
+.trait .tb{height:12px; border-radius:999px; background:var(--surface2); overflow:hidden}
+.trait .tb i{display:block; height:100%; border-radius:999px; background:var(--green); transition:width .8s ease}
+.trait .tp{font-weight:700; text-align:right; font-variant-numeric:tabular-nums}
+.trait.top .tn{color:var(--green)}
+.traits{display:flex; flex-direction:column; gap:10px}
+.cross{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.cross .stat .v{font-size:34px}
+.cross .stat .v small{font-size:16px; color:var(--muted); font-weight:700}
+.note{font-size:13px; color:var(--muted); line-height:1.5}
+.chk{display:flex; gap:10px; align-items:flex-start; font-weight:500; font-size:15px; flex-direction:row}
+.chk input{width:22px; height:22px; flex:none; margin-top:1px; accent-color:var(--green)}
+.choice{display:grid; gap:10px}
+.choice.c2{grid-template-columns:1fr 1fr}
+.choice button{text-align:left; background:var(--surface); border:2px solid var(--line); border-radius:16px; padding:13px 14px; font-weight:600; font-size:15px; color:var(--ink)}
+.choice button small{display:block; font-weight:500; color:var(--muted); font-size:13px; margin-top:2px}
+.choice button.on{border-color:var(--green); background:var(--green-soft)}
+.qblock{display:flex; flex-direction:column; gap:8px}
+.qblock>b{font-size:15px}
+.mode{display:flex; flex-direction:column; gap:10px}
+.mode button{text-align:left; background:var(--surface); border:2px solid var(--line); border-radius:18px; padding:16px; color:var(--ink); display:flex; flex-direction:column; gap:4px}
+.mode button b{font-size:17px}
+.mode button span{color:var(--muted); font-size:14px}
+.mode button.on{border-color:var(--green); background:var(--green-soft)}
+.mode .rec{font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--green)}
+.why{background:none; border:0; color:var(--green); font-size:13px; font-weight:700; padding:2px 0; text-align:left}
+.whybox{font-size:14px; color:var(--ink); background:var(--surface2); border-radius:12px; padding:10px 12px; line-height:1.5}
+.pocketrow{display:flex; flex-direction:column; gap:6px; padding:12px 0; border-bottom:1.5px solid var(--line)}
+.pocketrow:last-child{border-bottom:0}
+.slider{display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center}
+.slider input[type=range]{padding:0; border:0; background:none; accent-color:var(--green); height:28px}
+.conseq{background:var(--gold-soft); border-radius:14px; padding:12px 14px; font-size:14px; line-height:1.5}
+.compare{display:grid; grid-template-columns:1fr auto auto; gap:6px 14px; font-size:14px; font-variant-numeric:tabular-nums}
+.compare .h{font-weight:700; color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em}
+.today{background:linear-gradient(150deg, #1E5C38 0%, #10301F 60%, #0D1F15 100%); border:1.5px solid #2B6B45; border-radius:24px; padding:20px; display:flex; flex-direction:column; gap:6px; position:relative; overflow:hidden}
+.today .lbl{font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#A9E8C2}
+.today .val{font-family:var(--display); font-weight:800; font-size:54px; line-height:1; letter-spacing:-.03em; color:#F2FFF6; font-variant-numeric:tabular-nums}
+.today p{color:#CFEBD9; font-size:15px; margin:0}
+.today svg{position:absolute; right:-14px; bottom:-18px; width:120px; height:120px; color:var(--green); opacity:.22}
+.mini{display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--surface); border:1.5px solid var(--line); border-radius:20px; padding:14px 16px}
+.mini b{font-family:var(--display); font-size:26px}
+.belief{display:flex; flex-direction:column; gap:10px}
+.belief .quote{font-family:var(--display); font-size:21px; font-weight:700; line-height:1.2}
+.belief dl{margin:0; display:flex; flex-direction:column; gap:8px; font-size:14px}
+.belief dt{font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.belief dd{margin:0}
+.habit .hint{font-family:var(--display); font-size:20px; font-weight:700; line-height:1.25}
+.weeks{display:grid; grid-template-columns:repeat(9,1fr); gap:4px}
+.weeks i{height:10px; border-radius:4px; background:var(--line)}
+.weeks i.on{background:var(--green)}
+.plans{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.plans .stat{border:2px solid var(--line); background:var(--surface2)}
+.plans .stat.best{border-color:var(--green)}
+.plans .stat .v{font-size:24px}
+.soon{display:inline-block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); background:var(--gold-soft); border-radius:999px; padding:3px 9px}
+.sources{margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-size:14px; color:var(--muted)}
+.sources b{color:var(--ink)}
+/* asistente */
+.fab{position:fixed; z-index:5; right:max(16px, env(safe-area-inset-right, 0px)); bottom:calc(84px + env(safe-area-inset-bottom, 0px)); border:0; border-radius:999px; background:var(--green); color:var(--on-green); font-weight:800; font-size:15px; padding:13px 18px; display:flex; gap:8px; align-items:center; box-shadow:0 6px 24px rgba(0,0,0,.45)}
+.fab svg{width:20px; height:20px}
+.sheet{position:fixed; inset:0; z-index:7; background:rgba(4,7,5,.72); display:flex; align-items:flex-end; justify-content:center}
+.sheet .panel{width:100%; max-width:560px; height:min(86%, 760px); background:var(--bg); border:1.5px solid var(--line); border-bottom:0; border-radius:24px 24px 0 0; display:flex; flex-direction:column; padding:14px max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); gap:10px}
+.sheet .top{display:flex; justify-content:space-between; align-items:center; gap:10px}
+.sheet .top b{font-family:var(--display); font-size:20px}
+.chatlog{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding-block:6px}
+.bubble{max-width:88%; padding:11px 14px; border-radius:18px; font-size:15px; line-height:1.45; white-space:pre-wrap; overflow-wrap:anywhere}
+.bubble.me{align-self:flex-end; background:var(--green-soft); border:1.5px solid #22442E}
+.bubble.ai{align-self:flex-start; background:var(--surface); border:1.5px solid var(--line)}
+.bubble.wait{color:var(--muted)}
+.action{align-self:flex-start; max-width:88%; background:var(--gold-soft); border:1.5px solid #4A3C1C; border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:8px; font-size:14px}
+.action .btns{display:flex; gap:8px}
+.suggest{display:flex; gap:8px; overflow-x:auto; padding-bottom:2px}
+.suggest button{flex:none; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:8px 12px; font-size:13px; font-weight:600}
+.chatin{display:flex; gap:8px}
+.chatin input{flex:1}
+.chatin .btn{width:auto; padding:0 16px}
+
+[hidden]{display:none !important}
+
+.beta{margin-left:8px; border:1.5px solid #4A3C1C; background:var(--gold-soft); color:var(--gold); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; border-radius:999px; padding:4px 9px; font-family:var(--body, inherit)}
+.fbpanel{height:auto !important; max-height:92%; overflow-y:auto}
+.fbform{display:flex; flex-direction:column; gap:14px}
+.fbform textarea{width:100%; resize:vertical; font:inherit; color:var(--ink); background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:10px 12px; margin-top:6px}
+.choice.c3{grid-template-columns:repeat(3,1fr)}
+.choice.c3 button{text-align:center}
+#fbRate button.on{border-color:var(--green); background:var(--green-soft)}
+.fbthanks{display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; padding:24px 0}
+.fbthanks span{font-size:44px}
+.fbthanks b{font-family:var(--display); font-size:24px}
+</style></head><body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="app">
+  <header class="brand">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="13" y="2" width="6" height="28" rx="3" fill="var(--green)"/>
+        <rect x="12" y="10" width="8" height="2.2" rx="1.1" fill="var(--bg)"/>
+        <rect x="12" y="20" width="8" height="2.2" rx="1.1" fill="var(--bg)"/>
+        <path d="M19 9c4-4 9-4 11-3-2 4-6 6-11 5z" fill="var(--green)" opacity=".75"/>
+      </svg>
+      Bambú
+      <button class="beta" id="betaBtn" type="button" aria-label="Versión beta: dejanos tu opinión">Beta</button>
+    </div>
+    <div class="hright">
+      <span class="step" id="step"></span>
+      <div class="curt" id="curT" hidden><button data-c="ARS" class="on">ARS</button><button data-c="USD">USD</button></div>
+      <button class="bell" id="bellBtn" hidden aria-label="Alertas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4"/></svg>
+        <b id="bellN" hidden></b>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= BIENVENIDA ================= -->
+  <section class="screen welcome" id="welcome" hidden>
+    <span class="eyebrow">Tu plata, sin culpa</span>
+    <h1>¿Cómo te llevás con tu plata?</h1>
+    <p class="lead">Respondé 16 preguntas cortas y descubrí qué rasgos guían lo que hacés con la plata. Después armamos un plan hecho para vos.</p>
+    <div class="facts"><span class="chip">3 minutos</span><span class="chip">Sin cuenta</span><span class="chip">Gratis</span></div>
+    <button class="btn" id="startBtn">Empezar</button>
+    <p class="note">Bambú es un proyecto de seminario sobre la psicología del dinero. No es asesoramiento financiero.</p>
+  </section>
+
+  <!-- ================= TEST ================= -->
+  <section class="screen" id="quiz" hidden>
+    <div class="stalk" id="stalk" aria-hidden="true"></div>
+    <div class="banner" id="banner" hidden></div>
+    <div class="scene" id="scene" aria-hidden="true"></div>
+    <h2 id="qText"></h2>
+    <div class="optlist" id="options" role="radiogroup" aria-labelledby="qText"></div>
+    <div class="below"><button class="back" id="backBtn">← Anterior</button><span class="react" id="react" aria-live="polite"></span></div>
+  </section>
+
+  <section class="screen reveal" id="reveal" hidden>
+    <div class="grow" id="grow" aria-hidden="true"></div>
+    <h2>Haciendo crecer tu bambú…</h2>
+  </section>
+
+  <!-- ================= RESULTADO ================= -->
+  <section class="screen" id="result" hidden>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span class="eyebrow">Tu rasgo dominante</span>
+      <div class="big" id="rName"></div>
+      <p class="tag" id="rTag"></p>
+    </div>
+    <div class="card"><div class="traits" id="rTraits"></div></div>
+    <div class="pair">
+      <div><span class="k up">Superpoder</span><p id="rPower"></p></div>
+      <div><span class="k down">Trampa</span><p id="rTrap"></p></div>
+    </div>
+    <div class="card">
+      <span class="eyebrow">Saber y hacer</span>
+      <div class="cross">
+        <div class="stat"><span class="l">Saber</span><span class="v num" id="rSaber"></span></div>
+        <div class="stat"><span class="l">Hacer</span><span class="v num" id="rHacer"></span></div>
+      </div>
+      <p id="rCross"></p>
+    </div>
+    <button class="btn ghost" id="copyBtn">Retá a un amigo</button>
+    <div class="toast" id="toast" role="status"></div>
+    <div class="locked">
+      <div class="preview" aria-hidden="true"><div style="width:70%"></div><div></div><div style="width:85%"></div><div style="width:60%"></div></div>
+      <div class="over">
+        <b>Tu plan está listo</b>
+        <p class="muted">Cuánto destinar a cada cosa, según tus rasgos y tu momento de vida.</p>
+        <button class="btn" id="unlockBtn">Crear cuenta gratis</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CUENTA ================= -->
+  <section class="screen" id="signup" hidden>
+    <span class="eyebrow">Paso 1 de 4</span>
+    <h2>Creá tu cuenta</h2>
+    <form id="form" novalidate>
+      <label for="fName">Nombre<input id="fName" autocomplete="given-name" placeholder="Cómo te llamamos"></label>
+      <label for="fMail">Mail<input id="fMail" type="email" autocomplete="email" placeholder="tu@mail.com"></label>
+      <label for="fPass">Contraseña<input id="fPass" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres"></label>
+      <label class="chk" for="fAge"><input type="checkbox" id="fAge"> Soy mayor de 18 años o tengo permiso de un adulto responsable.</label>
+      <div class="err" id="err" role="alert"></div>
+      <button class="btn" type="submit">Seguir</button>
+    </form>
+    <p class="fine">Versión de demostración: la cuenta y tus datos se guardan solo en este dispositivo. Al crearla empezás 30 días gratis de Bambú+.</p>
+  </section>
+
+  <!-- ================= TU MOMENTO ================= -->
+  <section class="screen" id="moment" hidden>
+    <span class="eyebrow">Paso 2 de 4</span>
+    <h2>Tu momento</h2>
+    <p class="muted">Con un toque en cada una. El plan cambia según tu etapa de vida.</p>
+    <div class="qblock"><b>¿En qué etapa estás?</b><div class="choice" id="cEtapa"></div></div>
+    <div class="qblock"><b>¿Cómo te entra la plata?</b><div class="choice" id="cIngreso"></div></div>
+    <div class="qblock"><b>¿Alguien depende de vos económicamente?</b><div class="choice c2" id="cDep"></div></div>
+    <div class="qblock"><b>¿Tenés deudas?</b><div class="choice" id="cDeuda"></div></div>
+    <div class="qblock" id="qMoneda" hidden><b>¿En qué moneda es la deuda?</b><div class="choice c2" id="cMoneda"></div></div>
+    <div class="qblock"><b>¿Dónde vivís?</b><div class="choice c2" id="cPais"></div></div>
+    <div class="qblock"><b>Género <span class="muted small">(opcional, solo para estadísticas anónimas)</span></b><div class="choice c2" id="cGenero"></div></div>
+    <div class="err" id="mErr2" role="alert"></div>
+    <button class="btn" id="momentBtn">Seguir</button>
+  </section>
+
+  <!-- ================= TUS NÚMEROS ================= -->
+  <section class="screen" id="numbers" hidden>
+    <span class="eyebrow">Paso 3 de 4</span>
+    <h2>Tus números</h2>
+    <p class="muted">Aproximado alcanza. Podés cambiarlos cuando quieras.</p>
+    <form id="numForm" novalidate>
+      <div id="incFixed"><label for="sIn">¿Cuánto te entra por mes?<span class="hint">Sueldo, mensualidad, changas: todo junto.</span><span class="money"><input id="sIn" inputmode="numeric" placeholder="800.000"></span></label></div>
+      <div id="incVar" class="grid2" hidden>
+        <label for="sLow">En un mes flojo<span class="money"><input id="sLow" inputmode="numeric" placeholder="400.000"></span></label>
+        <label for="sHigh">En un mes bueno<span class="money"><input id="sHigh" inputmode="numeric" placeholder="1.000.000"></span></label>
+      </div>
+      <label for="sOut">¿Cuánto gastás sí o sí por mes?<span class="hint">Alquiler, servicios, súper, transporte, cuotas.</span><span class="money"><input id="sOut" inputmode="numeric" placeholder="450.000"></span></label>
+      <label for="sSav">¿Cuánto tenés ahorrado hoy?<span class="hint">En pesos. Si tenés dólares, sumalos convertidos.</span><span class="money"><input id="sSav" inputmode="numeric" placeholder="600.000"></span></label>
+      <label for="sDebt" id="debtLbl" hidden>¿Cuánto debés en total?<span class="money"><input id="sDebt" inputmode="numeric" placeholder="300.000"></span></label>
+      <div class="err" id="sErr" role="alert"></div>
+      <button class="btn" type="submit">Seguir</button>
+    </form>
+  </section>
+
+  <!-- ================= MODO DEL PLAN ================= -->
+  <section class="screen" id="modePick" hidden>
+    <span class="eyebrow">Paso 4 de 4</span>
+    <h2>¿Cómo querés armar tu plan?</h2>
+    <div class="mode" id="modeList">
+      <button data-m="auto"><b>Automático</b><span>Bambú arma el plan y lo ajusta sola cada mes.</span></button>
+      <button data-m="editable" class="on"><span class="rec">Recomendado</span><b>Te lo proponemos y lo ajustás</b><span>Partís del plan de Bambú y movés los porcentajes a tu gusto.</span></button>
+      <button data-m="manual"><b>Lo armo yo</b><span>Repartís tus bolsillos desde cero. Bambú te muestra las consecuencias.</span></button>
+    </div>
+    <p class="note">Podés cambiar de modo cuando quieras, desde Plan.</p>
+    <button class="btn" id="modeBtn">Ver mi plan</button>
+  </section>
+
+  <!-- ================= PRIMER PLAN ================= -->
+  <section class="screen" id="firstPlan" hidden>
+    <span class="eyebrow">Tu plan</span>
+    <h2 id="fpTitle"></h2>
+    <div class="card" id="fpCard"></div>
+    <div class="card"><h3>Si seguís este plan</h3><p id="fpProj"></p></div>
+    <button class="btn" id="fpBtn">Arrancar</button>
+  </section>
+
+  <section class="screen" id="firstWin" hidden>
+    <span class="eyebrow">Tu primera misión</span>
+    <h2>Separá tu futuro de este mes</h2>
+    <p class="muted" id="fwTxt"></p>
+    <button class="btn" id="fwYes">Listo, lo separé</button>
+    <button class="btn ghost" id="fwLater">Lo hago después</button>
+  </section>
+
+  <!-- ================= INICIO ================= -->
+  <section class="screen" id="t-home" hidden>
+    <div class="hello">
+      <div><span class="eyebrow" id="hMonth"></span><h2 id="hHello"></h2></div>
+      <div class="avatar" aria-hidden="true">🎋</div>
+    </div>
+    <div class="today">
+      <span class="lbl">Hoy podés gastar sin culpa</span>
+      <span class="val" id="hToday"></span>
+      <p id="hTodayTxt"></p>
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M10 90C30 40 60 15 95 8 88 45 60 78 10 90z" fill="currentColor"/></svg>
+    </div>
+    <div class="quick">
+      <input id="qAdd" placeholder="Ej: gasté 5.000 en el súper" aria-label="Anotar rápido">
+      <button class="btn" id="qAddBtn">Anotar</button>
+    </div>
+    <div class="toast" id="qToast" role="status"></div>
+    <div class="mini"><div><span class="small muted">Tus meses de libertad</span><br><b id="hFree"></b></div><p class="small muted" id="hFreeTxt" style="max-width:24ch;text-align:right"></p></div>
+    <div class="alerts" id="hAlerts"></div>
+    <div class="card" id="hHabit"></div>
+    <div class="card">
+      <div class="row"><h3>Tus bolsillos este mes</h3><button class="link" data-go="plan">Ver plan</button></div>
+      <ul class="pockets" id="hPockets"></ul>
+    </div>
+    <div class="card" id="hSummary"></div>
+    <div class="card">
+      <div class="row"><h3>Últimos movimientos</h3><button class="link" data-go="movs">Ver todo</button></div>
+      <ul class="list" id="hLast"></ul>
+    </div>
+  </section>
+
+  <section class="screen" id="t-alerts" hidden>
+    <div class="row"><h2>Alertas</h2><button class="link" data-go="home">Volver</button></div>
+    <p class="muted">Lo que reclama tu atención. Bambú avisa, pero nunca bloquea nada.</p>
+    <div class="alerts" id="aList"></div>
+  </section>
+
+  <!-- ================= MOVIMIENTOS ================= -->
+  <section class="screen" id="t-movs" hidden>
+    <h2>Movimientos</h2>
+    <div class="seg" id="movSeg">
+      <button class="on" data-sub="m-list">Todos</button>
+      <button data-sub="m-fixed">Fijos</button>
+      <button data-sub="m-cards">Tarjetas</button>
+      <button data-sub="m-methods">Medios</button>
+    </div>
+    <div id="m-list" class="screen">
+      <form class="card" id="movForm" novalidate>
+        <h3>Nuevo movimiento</h3>
+        <div class="chips" id="movType">
+          <button type="button" class="chip on" data-v="out">Gasto</button>
+          <button type="button" class="chip" data-v="in">Ingreso</button>
+          <button type="button" class="chip" data-v="save">Ahorro</button>
+        </div>
+        <div class="grid2">
+          <label for="mAmt">Monto<input id="mAmt" inputmode="decimal" placeholder="12.500"></label>
+          <label for="mCur">Moneda<select id="mCur"><option value="ARS">Pesos</option><option value="USD">Dólares</option></select></label>
+          <label for="mCat">Categoría<select id="mCat"></select></label>
+          <label for="mMethod">Medio<select id="mMethod"></select></label>
+          <label for="mNote" class="full">Detalle<input id="mNote" placeholder="Opcional"></label>
+        </div>
+        <div class="err" id="mErr" role="alert"></div>
+        <button class="btn" type="submit">Guardar</button>
+      </form>
+      <input id="mSearch" placeholder="Buscar…" aria-label="Buscar movimientos">
+      <div class="seg" id="movFilter"><button class="on" data-f="all">Todo</button><button data-f="out">Gastos</button><button data-f="in">Ingresos</button><button data-f="save">Ahorros</button></div>
+      <div class="card"><ul class="list" id="movList"></ul></div>
+    </div>
+    <div id="m-fixed" class="screen" hidden>
+      <p class="muted">Alquiler, servicios, cuotas, suscripciones. Los cargás una vez y te avisamos antes de que venzan.</p>
+      <form class="card" id="fixForm" novalidate>
+        <div class="grid2">
+          <label for="fxName">Qué es<input id="fxName" placeholder="Ej: Alquiler"></label>
+          <label for="fxAmt">Monto<span class="money"><input id="fxAmt" inputmode="numeric" placeholder="250.000"></span></label>
+          <label for="fxDay" class="full">Día del mes que vence<input id="fxDay" inputmode="numeric" placeholder="10"></label>
+        </div>
+        <div class="err" id="fxErr" role="alert"></div>
+        <button class="btn" type="submit">Agregar gasto fijo</button>
+      </form>
+      <div class="card"><div class="row"><h3>Este mes</h3><span class="small muted num" id="fixTot"></span></div><ul class="list" id="fixList"></ul></div>
+    </div>
+    <div id="m-cards" class="screen" hidden>
+      <p class="muted">El consumo, el límite y los vencimientos de cada tarjeta. Los gastos que pagás con ella suman solos.</p>
+      <div class="card" id="cardList"></div>
+      <form class="card" id="cardForm" novalidate>
+        <h3>Nueva tarjeta</h3>
+        <div class="grid2">
+          <label for="cName">Nombre<input id="cName" placeholder="Ej: Visa del banco"></label>
+          <label for="cLim">Límite<span class="money"><input id="cLim" inputmode="numeric" placeholder="1.500.000"></span></label>
+          <label for="cClose">Día de cierre<input id="cClose" inputmode="numeric" placeholder="25"></label>
+          <label for="cDue">Día de vencimiento<input id="cDue" inputmode="numeric" placeholder="5"></label>
+        </div>
+        <div class="err" id="cErr" role="alert"></div>
+        <button class="btn" type="submit">Agregar tarjeta</button>
+      </form>
+    </div>
+    <div id="m-methods" class="screen" hidden>
+      <p class="muted">Dónde está tu plata. El primero es el que usamos si no elegís otro.</p>
+      <div class="card"><ul class="list" id="methList"></ul></div>
+      <div class="card"><h3>Agregar rápido</h3><div class="chips" id="methQuick"></div></div>
+    </div>
+  </section>
+
+  <!-- ================= PLAN ================= -->
+  <section class="screen" id="t-plan" hidden>
+    <h2>Tu plan</h2>
+    <div class="seg" id="planSeg">
+      <button class="on" data-sub="p-pockets">Bolsillos</button>
+      <button data-sub="p-goals">Metas</button>
+      <button data-sub="p-wait">Espera 48 h</button>
+      <button data-sub="p-guides">Guías</button>
+    </div>
+    <div id="p-pockets" class="screen">
+      <div id="pCompare"></div>
+      <div class="card">
+        <div class="row"><h3>Cómo se reparte tu plata</h3><span class="state ok" id="pMode"></span></div>
+        <p class="muted small" id="pBase"></p>
+        <div class="split" id="pSplit" role="img" aria-label="Reparto del ingreso en bolsillos"></div>
+        <div id="pList"></div>
+        <div id="pAdj"></div>
+      </div>
+      <div class="card" id="pEdit"></div>
+      <div class="card"><h3>Si seguís este plan</h3><p id="pProj"></p></div>
+      <div class="card">
+        <div class="row"><h3>Margen para imprevistos</h3><span class="small muted num" id="mgTxt"></span></div>
+        <div class="meter" id="mgMeter"><i></i></div>
+        <p class="small muted" id="mgNote"></p>
+        <div class="inline"><span class="money"><input id="mgAdd" inputmode="numeric" placeholder="Sumar al margen" aria-label="Sumar al margen"></span><button class="btn sm" id="mgBtn">Sumar</button></div>
+      </div>
+      <div class="card">
+        <h3>¿Cambió algo en tu vida?</h3>
+        <p class="small muted">Nuevo trabajo, un aumento, una mudanza, perdiste un ingreso o se sumó alguien a tu familia. Recalculamos el plan y te mostramos el antes y el después.</p>
+        <button class="btn ghost" id="changeBtn">Cambió mi situación</button>
+      </div>
+      <div class="card" id="simLock" hidden></div>
+      <div class="card" id="simCard">
+        <h3>¿Y si lo dejás crecer?</h3>
+        <p class="small muted">Una estimación con un rendimiento supuesto, no una promesa.</p>
+        <div class="grid2">
+          <label for="simM">Por mes<span class="money"><input id="simM" inputmode="numeric"></span></label>
+          <label for="simY">Años<input id="simY" inputmode="numeric" value="10"></label>
+          <label for="simR" class="full">Rendimiento por encima de la inflación, por año (%)<input id="simR" inputmode="decimal" value="4"></label>
+        </div>
+        <div class="sim">
+          <div class="stat"><span class="l">Lo que ponés vos</span><span class="v num" id="simPut"></span></div>
+          <div class="stat"><span class="l">Lo que tendrías</span><span class="v num" id="simGot" style="color:var(--green)"></span></div>
+        </div>
+        <p class="small muted" id="simTxt"></p>
+      </div>
+    </div>
+    <div id="p-goals" class="screen" hidden>
+      <div class="card"><div class="row"><h3>Ahorro total</h3><span class="num" style="font-weight:700" id="savTot"></span></div><p class="small muted" id="savTxt"></p></div>
+      <div class="card"><div id="goalList"></div></div>
+      <form class="card" id="goalForm" novalidate>
+        <h3>Nueva meta</h3>
+        <div class="grid2">
+          <label for="gName">Qué<input id="gName" placeholder="Ej: Viaje a Brasil"></label>
+          <label for="gTarget">Cuánto necesitás<span class="money"><input id="gTarget" inputmode="numeric" placeholder="1.000.000"></span></label>
+          <label for="gWhy" class="full">¿Para qué la querés?<span class="hint">Opcional. Las metas con un porqué propio se sostienen mejor.</span><input id="gWhy" placeholder="Ej: conocer el mar con mi hermana"></label>
+          <label for="gMonthly" class="full">Cuánto sumás por mes<span class="hint">Opcional. Así proyectamos la fecha.</span><span class="money"><input id="gMonthly" inputmode="numeric" placeholder="100.000"></span></label>
+        </div>
+        <div class="err" id="gErr" role="alert"></div>
+        <button class="btn" type="submit">Crear meta</button>
+      </form>
+    </div>
+    <div id="p-wait" class="screen" hidden>
+      <div class="card">
+        <h3>Lista de espera</h3>
+        <p class="small muted">¿Ganas de comprar algo que no tenías planeado? Anotalo y esperá 48 horas. Si después lo seguís queriendo, adelante. Si no, esa plata se queda con vos.</p>
+        <form id="wForm" class="grid2" novalidate>
+          <label for="wName">Qué querés<input id="wName" placeholder="Ej: Zapatillas"></label>
+          <label for="wAmt">Cuánto sale<span class="money"><input id="wAmt" inputmode="numeric" placeholder="120.000"></span></label>
+          <div class="err full" id="wErr" role="alert"></div>
+          <button class="btn full" type="submit">Poner en espera</button>
+        </form>
+      </div>
+      <div class="statgrid">
+        <div class="stat"><span class="v num" id="wSaved"></span><span class="l">Plata que no gastaste por impulso</span></div>
+        <div class="stat"><span class="v num" id="wCount"></span><span class="l">Impulsos frenados</span></div>
+      </div>
+      <div class="card"><div id="wList"></div></div>
+    </div>
+    <div id="p-guides" class="screen" hidden>
+      <p class="muted">Una guía es un tope por categoría, en plata o como porcentaje de tu ingreso. Te avisa cuando te acercás, pero nunca bloquea nada.</p>
+      <div class="card" id="budList"></div>
+      <form class="card" id="budForm" novalidate>
+        <h3>Nueva guía</h3>
+        <div class="grid2">
+          <label for="bCat">Categoría<select id="bCat"></select></label>
+          <label for="bKind">Tipo<select id="bKind"><option value="amt">Monto fijo</option><option value="pct">% del ingreso</option></select></label>
+          <label for="bVal" class="full">Tope<input id="bVal" inputmode="decimal" placeholder="80.000 o 10"></label>
+        </div>
+        <div class="err" id="bErr" role="alert"></div>
+        <button class="btn" type="submit">Guardar guía</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= PATRIMONIO ================= -->
+  <section class="screen" id="t-worth" hidden>
+    <h2>Patrimonio</h2>
+    <div class="hero">
+      <span class="lbl">Todo lo que tenés</span>
+      <span class="val num" id="wTotal" style="font-size:44px"></span>
+      <p id="wSub"></p>
+    </div>
+    <p class="note">Tu patrimonio se mira una vez por mes. Mirarlo todos los días hace que cada baja parezca una catástrofe (Gneezy y Potters, 1997).</p>
+    <div class="seg" id="worthSeg"><button class="on" data-sub="w-assets">Lo que tenés</button><button data-sub="w-hist">Mes a mes</button></div>
+    <div id="w-assets" class="screen">
+      <div class="card"><ul class="list" id="assetList"></ul></div>
+      <form class="card" id="assetForm" novalidate>
+        <h3>Agregar</h3>
+        <div class="grid2">
+          <label for="aName">Qué es<input id="aName" placeholder="Ej: Cuenta, dólares, auto"></label>
+          <label for="aKind">Tipo<select id="aKind"><option value="cuenta">Cuenta o billetera</option><option value="inversion">Inversión</option><option value="efectivo">Efectivo</option><option value="bien">Bien (auto, casa)</option></select></label>
+          <label for="aAmt">Valor<input id="aAmt" inputmode="decimal" placeholder="500.000"></label>
+          <label for="aCur">Moneda<select id="aCur"><option value="ARS">Pesos</option><option value="USD">Dólares</option></select></label>
+        </div>
+        <div class="err" id="aErr" role="alert"></div>
+        <button class="btn" type="submit">Agregar</button>
+      </form>
+      <div class="card"><h3>Cotización del dólar</h3><label for="wRate">Pesos por dólar<span class="money"><input id="wRate" inputmode="numeric"></span></label></div>
+      <div class="card" id="wInfl"></div>
+    </div>
+    <div id="w-hist" class="screen" hidden>
+      <div class="card">
+        <h3>Ingresos, gastos y ahorro</h3>
+        <div class="legend"><span><i style="background:var(--green)"></i>Ingresos</span><span><i style="background:var(--bad)"></i>Gastos</span><span><i style="background:var(--b-futuro)"></i>Ahorro</span></div>
+        <div class="months" id="hist"></div>
+        <p class="small muted">A la derecha, lo que te quedó cada mes (ingresos menos gastos).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VOS ================= -->
+  <section class="screen" id="t-me" hidden>
+    <div class="hello"><div><span class="eyebrow">Vos y la plata</span><h2 id="meName"></h2></div><div class="avatar" aria-hidden="true">🎋</div></div>
+    <div class="seg" id="meSeg">
+      <button class="on" data-sub="me-traits">Rasgos</button>
+      <button data-sub="me-habit">Hábito</button>
+      <button data-sub="me-beliefs">Creencias</button>
+      <button data-sub="me-more">Más</button>
+    </div>
+    <div id="me-traits" class="screen">
+      <div class="card"><div class="row"><h3>Tus rasgos</h3><span class="small muted" id="meDate"></span></div><div class="traits" id="meTraits"></div><p class="small muted" id="meDom"></p></div>
+      <div class="card" id="meCompare" hidden></div>
+      <div class="card">
+        <span class="eyebrow">Saber y hacer</span>
+        <div class="cross">
+          <div class="stat"><span class="l">Saber</span><span class="v num" id="meSaber"></span></div>
+          <div class="stat"><span class="l">Hacer</span><span class="v num" id="meHacer"></span></div>
+        </div>
+        <p id="meCross" class="small"></p>
+      </div>
+      <div class="card">
+        <h3>¿Cómo te sentiste con la plata esta semana?</h3>
+        <div class="mood" id="mood">
+          <button data-m="1">😌<small>Tranqui</small></button>
+          <button data-m="2">🙂<small>Bien</small></button>
+          <button data-m="3">😐<small>Más o menos</small></button>
+          <button data-m="4">😣<small>Tenso</small></button>
+        </div>
+        <p class="small muted" id="moodTxt"></p>
+      </div>
+      <div class="card"><h3>Tu bambú</h3><div class="stages" id="stages"></div><p class="small muted" id="stageTxt"></p></div>
+      <div class="card bias">
+        <span class="eyebrow">Tu cerebro y la plata</span>
+        <span class="bt" id="bTitle"></span>
+        <p id="bText"></p>
+        <div class="row"><div class="dots" id="bDots"></div><button class="btn sm" id="bNext">Siguiente</button></div>
+      </div>
+      <button class="btn ghost" id="copyBtn2">Retá a un amigo</button>
+      <div class="toast" id="toast2" role="status"></div>
+      <button class="btn ghost" id="againBtn"></button>
+    </div>
+    <div id="me-habit" class="screen" hidden>
+      <div class="card habit" id="habitCard"></div>
+      <div class="card"><h3>Elegí otro hábito</h3><p class="small muted">De a uno por vez. Cuando este se vuelva automático, sumás el siguiente.</p><div class="choice" id="habitList"></div></div>
+    </div>
+    <div id="me-beliefs" class="screen" hidden>
+      <p class="muted">Frases que aprendimos de chicos y que, sin darnos cuenta, deciden por nosotros. Salen de tus respuestas al test. Si alguna no te representa, descartala.</p>
+      <div id="beliefList" class="screen" style="gap:12px"></div>
+    </div>
+    <div id="me-more" class="screen" hidden>
+      <div class="card">
+        <div class="row"><h3>Ayudanos a mejorar</h3><span class="soon">Beta</span></div>
+        <p class="small muted">Bambú está en versión de prueba. Contanos qué te gustó, qué no entendiste o qué falló: cada respuesta se lee y sirve para mejorar la app.</p>
+        <button class="btn" id="fbOpen2" style="align-self:flex-start">Dejar mi opinión</button>
+      </div>
+      <div class="card" id="plusCard"></div>
+      <div class="card"><div class="row"><h3>Modo emprendedor</h3><span class="soon">Próximamente</span></div><p class="small muted">Separar la plata personal de la del negocio, ver el flujo de caja y pagarte un sueldo fijo. Mezclar las dos es uno de los errores más comunes de quien emprende.</p></div>
+      <div class="card">
+        <h3>En qué se basa Bambú</h3>
+        <ul class="sources">
+          <li><b>Saber no alcanza:</b> la educación financiera explica una parte mínima del comportamiento (Fernandes et al., 2014).</li>
+          <li><b>Rasgos y creencias:</b> los guiones del dinero de Klontz et al. (2011) y la programación financiera de Eker (2005).</li>
+          <li><b>Separar antes de gastar:</b> Save More Tomorrow llevó el ahorro de 3,5% a 13,6% (Thaler y Benartzi, 2004).</li>
+          <li><b>Margen para imprevistos:</b> la preocupación por la plata ocupa la cabeza (Mani et al., 2013).</li>
+          <li><b>Hábitos:</b> "cuando pasa X, hago Y" (Gollwitzer, 1999); unos 66 días para que algo se vuelva automático (Lally et al., 2010).</li>
+          <li><b>Bienestar financiero:</b> control, protección, rumbo y libertad (CFPB, 2015).</li>
+          <li><b>Base de la regla de reparto:</b> 50/30/20 (Warren y Warren Tyagi, 2005).</li>
+        </ul>
+      </div>
+      <button class="btn ghost" id="wipeBtn">Borrar mis datos</button>
+      <div id="wipeConfirm" class="alert bad" hidden>
+        <div style="display:flex;flex-direction:column;gap:10px;width:100%">
+          <span>Se borra todo lo que cargaste en este dispositivo. No se puede deshacer.</span>
+          <div class="grid2"><button class="btn sm ghost" id="wipeNo">Cancelar</button><button class="btn sm danger" id="wipeYes">Borrar todo</button></div>
+        </div>
+      </div>
+      <p class="foot">Bambú es un proyecto de seminario sobre la psicología del dinero. Recomienda, pero la decisión es siempre tuya. No es asesoramiento financiero.</p>
+    </div>
+  </section>
+</div>
+
+<button class="fab" id="fab" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Preguntale a Bambú</button>
+<div class="sheet" id="fbSheet" hidden>
+  <div class="panel fbpanel" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+    <div class="top"><b id="fbTitle">Tu opinión sobre Bambú</b><button class="btn sm ghost" id="fbClose" type="button">Cerrar</button></div>
+    <form id="fbForm" class="fbform" novalidate>
+      <p class="small muted" style="margin:0">Es anónima y tarda un minuto. Bambú está en beta: tu respuesta decide qué mejoramos.</p>
+      <div class="qblock"><b>¿Qué tan útil te resultó?</b>
+        <div class="mood" id="fbRate">
+          <button type="button" data-v="1">😕<small>Poco</small></button>
+          <button type="button" data-v="2">😐<small>Algo</small></button>
+          <button type="button" data-v="3">🙂<small>Bastante</small></button>
+          <button type="button" data-v="4">🤩<small>Mucho</small></button>
+        </div>
+      </div>
+      <label for="fbLike">¿Qué fue lo que más te gustó?<textarea id="fbLike" rows="2" maxlength="600"></textarea></label>
+      <label for="fbImprove">¿Qué mejorarías o qué no entendiste?<textarea id="fbImprove" rows="2" maxlength="600"></textarea></label>
+      <label for="fbBug">¿Encontraste algún error? <span class="hint">Opcional. Contanos dónde estabas y qué pasó.</span><textarea id="fbBug" rows="2" maxlength="600"></textarea></label>
+      <div class="qblock"><b>¿Se la recomendarías a un amigo?</b><div class="choice c3" id="fbRec"><button type="button" data-v="Sí">Sí</button><button type="button" data-v="Tal vez">Tal vez</button><button type="button" data-v="No">No</button></div></div>
+      <p class="err" id="fbErr" role="alert"></p>
+      <button class="btn" id="fbSend" type="submit">Enviar</button>
+    </form>
+    <div id="fbThanks" class="fbthanks" hidden><span aria-hidden="true">🌱</span><b>¡Gracias!</b><p class="small muted">Tu opinión ya está en camino. Si querés, podés volver a escribirnos cuando quieras desde el botón Beta.</p><button class="btn ghost" id="fbDone" type="button">Volver a Bambú</button></div>
+  </div>
+</div>
+<div class="sheet" id="sheet" hidden>
+  <div class="panel" role="dialog" aria-label="Asistente de Bambú">
+    <div class="top"><b>Asistente de Bambú</b><button class="btn sm ghost" id="sheetClose">Cerrar</button></div>
+    <p class="note" id="aiNote"></p>
+    <div class="chatlog" id="chatlog" aria-live="polite"></div>
+    <div class="suggest" id="suggest"></div>
+    <form class="chatin" id="chatForm"><input id="chatIn" placeholder="Escribí tu pregunta o un gasto" aria-label="Mensaje para el asistente"><button class="btn" id="chatSend">Enviar</button></form>
+  </div>
+</div>
+
+<nav class="tabs" id="tabs" hidden>
+  <div class="in">
+    <button data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
+    <button data-tab="movs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg>Movimientos</button>
+    <button data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M12 3c-3 0-5 2-5 5M12 8c3 0 5 2 5 5M7 21h10"/></svg>Plan</button>
+    <button data-tab="worth"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6M5 10v9M10 10v9M14 10v9M19 10v9M3 21h18"/></svg>Patrimonio</button>
+    <button data-tab="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Vos</button>
+  </div>
+</nav>
+<script>window.BAMBU_API="/api/chat";window.BAMBU_FEEDBACK="/api/feedback";</script><script>
+(function(){
+"use strict";
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+const TRAITS = {
+  impulso:{n:"Impulso", tag:"Vivís el presente y te animás.", power:"Disfrutás el presente y te animás a decidir.", trap:"Comprás sin pensarlo y después te arrepentís."},
+  ansiedad:{n:"Ansiedad", tag:"Te tomás la plata en serio, a veces demasiado.", power:"Te tomás la plata en serio.", trap:"La preocupación te ocupa la cabeza."},
+  evitacion:{n:"Evitación", tag:"Preferís no mirar los números.", power:"No vivís pendiente de la plata.", trap:"Lo que no mirás crece sin que lo veas."},
+  comparacion:{n:"Comparación", tag:"Los demás pesan en lo que hacés con la plata.", power:"Te motivan los logros de los demás.", trap:"Gastás para la mirada de otros."},
+  adoracion:{n:"Adoración", tag:"Sentís que con más plata se arreglaría todo.", power:"Tenés ambición y ganas de crecer.", trap:"Ningún número termina de alcanzarte."},
+  control:{n:"Control", tag:"Planificás y cuidás cada peso.", power:"Planificás y cuidás.", trap:"Te cuesta disfrutar lo que juntaste."}
+};
+const TORDER = ["impulso","ansiedad","evitacion","comparacion","adoracion","control"];
+
+// s: puntaje 0..3 por opción, en el orden escrito. h: suma al puntaje de hacer. k: respuesta correcta de saber.
+const Q = [
+  // Tu día a día (mismas preguntas que la encuesta del seminario)
+  {s:"💸", q:"Cuando te entra plata (sueldo, mensualidad, changa, regalo), ¿separás una parte para guardar antes de empezar a gastar?", o:["Siempre","A veces","Casi nunca","Nunca"], t:"control", sc:[3,2,1,0], h:[1,1,0,0]},
+  {s:"😍", q:"Ves algo que te encanta, pero no tenías pensado comprarlo. ¿Qué hacés?", o:["Lo compro en el momento","Lo pienso hasta el día siguiente","Espero una semana o más","Casi nunca termino comprándolo"], t:"impulso", sc:[3,2,1,0]},
+  {s:"🧾", q:"¿Sabés más o menos cuánto gastaste el mes pasado?", o:["Sí, casi exacto","Más o menos","No tengo idea"], t:"evitacion", sc:[0,1.5,3], h:[1,1,0]},
+  {s:"🛍️", q:"En los últimos 3 meses, ¿compraste algo por impulso y después te arrepentiste?", o:["Sí, varias veces","Sí, una vez","No"], t:"impulso", sc:[3,1.5,0], h:[0,0,1]},
+  {s:"🔧", q:"Se te rompe algo importante (el celular, la compu, el auto) y arreglarlo cuesta lo mismo que gastás en un mes. ¿Podrías pagarlo con plata que ya tenés ahorrada?", n:"Contá solo la plata que manejás vos.", o:["Sí, sin problema","Sí, pero me quedaría casi sin ahorros","No: tendría que pedir prestado, pagar en cuotas o vender algo"], h:[1,1,0]},
+  {s:"📊", q:"Cuando tenés que revisar en qué se te fue la plata, ¿qué hacés?", o:["Lo reviso tranquilo","Lo miro rápido","Lo dejo para después","Prefiero no mirarlo"], t:"evitacion", sc:[0,1,2,3]},
+  {s:"🗓️", q:"Llegás a fin de mes y te sobró plata. ¿Qué hacés con ella?", o:["Casi siempre la gasto","Gasto una parte y guardo otra","Guardo casi toda","La guardo toda y me cuesta usarla para mí"], t:"control", sc:[0,1,2,3]},
+  {s:"👀", q:"¿Qué tan seguido comprás algo porque lo tienen otros o para que lo vean?", o:["Nunca","A veces","Seguido","Casi siempre"], t:"comparacion", sc:[0,1,2,3]},
+  {s:"📈", q:"A alguien cercano le va mucho mejor que a vos con la plata. ¿Cómo te sentís?", o:["Me alegro por esa persona","Me da curiosidad: quiero aprender","Siento que me estoy quedando atrás","Me angustia"], t:"comparacion", sc:[0,1,2,3]},
+  // Cómo te sentís
+  {s:"🎛️", q:"¿Sentís que vos manejás tu plata o que la plata te maneja a vos?", o:["Yo la manejo","Casi siempre la manejo yo","Mitad y mitad","Casi siempre me maneja ella","La plata me maneja a mí"], t:"ansiedad", sc:[0,.75,1.5,2.25,3]},
+  {s:"🌙", q:"¿Qué tan seguido la plata te genera preocupación o estrés?", o:["Nunca","A veces","Seguido","Siempre"], t:"ansiedad", sc:[0,1,2,3]},
+  {s:"💭", q:"¿Qué tan de acuerdo estás con esta frase? \"Si tuviera más plata, se me solucionarían casi todos mis problemas.\"", o:["Nada de acuerdo","Un poco de acuerdo","Bastante de acuerdo","Totalmente de acuerdo"], t:"adoracion", sc:[0,1,2,3]},
+  {s:"🪜", q:"Cuando conseguís algo que querías comprar, ¿al poco tiempo ya estás pensando en lo próximo?", o:["Nunca","A veces","Seguido","Siempre"], t:"adoracion", sc:[0,1,2,3]},
+  // Mini desafío (igual que la encuesta)
+  {s:"🧠", q:"Ponés $100.000 en el banco y no sacás nada. Cada año, el banco te suma un 10% de lo que tenés en la cuenta. Después de 5 años, ¿cuánto vas a tener?", o:["Más de $150.000","Exactamente $150.000","Menos de $150.000","No sé"], k:0, quiz:true},
+  {s:"🧠", q:"Tu plata en el banco rinde 20% por año y la inflación es de 40% por año. Dentro de un año, con esa plata vas a poder comprar…", o:["Más que hoy","Lo mismo que hoy","Menos que hoy","No sé"], k:2, quiz:true},
+  {s:"🧠", q:"\"Poner toda tu plata en una sola empresa es más seguro que repartirla entre muchas.\"", o:["Verdadero","Falso","No sé"], k:1, quiz:true}
+];
+const REACT = ["Anotado","Gracias por la honestidad","Muy común","Sin juicio","Tiene sentido","Seguimos"];
+
+const ETAPAS = [
+  {k:"estudio", n:"Estudiando", d:"Mensualidad, changas o primeros ingresos", months:1, retiro:0},
+  {k:"primer", n:"Primer trabajo", d:"Arrancando a ganar lo propio", months:3, retiro:.2},
+  {k:"familia", n:"Independizado o con familia", d:"Casa, hijos, responsabilidades", months:6, retiro:.4},
+  {k:"preretiro", n:"Pensando en retirarme", d:"Faltan pocos años", months:6, retiro:.7},
+  {k:"jubilado", n:"Jubilado", d:"Vivo de lo que construí", months:9, retiro:0}
+];
+const INGRESOS = [{k:"fijo",n:"Fijo todos los meses"},{k:"variable",n:"Varía mes a mes"},{k:"mesada",n:"Mensualidad o changas"}];
+const DEUDAS = [{k:"no",n:"No"},{k:"tarjeta",n:"Tarjeta o cuotas"},{k:"prestamo",n:"Préstamos"}];
+const PAISES = ["Argentina","Uruguay","Chile","México","Colombia","Otro país"];
+const GENEROS = ["Mujer","Varón","Otro","Prefiero no decir"];
+
+const HABITS = [
+  {k:"separar", t:["control","adoracion"], txt:"Cuando cobro, separo mi bolsillo de futuro antes de gastar.", why:"Separar antes de ver la plata es atarse al mástil: no depende de la fuerza de voluntad."},
+  {k:"espera", t:["impulso","comparacion"], txt:"Cuando quiero comprar algo que no planeé, lo pongo en la lista de espera 48 horas.", why:"Le da tiempo a la parte lenta y racional del cerebro para alcanzar a la impulsiva."},
+  {k:"margen", t:["ansiedad"], txt:"Cuando cobro, mando primero una parte a mi margen para imprevistos.", why:"Saber que lo inesperado está cubierto libera la cabeza."},
+  {k:"domingo", t:["evitacion"], txt:"Cada domingo miro mi número de la semana en Bambú. Dos minutos, nada más.", why:"Mirar poco pero seguido le gana a no mirar nunca."},
+  {k:"redes", t:["comparacion"], txt:"Cuando algo me tienta por verlo en redes, me pregunto: ¿lo querría si nadie lo viera?", why:"La mayoría de lo que compramos para los demás, los demás ni lo notan."},
+  {k:"gusto", t:["control","ansiedad"], txt:"Una vez por semana uso mi bolsillo de disfrute en algo que me guste, sin culpa.", why:"Un plan que solo restringe se abandona. Disfrutar también es parte del plan."},
+  {k:"aumento", t:["adoracion"], txt:"Cuando entra plata extra, mando la mitad a mi futuro antes de gastarla.", why:"Ahorrar de lo que todavía no te acostumbraste a gastar duele mucho menos."}
+];
+
+const BELIEFS = {
+  adoracion1:{q:"\"Con más plata se arreglaría todo.\"", from:"Suele venir de crecer viendo que los problemas de la casa giraban alrededor de la plata.", ask:"¿Qué problema tuyo de hoy seguiría igual aunque ganaras el doble?", alt:"\"La plata resuelve algunas cosas. Las otras las resuelvo yo.\"", ex:"Escribí tres cosas que valorás y que no se compran."},
+  adoracion2:{q:"\"Nunca me va a alcanzar.\"", from:"Aparece cuando la meta se mueve cada vez que te acercás.", ask:"¿Cuánto sería suficiente para vos? Ponele un número.", alt:"\"Tengo un número que es suficiente, y lo voy a reconocer cuando llegue.\"", ex:"Calculá cuánto necesitarías por mes para vivir bien, sin lujos ni privaciones."},
+  evitacion:{q:"\"Mejor no mirar: si no lo veo, no existe.\"", from:"Suele aprenderse en casas donde de la plata no se hablaba, o donde hablar de plata era sinónimo de pelea.", ask:"¿Qué es lo peor que podría pasar si miraras tus números esta semana?", alt:"\"Mirar mis números es cuidarme, no castigarme.\"", ex:"Mirá cuánto gastaste ayer. Solo eso, sin juzgarte."},
+  sufrimiento:{q:"\"Para tener plata hay que sufrir.\"", from:"Es una de las frases más comunes en las casas argentinas. Una entrevistada del seminario la escuchaba de chica: \"el dinero era sufrimiento\".", ask:"¿Conocés a alguien a quien le vaya bien con la plata sin vivir sufriendo?", alt:"\"Puedo trabajar duro y también disfrutar lo que gano.\"", ex:"Anotá una frase sobre la plata que escuchabas en tu casa. ¿La seguís creyendo?"},
+  estatus:{q:"\"Valgo lo que tengo.\"", from:"Crece cuando el éxito se mide por lo que se ve: el auto, la ropa, el viaje.", ask:"De las personas que más admirás, ¿cuánto sabés de su plata?", alt:"\"La riqueza de verdad es la que no se ve.\"", ex:"Pensá en tu última compra grande. ¿La habrías hecho si nadie la viera?"},
+  culpa:{q:"\"Gastar en mí es un desperdicio.\"", from:"Es la otra cara del ahorro: cuidar tanto que disfrutar da culpa.", ask:"¿Para qué estás guardando, si nunca te das permiso de usar nada?", alt:"\"Disfrutar una parte de lo que gano también es cuidarme.\"", ex:"Esta semana, usá algo de tu bolsillo de disfrute y anotá cómo te sentiste."},
+  respaldo:{q:"\"Siempre va a haber alguien que me cubra.\"", from:"Una entrevistada del seminario lo llamó \"una seguridad bastante mentirosa\": saber que alguien te va a salvar hace que te cuides menos.", ask:"¿Qué harías distinto si nadie pudiera cubrirte el mes que viene?", alt:"\"Me ocupo de mi plata como si no hubiera red.\"", ex:"Armá tu margen para imprevistos aunque sea con un monto chico."},
+  merezco:{q:"\"Me lo merezco, y lo merezco ya.\"", from:"Es el yo del presente ganándole al yo del futuro. Todos lo tenemos.", ask:"¿Tu yo de dentro de un mes estaría de acuerdo con esta compra?", alt:"\"Me lo merezco, y por eso me lo regalo bien pensado.\"", ex:"La próxima compra no planeada, mandala a la lista de espera de 48 horas."}
+};
+
+const BIASES = [
+  ["Sesgo del presente","Lo de hoy pesa más que lo de mañana, aunque mañana valga más. En un estudio, entre el 62% y el 82% de los que eligieron fruta para la semana siguiente se pasó al chocolate cuando llegó el día."],
+  ["Aversión a la pérdida","Perder duele más o menos el doble de lo que alegra ganar lo mismo. Por eso nos aferramos a malas decisiones."],
+  ["Contabilidad mental","Tratamos distinto la misma plata según de dónde vino. Por eso ponerle nombre a cada bolsillo ayuda a respetarlo."],
+  ["Comparación social","Medimos lo que tenemos contra lo que muestran otros. Y en redes, todos muestran lo mejor."],
+  ["Mirar demasiado","Quienes miraban su resultado más seguido se asustaban más y arriesgaban menos, aunque les convenía lo contrario (Gneezy y Potters, 1997)."],
+  ["Interés compuesto","Poco, seguido y durante mucho tiempo le gana a mucho de golpe. Casi toda la fortuna de Buffett llegó después de sus 65 años."],
+  ["Hábitos","Casi la mitad de lo que hacemos cada día es automático (Wood et al., 2002). Cambiar un hábito cambia más que una decisión aislada."]
+];
+
+const POCKET_INFO = {
+  fijos:{n:"Gastos fijos", d:"Lo que pagás sí o sí", why:"Lo que pagás sí o sí va primero. Como referencia, conviene que no pase del 50% de lo que te entra (regla 50/30/20, Warren y Warren Tyagi, 2005)."},
+  deudas:{n:"Salir de deudas", d:"Antes que ahorrar", why:"Una deuda cara crece más rápido que cualquier ahorro, por eso va antes. Y si es en otra moneda que la de tu ingreso, el riesgo es doble: un ejecutivo entrevistado para el seminario lo aprendió a los golpes."},
+  margen:{n:"Margen", d:"Imprevistos y regalos", why:"Tener cubierto lo inesperado libera la cabeza: la preocupación por la plata consume atención (Mani et al., 2013). Cuando se llena, lo que iba acá pasa a tu futuro."},
+  futuro:{n:"Futuro", d:"Metas y retiro", why:"Separarlo apenas cobrás, antes de verlo, multiplica el ahorro: en el programa Save More Tomorrow el ahorro pasó de 3,5% a 13,6% (Thaler y Benartzi, 2004)."},
+  disfrute:{n:"Disfrute", d:"Salidas, gustos, ropa", why:"Un plan que no te deja disfrutar se abandona. Por eso este bolsillo nunca baja de un mínimo. Eker también propone una cuenta solo para disfrutar."}
+};
+const POCKET_ORDER = ["fijos","deudas","margen","futuro","disfrute"];
+const PCOLOR = {fijos:"var(--b-fijos)", deudas:"var(--bad)", margen:"var(--b-margen)", futuro:"var(--b-futuro)", disfrute:"var(--b-disfrute)"};
+
+const CATS = [
+  ["super","🛒","Súper","fijos"],["transporte","🚌","Transporte","fijos"],["servicios","💡","Servicios","fijos"],["alquiler","🏠","Alquiler","fijos"],
+  ["educacion","📚","Educación","fijos"],["salud","💊","Salud","fijos"],["comida","🍔","Comida afuera","disfrute"],["salidas","🎉","Salidas","disfrute"],
+  ["ropa","👕","Ropa","disfrute"],["suscripciones","📺","Suscripciones","disfrute"],["regalos","🎁","Regalos","margen"],["imprevistos","🔧","Imprevistos","margen"],
+  ["deudas","💳","Pago de deudas","deudas"],["otros","📦","Otros","disfrute"]
+];
+const CAT = Object.fromEntries(CATS.map(c => [c[0], {e:c[1], n:c[2], p:c[3]}]));
+const KEYWORDS = [
+  [/s[uú]per|chino|verdu|almac|carnic/i,"super"],[/uber|taxi|colectivo|bondi|subte|nafta|sube|tren|cabify|didi/i,"transporte"],
+  [/luz|\bgas\b|agua|internet|celu|tel[eé]fono|expensa|abl/i,"servicios"],[/alquiler/i,"alquiler"],[/facu|colegio|curso|libro/i,"educacion"],
+  [/farmacia|m[eé]dic|remedio|prepaga|dentista/i,"salud"],[/burga|hamburg|pizza|empanada|caf[eé]|resto|almuerzo|cena|helado|rappi|pedidos/i,"comida"],
+  [/boliche|\bbar\b|birra|cerveza|cine|recital|salida|entrada/i,"salidas"],[/ropa|zapatilla|remera|jean|campera/i,"ropa"],
+  [/netflix|spotify|disney|hbo|\bmax\b|youtube|prime|suscrip/i,"suscripciones"],[/regalo|cumple/i,"regalos"],[/arregl|rompi|mec[aá]nico|calef[oó]n|plomero|imprevisto/i,"imprevistos"],
+  [/tarjeta|cuota|pr[eé]stamo|deuda/i,"deudas"]
+];
+const METHOD_QUICK = ["Mercado Pago","Ualá","Cuenta DNI","Brubank","Lemon","Naranja X","Galicia","Santander","BBVA","Banco Nación","Macro","Banco Provincia"];
+const STAGES = [["Semilla","🌰",0],["Brote","🌱",2],["Tallo","🎍",4],["Caña","🎋",8],["Bosque","🌳",12]];
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+const KEY = "bambu-v1";
+const $ = id => document.getElementById(id);
+const calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const now = () => new Date();
+const ym = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+const uid = () => Math.random().toString(36).slice(2,9);
+const DAY = 864e5;
+function parseNum(v){ let s = String(v ?? "").trim(); if (!s) return NaN; s = s.replace(/\./g,"").replace(",","."); const n = Number(s.replace(/[^\d.]/g,"")); return isFinite(n) ? n : NaN; }
+function blank(){ return {quiz:null, user:null, ctx:null, nums:null, mode:null, split:null, prevPlan:null, raiseTip:null,
+  movs:[], fixed:[], cards:[], methods:["Efectivo","Débito","Transferencia"], budgets:[], goals:[], assets:[], wishes:[], rate:1400, view:"ARS",
+  moods:{}, habit:null, beliefs:{}, plusStart:null, plus:false, aiDay:null, aiN:0, firstWin:false, snaps:{}}; }
+function load(){ try { const s = JSON.parse(localStorage.getItem(KEY)||"null"); return s ? Object.assign(blank(), s) : blank(); } catch(_) { return blank(); } }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(_) {} }
+let S = load();
+
+const fmtA = new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0});
+const fmtU = new Intl.NumberFormat("es-AR",{style:"currency",currency:"USD",maximumFractionDigits:0});
+const money = n => S.view === "USD" ? fmtU.format(Math.round((n||0)/(S.rate||1))) : fmtA.format(Math.round(n||0));
+const pesos = n => fmtA.format(Math.round(n||0));
+const week = d => { const x = d ? new Date(d) : now(); x.setHours(12,0,0,0); x.setDate(x.getDate() - ((x.getDay()+6)%7)); return x.toISOString().slice(0,10); };
+
+/* Montos con puntos de miles mientras se escriben */
+function fmtInt(n){ return n > 0 ? Math.round(n).toLocaleString("es-AR") : ""; }
+function fmtTyping(v){
+  let [i, d] = String(v).replace(/[^\d,]/g,"").split(",");
+  i = (i || "").replace(/^0+(?=\d)/,"");
+  const out = i ? Number(i).toLocaleString("es-AR") : "";
+  return d !== undefined ? (out || "0") + "," + d.slice(0,2) : out;
+}
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (!(el instanceof HTMLInputElement) || !(el.closest(".money") || el.id === "mAmt" || el.id === "aAmt")) return;
+  const pos = el.selectionStart ?? el.value.length, before = el.value.slice(0, pos).replace(/[^\d,]/g,"").length;
+  const nv = fmtTyping(el.value); if (nv === el.value) return;
+  el.value = nv;
+  let c = 0, k = 0; while (k < nv.length && c < before){ if (/[\d,]/.test(nv[k])) c++; k++; }
+  try { el.setSelectionRange(k, k); } catch(_) {}
+}, true);
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+const PRE = ["welcome","quiz","reveal","result","signup","moment","numbers","modePick","firstPlan","firstWin"];
+const TABS = ["home","movs","plan","worth","me","alerts"];
+let curTab = "home";
+function show(id){
+  [...PRE, ...TABS.map(t => "t-"+t)].forEach(s => $(s).hidden = s !== id);
+  const inApp = id.startsWith("t-");
+  $("tabs").hidden = !inApp; $("curT").hidden = !inApp; $("bellBtn").hidden = !inApp; $("fab").hidden = !inApp;
+  document.body.classList.toggle("in-app", inApp);
+  if (inApp) $("step").textContent = "";
+  const el = $(id); el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter");
+  window.scrollTo({top:0});
+}
+const RENDER = {home:()=>renderHome(), movs:()=>renderMovs(), plan:()=>renderPlan(), worth:()=>renderWorth(), me:()=>renderMe(), alerts:()=>renderAlerts()};
+function go(tab){
+  curTab = tab;
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+  RENDER[tab](); updateBell(); show("t-"+tab);
+}
+const refresh = () => { RENDER[curTab](); updateBell(); };
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => go(b.dataset.tab));
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+$("bellBtn").onclick = () => go("alerts");
+$("curT").querySelectorAll("button").forEach(b => b.onclick = () => { S.view = b.dataset.c; save(); paintCur(); refresh(); });
+function paintCur(){ $("curT").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.c === S.view)); }
+function subtabs(segId, ids){
+  $(segId).querySelectorAll("button").forEach(b => b.onclick = () => {
+    $(segId).querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    ids.forEach(s => $(s).hidden = s !== b.dataset.sub);
+  });
+}
+subtabs("movSeg", ["m-list","m-fixed","m-cards","m-methods"]);
+subtabs("planSeg", ["p-pockets","p-goals","p-wait","p-guides"]);
+subtabs("worthSeg", ["w-assets","w-hist"]);
+subtabs("meSeg", ["me-traits","me-habit","me-beliefs","me-more"]);
+
+/* =========================================================
+   TEST
+   ========================================================= */
+let ans = [], qi = 0, lock = false, order = [];
+function shuffle(n){ const a = [...Array(n).keys()]; for (let j = n-1; j > 0; j--){ const r = Math.floor(Math.random()*(j+1)); [a[j],a[r]] = [a[r],a[j]]; } return a; }
+function stalk(n){ const s = $("stalk"); s.style.gridTemplateColumns = "repeat("+Q.length+",1fr)"; s.innerHTML = ""; for (let j = 0; j < Q.length; j++){ const b = document.createElement("span"); if (j < n) b.className = "on"; s.appendChild(b); } }
+function startQuiz(){ ans = new Array(Q.length).fill(null); qi = 0; order = Q.map(q => q.mix ? shuffle(q.o.length) : [...q.o.keys()]); renderQ(); show("quiz"); }
+function renderQ(){
+  const q = Q[qi];
+  $("step").textContent = (qi+1) + " / " + Q.length;
+  stalk(qi);
+  const msg = qi === 0 ? "Respondé lo que hacés, no lo que deberías hacer. No hay respuestas buenas ni malas." :
+    qi === 9 ? "Ahora, cómo te sentís con la plata." :
+    qi === 13 ? "Mini desafío: 3 preguntas de conocimiento. Vale responder \"No sé\"." : (q.n || "");
+  $("banner").hidden = !msg; $("banner").textContent = msg;
+  $("scene").innerHTML = "<span>" + q.s + "</span>";
+  $("qText").textContent = q.q;
+  $("react").classList.remove("show");
+  const box = $("options"); box.innerHTML = "";
+  order[qi].forEach(k => {
+    const b = document.createElement("button");
+    b.className = "opt" + (ans[qi] === k ? " picked" : "");
+    b.setAttribute("role","radio"); b.setAttribute("aria-checked", ans[qi] === k);
+    b.innerHTML = '<span class="dot" aria-hidden="true"></span><span></span>';
+    b.lastChild.textContent = q.o[k];
+    b.onclick = () => pick(k, b);
+    box.appendChild(b);
+  });
+  $("backBtn").disabled = qi === 0;
+}
+function pick(k, b){
+  if (lock) return; lock = true; ans[qi] = k;
+  [...$("options").children].forEach(c => { c.classList.remove("picked"); c.setAttribute("aria-checked","false"); });
+  b.classList.add("picked"); b.setAttribute("aria-checked","true"); stalk(qi+1);
+  if (!Q[qi].quiz){ const r = $("react"); r.textContent = REACT[Math.floor(Math.random()*REACT.length)]; r.classList.add("show"); }
+  setTimeout(() => { lock = false; if (qi < Q.length-1){ qi++; renderQ(); show("quiz"); } else reveal(); }, 420);
+}
+$("backBtn").onclick = () => { if (qi > 0){ qi--; renderQ(); show("quiz"); } };
+$("startBtn").onclick = startQuiz;
+
+function scoreQuiz(a){
+  const sum = {}, max = {}; TORDER.forEach(t => { sum[t] = 0; max[t] = 0; });
+  let hacer = 0, saber = 0;
+  Q.forEach((q, i) => {
+    const k = a[i];
+    if (q.t){ sum[q.t] += q.sc[k]; max[q.t] += 3; }
+    if (q.h) hacer += q.h[k];
+    if (q.quiz && k === q.k) saber++;
+  });
+  const traits = {}; TORDER.forEach(t => traits[t] = Math.round(sum[t] / max[t] * 100));
+  let dom = TORDER[0]; TORDER.forEach(t => { if (traits[t] > traits[dom]) dom = t; });
+  return {answers:a.slice(), traits, dominant:dom, hacer, saber, date:new Date().toISOString()};
+}
+function reveal(){
+  $("step").textContent = ""; show("reveal");
+  const g = $("grow"); g.innerHTML = "";
+  for (let j = 0; j < 5; j++){ const s = document.createElement("i"); s.style.animationDelay = (j*0.22)+"s"; g.appendChild(s); }
+  setTimeout(() => {
+    const prev = S.quiz;
+    S.quiz = scoreQuiz(ans);
+    if (prev) S.quiz.prev = {traits:prev.traits, date:prev.date};
+    save(); leaves();
+    if (S.user && S.nums){ go("me"); return; }
+    renderResult();
+  }, calm ? 300 : 1500);
+}
+function crossText(q){
+  const s = q.saber, h = q.hacer;
+  if (s >= 2 && h <= 2) return "Sabés bastante de plata, pero eso todavía no se convierte en hábitos. Es lo más común: saber no alcanza. Bambú está hecha para cerrar esa brecha.";
+  if (s <= 1 && h >= 3) return "Tenés buenos hábitos aunque no te sientas experto en finanzas. Igual conviene sumar lo básico: el desconocimiento tiene costos ocultos.";
+  if (s >= 2 && h >= 3) return "Sabés y hacés. Bambú te ayuda a sostenerlo en el tiempo y a no aflojar cuando algo cambia.";
+  return "Hay espacio para crecer en las dos cosas. Arrancamos por los hábitos, que son los que más pesan, y el asistente te ayuda con lo básico.";
+}
+function renderTraits(el, q){
+  el.innerHTML = "";
+  const sorted = [...TORDER].sort((a,b) => q.traits[b] - q.traits[a]);
+  sorted.forEach(t => {
+    const r = document.createElement("div"); r.className = "trait" + (t === q.dominant ? " top" : "");
+    r.innerHTML = '<span class="tn"></span><span class="tb"><i></i></span><span class="tp num"></span>';
+    r.querySelector(".tn").textContent = TRAITS[t].n;
+    r.querySelector(".tp").textContent = q.traits[t] + "%";
+    el.appendChild(r);
+    const bar = r.querySelector("i"); bar.style.width = "0%"; requestAnimationFrame(() => requestAnimationFrame(() => bar.style.width = q.traits[t] + "%"));
+  });
+}
+function renderResult(){
+  const q = S.quiz, T = TRAITS[q.dominant];
+  $("step").textContent = "Tu resultado";
+  $("rName").textContent = T.n + " " + q.traits[q.dominant] + "%";
+  $("rTag").textContent = T.tag;
+  renderTraits($("rTraits"), q);
+  $("rPower").textContent = T.power; $("rTrap").textContent = T.trap;
+  $("rSaber").innerHTML = q.saber + ' <small>de 3</small>'; $("rHacer").innerHTML = q.hacer + ' <small>de 4</small>';
+  $("rCross").textContent = crossText(q);
+  $("toast").textContent = "";
+  show("result");
+}
+function shareText(){
+  const q = S.quiz, t = [...TORDER].sort((a,b) => q.traits[b] - q.traits[a]);
+  return "Hice el test de Bambú: soy " + q.traits[t[0]] + "% " + TRAITS[t[0]].n.toLowerCase() + " y " + q.traits[t[1]] + "% " + TRAITS[t[1]].n.toLowerCase() + ". ¿Y vos cómo te llevás con tu plata?";
+}
+function copyShare(id){
+  const t = shareText(), ok = () => $(id).textContent = "Copiado. Mandáselo a quien quieras.";
+  try { navigator.clipboard.writeText(t).then(ok).catch(() => $(id).textContent = t); } catch(_) { $(id).textContent = t; }
+}
+$("copyBtn").onclick = () => copyShare("toast");
+$("copyBtn2").onclick = () => copyShare("toast2");
+$("unlockBtn").onclick = () => { $("step").textContent = ""; show("signup"); $("fName").focus(); };
+
+/* =========================================================
+   CUENTA, MOMENTO, NÚMEROS, MODO
+   ========================================================= */
+$("form").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const name = $("fName").value.trim(), mail = $("fMail").value.trim(), pass = $("fPass").value;
+  if (!name) return $("err").textContent = "Poné tu nombre.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return $("err").textContent = "Revisá el mail: parece que falta algo.";
+  if (pass.length < 8) return $("err").textContent = "La contraseña necesita al menos 8 caracteres.";
+  if (!$("fAge").checked) return $("err").textContent = "Para crear la cuenta tenés que ser mayor de 18 años o tener permiso de un adulto.";
+  $("err").textContent = "";
+  S.user = {name, mail}; // en esta demo la contraseña no se guarda
+  if (!S.plusStart) S.plusStart = new Date().toISOString();
+  save(); openMoment(false);
+});
+
+let ctxDraft = {}, changing = false;
+function choiceGroup(id, items, key, onPick){
+  const box = $(id); box.innerHTML = "";
+  items.forEach(it => {
+    const v = typeof it === "string" ? it : it.k, label = typeof it === "string" ? it : it.n, d = typeof it === "string" ? "" : (it.d || "");
+    const b = document.createElement("button"); b.type = "button";
+    b.innerHTML = '<span></span>' + (d ? '<small></small>' : "");
+    b.firstChild.textContent = label; if (d) b.lastChild.textContent = d;
+    b.classList.toggle("on", ctxDraft[key] === v);
+    b.onclick = () => { ctxDraft[key] = v; [...box.children].forEach(x => x.classList.toggle("on", x === b)); if (onPick) onPick(v); };
+    box.appendChild(b);
+  });
+}
+function openMoment(isChange){
+  changing = isChange;
+  ctxDraft = Object.assign({pais:"Argentina"}, S.ctx || {});
+  choiceGroup("cEtapa", ETAPAS, "etapa");
+  choiceGroup("cIngreso", INGRESOS, "ingreso");
+  choiceGroup("cDep", [{k:"no",n:"No"},{k:"si",n:"Sí"}], "dep");
+  choiceGroup("cDeuda", DEUDAS, "deuda", v => $("qMoneda").hidden = v === "no");
+  choiceGroup("cMoneda", [{k:"ARS",n:"Pesos"},{k:"USD",n:"Dólares"}], "deudaMoneda");
+  choiceGroup("cPais", PAISES, "pais");
+  choiceGroup("cGenero", GENEROS, "genero");
+  $("qMoneda").hidden = !ctxDraft.deuda || ctxDraft.deuda === "no";
+  $("mErr2").textContent = "";
+  $("step").textContent = ""; show("moment");
+}
+$("momentBtn").onclick = () => {
+  const c = ctxDraft;
+  if (!c.etapa) return $("mErr2").textContent = "Elegí en qué etapa estás.";
+  if (!c.ingreso) return $("mErr2").textContent = "Elegí cómo te entra la plata.";
+  if (!c.dep) return $("mErr2").textContent = "Contanos si alguien depende de vos.";
+  if (!c.deuda) return $("mErr2").textContent = "Contanos si tenés deudas.";
+  if (c.deuda !== "no" && !c.deudaMoneda) return $("mErr2").textContent = "Elegí en qué moneda es la deuda.";
+  if (c.deuda === "no") delete c.deudaMoneda;
+  S.ctxDraft = Object.assign({}, c);
+  openNumbers();
+};
+function openNumbers(){
+  const variable = S.ctxDraft.ingreso === "variable";
+  $("incFixed").hidden = variable; $("incVar").hidden = !variable;
+  $("debtLbl").hidden = S.ctxDraft.deuda === "no";
+  const n = S.nums;
+  if (n){ $("sIn").value = fmtInt(n.inc); $("sLow").value = fmtInt(n.low); $("sHigh").value = fmtInt(n.high); $("sOut").value = fmtInt(n.fijos); $("sSav").value = fmtInt(n.ahorro); $("sDebt").value = fmtInt(n.deuda); }
+  $("sErr").textContent = ""; show("numbers");
+}
+$("numForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const variable = S.ctxDraft.ingreso === "variable";
+  const inc = parseNum($("sIn").value), low = parseNum($("sLow").value), high = parseNum($("sHigh").value);
+  const fijos = parseNum($("sOut").value), ahorro = $("sSav").value.trim() ? parseNum($("sSav").value) : 0, deuda = $("sDebt").value.trim() ? parseNum($("sDebt").value) : 0;
+  if (variable){
+    if (!(low > 0) || !(high > 0)) return $("sErr").textContent = "Poné cuánto te entra en un mes flojo y en uno bueno, aunque sea aproximado.";
+    if (high < low) return $("sErr").textContent = "El mes bueno tendría que ser mayor que el flojo.";
+  } else if (!(inc > 0)) return $("sErr").textContent = "Poné cuánto te entra por mes, aunque sea aproximado.";
+  if (!(fijos >= 0)) return $("sErr").textContent = "Poné cuánto gastás sí o sí por mes.";
+  if (!(ahorro >= 0) || !(deuda >= 0)) return $("sErr").textContent = "Revisá los montos: tienen que ser números.";
+  $("sErr").textContent = "";
+  const prev = S.nums && S.ctx ? planFor(S.ctx, S.nums, S.split) : null;
+  const prevBase = S.nums ? baseIncome(S.ctx, S.nums) : null;
+  S.ctx = S.ctxDraft; delete S.ctxDraft;
+  S.nums = variable ? {low, high, fijos, ahorro, deuda} : {inc, fijos, ahorro, deuda};
+  if (changing){
+    S.prevPlan = prev;
+    const nb = baseIncome(S.ctx, S.nums);
+    S.raiseTip = prevBase && nb > prevBase * 1.03 ? {extra: nb - prevBase} : null;
+    if (S.mode !== "manual" && S.mode !== "editable") S.split = null;
+    save(); go("plan"); return;
+  }
+  save(); show("modePick");
+});
+let modeDraft = "editable";
+$("modeList").querySelectorAll("button").forEach(b => b.onclick = () => { modeDraft = b.dataset.m; $("modeList").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); });
+$("modeBtn").onclick = () => {
+  S.mode = modeDraft;
+  S.split = modeDraft === "manual" ? {disfrute:34, futuro:33, margen:33} : null;
+  save(); renderFirstPlan();
+};
+$("changeBtn").onclick = () => openMoment(true);
+
+/* =========================================================
+   EL PLAN
+   ========================================================= */
+const etapa = c => ETAPAS.find(e => e.k === (c && c.etapa)) || ETAPAS[1];
+function baseIncome(c, n){ if (!n) return 0; return c && c.ingreso === "variable" ? (n.low || 0) : (n.inc || 0); }
+function margenMeta(c, n){ let m = etapa(c).months; if (c.ingreso !== "fijo") m += 2; if (c.dep === "si") m += 1; return Math.min(12, m) * (n.fijos || 0); }
+const margenSaved = () => S.movs.filter(m => m.type === "save" && m.cat === "margen").reduce((a,m) => a + m.amt, 0);
+const savedTotal = () => (S.nums ? S.nums.ahorro : 0) + S.movs.filter(m => m.type === "save").reduce((a,m) => a + m.amt, 0);
+
+function recommendedSplit(c){
+  const t = S.quiz ? S.quiz.traits : {}, adj = [];
+  let d = 45, f = 35, m = 20;
+  const mv = (from, to, n, why) => { const take = from === "d" ? Math.min(n, d - 15) : n; if (take <= 0) return;
+    if (from === "d") d -= take; if (from === "f") f -= take; if (from === "m") m -= take;
+    if (to === "d") d += take; if (to === "f") f += take; if (to === "m") m += take; adj.push(why); };
+  if (t.ansiedad >= 60) mv("d","m",10,"Tu ansiedad está alta: más margen, porque tener cubierto lo inesperado baja la tensión.");
+  if (t.impulso >= 60) mv("d","f",5,"Tu impulso está alto: el futuro se separa apenas cobrás, antes de que lo veas.");
+  if (t.control >= 60 && t.ansiedad >= 50) mv("f","d",10,"Cuidás mucho y te preocupa: te damos más permiso para disfrutar sin culpa.");
+  if (t.adoracion >= 60) mv("d","f",5,"Sentís que nunca alcanza: reforzamos tu futuro y te proponemos definir tu número \"suficiente\".");
+  if (c.etapa === "preretiro") mv("d","f",10,"Estás cerca del retiro: tu futuro pesa más.");
+  if (c.etapa === "jubilado") mv("f","d",10,"Estás jubilado: tu ahorro está para usarse, con calma.");
+  if (c.etapa === "estudio") adj.push("Estás estudiando: el objetivo principal es el hábito, aunque los montos sean chicos.");
+  if (c.ingreso !== "fijo") mv("d","m",5,"Tu ingreso varía: más margen para los meses flojos.");
+  if (c.dep === "si") mv("d","m",5,"Alguien depende de vos: más protección.");
+  return {split:{disfrute:d, futuro:f, margen:m}, adj};
+}
+function planFor(c, n, custom){
+  const inc = baseIncome(c, n), fijos = n.fijos || 0;
+  const libre = Math.max(0, inc - fijos), deficit = fijos > inc ? fijos - inc : 0;
+  const rec = recommendedSplit(c);
+  const sp = Object.assign({}, custom || rec.split);
+  const tot = sp.disfrute + sp.futuro + sp.margen || 1;
+  const hasDebt = c.deuda && c.deuda !== "no";
+  const pool = hasDebt ? libre * 0.8 : libre;
+  let P = {fijos:Math.min(fijos, inc), deudas: hasDebt ? libre * 0.2 : 0,
+    disfrute: pool * sp.disfrute / tot, futuro: pool * sp.futuro / tot, margen: pool * sp.margen / tot};
+  const meta = margenMeta(c, n), have = margenSaved() + 0;
+  const margenFull = meta > 0 && have >= meta;
+  if (margenFull){ P.futuro += P.margen; P.margen = 0; }
+  const retiro = P.futuro * etapa(c).retiro;
+  return {inc, libre, deficit, P, split:sp, adj: custom ? [] : rec.adj, meta, margenHave:have, margenFull, retiro, hasDebt};
+}
+const plan = () => planFor(S.ctx, S.nums, S.split);
+
+function monthStats(key){
+  const r = {fijos:0, disfrute:0, futuro:0, margen:0, deudas:0, in:0, out:0, save:0, cats:{}};
+  S.movs.filter(m => m.date.slice(0,7) === key).forEach(m => {
+    if (m.type === "in") r.in += m.amt;
+    else if (m.type === "save"){ r.save += m.amt; r[m.cat === "margen" ? "margen" : "futuro"] += m.amt; }
+    else { r.out += m.amt; const p = (CAT[m.cat]||CAT.otros).p; r[p] += m.amt; r.cats[m.cat] = (r.cats[m.cat]||0) + m.amt; }
+  });
+  return r;
+}
+function todayAllowance(){
+  const pl = plan(), st = monthStats(ym(now()));
+  const d = now(), last = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate(), left = last - d.getDate() + 1;
+  const rest = pl.P.disfrute - st.disfrute;
+  return {perDay: Math.max(0, rest) / left, rest, left, over: rest < 0};
+}
+function projection(pl){
+  const mMonthly = pl.P.margen, need = Math.max(0, pl.meta - pl.margenHave);
+  const mMonths = pl.margenFull ? 0 : (mMonthly > 0 ? Math.ceil(need / mMonthly) : null);
+  let fut = 0, mg = pl.margenHave;
+  for (let i = 0; i < 12; i++){ if (mg < pl.meta){ const add = Math.min(pl.P.margen, pl.meta - mg); mg += add; fut += pl.P.futuro + (pl.P.margen - add); } else fut += pl.P.futuro + pl.P.margen; }
+  return {mMonths, fut, mg};
+}
+function projText(pl){
+  if (pl.deficit) return "Hoy tus gastos fijos superan lo que te entra por " + money(pl.deficit) + ". Antes de repartir, el primer paso es bajar fijos o sumar ingresos. Bambú te acompaña en eso.";
+  const p = projection(pl);
+  const parts = [];
+  parts.push(pl.margenFull ? "Tu margen ya está lleno: lo que iba ahí se suma a tu futuro." :
+    p.mMonths !== null ? "Tu margen para imprevistos se llena en " + p.mMonths + (p.mMonths === 1 ? " mes" : " meses") + " (meta: " + money(pl.meta) + ")." : "Tu margen no recibe plata con este reparto.");
+  parts.push("En 12 meses sumás " + money(p.fut) + " a tu futuro, sin contar rendimientos.");
+  if (pl.retiro > 0) parts.push("De tu futuro, " + money(pl.retiro) + " por mes van a tu retiro.");
+  return parts.join(" ");
+}
+function pocketRows(box, pl, withWhy){
+  box.innerHTML = "";
+  POCKET_ORDER.forEach(k => {
+    if (k === "deudas" && !pl.hasDebt) return;
+    if (k === "margen" && pl.margenFull) return;
+    const info = POCKET_INFO[k], v = pl.P[k];
+    const row = document.createElement("div"); row.className = "pocketrow";
+    row.innerHTML = '<div class="pocket"><span class="sw"></span><div><div class="name"></div><div class="why"></div></div><div class="amt num"></div></div>';
+    row.querySelector(".sw").style.background = PCOLOR[k];
+    row.querySelector(".name").textContent = info.n;
+    row.querySelector(".why").textContent = info.d + (k === "futuro" && pl.retiro > 0 ? " · " + money(pl.retiro) + " para retiro" : "");
+    row.querySelector(".amt").innerHTML = money(v) + '<span class="pct">' + (pl.inc ? Math.round(v / pl.inc * 100) : 0) + '% del ingreso</span>';
+    if (withWhy){
+      const b = document.createElement("button"); b.className = "why"; b.textContent = "¿Por qué este número?";
+      const box2 = document.createElement("div"); box2.className = "whybox"; box2.hidden = true; box2.textContent = info.why + (k === "margen" ? " Tu meta: " + etapa(S.ctx).months + " meses de fijos por tu etapa" + (S.ctx.ingreso !== "fijo" ? ", más 2 por ingreso variable" : "") + (S.ctx.dep === "si" ? ", más 1 porque alguien depende de vos" : "") + "." : "");
+      b.onclick = () => { box2.hidden = !box2.hidden; };
+      row.appendChild(b); row.appendChild(box2);
+    }
+    box.appendChild(row);
+  });
+}
+function renderFirstPlan(){
+  const pl = plan();
+  $("fpTitle").textContent = "Hola, " + S.user.name + ". Así se reparte tu plata.";
+  const c = $("fpCard"); c.innerHTML = "";
+  const base = document.createElement("p"); base.className = "small muted";
+  base.textContent = (S.ctx.ingreso === "variable" ? "Calculado sobre tu mes flojo (" + money(pl.inc) + "). " : "Te entran " + money(pl.inc) + ". ") + "Después de tus gastos fijos quedan " + money(pl.libre) + " para repartir.";
+  c.appendChild(base);
+  const list = document.createElement("div"); c.appendChild(list); pocketRows(list, pl, true);
+  if (pl.adj.length){ const a = document.createElement("div"); a.className = "small muted"; a.innerHTML = "<b>Ajustado a vos:</b>"; const ul = document.createElement("ul"); ul.style.margin = "6px 0 0"; ul.style.paddingLeft = "18px"; pl.adj.forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.appendChild(li); }); a.appendChild(ul); c.appendChild(a); }
+  $("fpProj").textContent = projText(pl);
+  show("firstPlan");
+}
+$("fpBtn").onclick = () => {
+  const pl = plan();
+  $("fwTxt").textContent = pl.P.futuro > 0 ? "Pasá " + money(pl.P.futuro) + " a una cuenta aparte, o al menos una parte. Separarlo antes de ver la plata es la herramienta más poderosa del plan." : "Este mes no queda plata para el futuro. Tu primera misión es anotar tus gastos de una semana para ver dónde se puede achicar.";
+  show("firstWin");
+};
+$("fwYes").onclick = () => {
+  const pl = plan();
+  if (pl.P.futuro > 0) addMov({type:"save", orig:pl.P.futuro, cur:"ARS", cat:"futuro", note:"Primer bolsillo de futuro"});
+  S.firstWin = true; touch(); save(); leaves(); go("home");
+  $("qToast").textContent = "Primera misión cumplida. Tu bambú ya echó raíces.";
+};
+$("fwLater").onclick = () => { go("home"); };
+
+/* =========================================================
+   MOVIMIENTOS (lógica compartida)
+   ========================================================= */
+function touch(){ const w = week(); S.active = S.active || []; if (!S.active.includes(w)) S.active.push(w); }
+function addMov(m){
+  const amt = m.cur === "USD" ? m.orig * S.rate : (m.orig ?? m.amt);
+  S.movs.unshift(Object.assign({id:uid(), date:new Date().toISOString(), method:S.methods[0], cur:"ARS"}, m, {amt, orig: m.orig ?? amt}));
+  touch(); save();
+}
+function parseQuick(txt){
+  const t = txt.toLowerCase();
+  const m = t.match(/(\d+(?:[.,]\d+)*)\s*(lucas?|k\b|mil\b|palos?|millones?|usd|u\$s|d[oó]lares?|verdes)?/);
+  if (!m) return null;
+  let n = (/,\d{1,2}$/.test(m[1]) || /^\d+[.,]\d$/.test(m[1])) ? Number(m[1].replace(/\./g,"").replace(",",".")) : Number(m[1].replace(/[.,]/g,""));
+  const u = m[2] || "";
+  if (/luca|^k|mil/.test(u)) n *= 1e3; if (/palo|millon/.test(u)) n *= 1e6;
+  if (!(n > 0)) return null;
+  const usd = /usd|u\$s|d[oó]lar|verdes/.test(t);
+  const type = /cobr|ingres|me pagaron|me entr|sueldo|me dieron|mesada|mensualidad|vend[ií]/.test(t) ? "in" : /ahorr|guard|separ|apart/.test(t) ? "save" : "out";
+  let cat = type === "in" ? "ingreso" : type === "save" ? (/margen|imprevist/.test(t) ? "margen" : "futuro") : "otros";
+  if (type === "out") for (const [re,c] of KEYWORDS) if (re.test(t)){ cat = c; break; }
+  let note = txt.replace(m[0]," ").replace(/(^|\s)(gast[eé]|cobr[eé]|ahorr[eé]|pagu[eé]|en|el|la|los|las|un|una|de|del|al|por)(?=\s|$)/gi," ").replace(/(^|\s)(gast[eé]|cobr[eé]|ahorr[eé]|pagu[eé]|en|el|la|los|las|un|una|de|del|al|por)(?=\s|$)/gi," ").replace(/\s+/g," ").trim();
+  note = note ? note.charAt(0).toUpperCase() + note.slice(1) : (type === "out" ? CAT[cat].n : type === "in" ? "Ingreso" : "Ahorro");
+  return {type, orig:n, cur: usd ? "USD" : "ARS", cat, note};
+}
+function movLabel(m){ return m.type === "in" ? {e:"💵", n:"Ingreso"} : m.type === "save" ? {e: m.cat === "margen" ? "🛟" : "🌱", n: m.cat === "margen" ? "Margen" : "Futuro"} : (CAT[m.cat]||CAT.otros); }
+function listMovs(ul, arr, emptyTxt){
+  ul.innerHTML = "";
+  if (!arr.length){ const li = document.createElement("li"); li.className = "empty"; li.style.display = "block"; li.textContent = emptyTxt; ul.appendChild(li); return; }
+  arr.forEach(m => {
+    const c = movLabel(m), li = document.createElement("li");
+    li.innerHTML = '<span class="ic" aria-hidden="true"></span><div><div class="t"></div><div class="s"></div></div><div class="side"><div class="a num"></div><button class="del">Borrar</button></div>';
+    li.querySelector(".ic").textContent = c.e;
+    li.querySelector(".t").textContent = m.note || c.n;
+    li.querySelector(".s").textContent = c.n + " · " + m.method + " · " + new Date(m.date).toLocaleDateString("es-AR",{day:"numeric", month:"short"}) + (m.cur === "USD" ? " · US$ " + m.orig.toLocaleString("es-AR") : "");
+    const a = li.querySelector(".a"); a.textContent = (m.type === "out" ? "−" : "+") + money(m.amt);
+    if (m.type === "in") a.classList.add("in"); if (m.type === "save") a.classList.add("sav");
+    li.querySelector(".del").onclick = () => { S.movs = S.movs.filter(x => x.id !== m.id); save(); refresh(); };
+    ul.appendChild(li);
+  });
+}
+
+/* =========================================================
+   ALERTAS
+   ========================================================= */
+const daysTo = day => { const d = now().getDate(); return day >= d ? day - d : null; };
+function cardCycle(c){
+  const d = now(), start = new Date(d.getFullYear(), d.getMonth() - (d.getDate() > c.close ? 0 : 1), c.close + 1);
+  return {used: S.movs.filter(m => m.type === "out" && m.method === c.name && new Date(m.date) >= start).reduce((a,m) => a + m.amt, 0)};
+}
+const budgetCap = b => b.kind === "pct" ? baseIncome(S.ctx, S.nums) * b.val / 100 : b.val;
+function alerts(){
+  const A = [], pl = plan(), st = monthStats(ym(now()));
+  if (pl.deficit) A.push(["bad","Ojo: tus gastos fijos superan lo que te entra por " + money(pl.deficit) + ". El primer paso es bajar fijos o sumar ingresos."]);
+  if (pl.P.disfrute > 0 && st.disfrute > pl.P.disfrute) A.push(["bad","Te pasaste del disfrute por " + money(st.disfrute - pl.P.disfrute) + ". No pasa nada: el mes que viene arrancás de cero."]);
+  else if (pl.P.disfrute > 0 && st.disfrute > pl.P.disfrute * .85) A.push(["warn","Atención: usaste el " + Math.round(st.disfrute / pl.P.disfrute * 100) + "% de tu disfrute del mes."]);
+  if (S.ctx && S.ctx.deuda !== "no" && S.ctx.deudaMoneda === "USD" && S.ctx.pais === "Argentina") A.push(["warn","Tenés una deuda en dólares y tu ingreso es en pesos. Si el dólar sube, la deuda crece sola. Conviene priorizar cancelarla."]);
+  S.budgets.forEach(b => { const cap = budgetCap(b), u = st.cats[b.cat] || 0;
+    if (u > cap) A.push(["bad","Te pasaste de tu guía de " + CAT[b.cat].n.toLowerCase() + " por " + money(u - cap) + ". ¿Querés ajustar el monto?"]);
+    else if (u > cap * .85) A.push(["warn","Atención: llevás el " + Math.round(u/cap*100) + "% de tu guía de " + CAT[b.cat].n.toLowerCase() + "."]); });
+  S.fixed.forEach(f => { const d = daysTo(f.day); if (d !== null && d <= 3 && f.paid !== ym(now())) A.push(["warn", (d === 0 ? "Hoy" : d === 1 ? "Mañana" : "En " + d + " días") + " vence " + f.name + " (" + money(f.amt) + ")."]); });
+  S.cards.forEach(c => { const {used} = cardCycle(c), d = daysTo(c.due);
+    if (c.limit && used > c.limit * .8) A.push(["bad","Usaste el " + Math.round(used/c.limit*100) + "% del límite de " + c.name + "."]);
+    if (d !== null && d <= 3) A.push(["warn", (d === 0 ? "Hoy" : d === 1 ? "Mañana" : "En " + d + " días") + " vence " + c.name + ". Pagar solo el mínimo sale caro."]); });
+  // Detección automática: ingresos cargados muy distintos de lo declarado
+  const base = baseIncome(S.ctx, S.nums);
+  const ins = [1,2].map(k => { const d = new Date(now().getFullYear(), now().getMonth()-k, 1); return monthStats(ym(d)).in; });
+  if (base > 0 && ins.every(v => v > 0) && ins.every(v => Math.abs(v - base) / base > .25)) A.push(["warn","En los últimos dos meses te entró bastante distinto de lo que declaraste. ¿Actualizamos tu plan? Tocá \"Cambió mi situación\" en Plan."]);
+  const ready = S.wishes.filter(w => w.status === "wait" && Date.now() - w.t >= 48*3600e3);
+  if (ready.length) A.push(["ok","Ya pasaron las 48 horas de «" + ready[0].name + "». ¿Lo seguís queriendo?"]);
+  if (!S.moods[week()]) A.push(["ok","Todavía no hiciste tu chequeo emocional de esta semana. Son 5 segundos, en Vos."]);
+  return A;
+}
+function updateBell(){ if (!S.nums) return; const n = alerts().filter(a => a[0] !== "ok").length; $("bellN").hidden = !n; $("bellN").textContent = n; }
+function paintAlerts(box, list, max){
+  box.innerHTML = "";
+  const L = max ? list.slice(0, max) : list;
+  if (!L.length){ const d = document.createElement("div"); d.className = "alert ok"; d.textContent = "Todo en orden. Nada reclama tu atención."; box.appendChild(d); return; }
+  L.forEach(([c,t]) => { const d = document.createElement("div"); d.className = "alert " + c; d.textContent = t; box.appendChild(d); });
+}
+function renderAlerts(){ paintAlerts($("aList"), alerts()); }
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+function renderHome(){
+  const pl = plan(), st = monthStats(ym(now())), ta = todayAllowance();
+  $("hMonth").textContent = now().toLocaleDateString("es-AR",{weekday:"long", day:"numeric", month:"long"});
+  $("hHello").textContent = "Hola, " + S.user.name;
+  $("hToday").textContent = money(ta.perDay);
+  $("hTodayTxt").textContent = pl.deficit ? "Este mes tus fijos superan tu ingreso. Mirá tus alertas para ver por dónde empezar." :
+    ta.over ? "Este mes ya usaste tu disfrute. No pasa nada: el mes que viene arrancás de cero." :
+    "Te quedan " + money(ta.rest) + " de disfrute para " + ta.left + (ta.left === 1 ? " día" : " días") + ". Lo que no gastes hoy se suma a mañana.";
+  const months = S.nums.fijos > 0 ? savedTotal() / S.nums.fijos : Infinity;
+  $("hFree").textContent = isFinite(months) ? months.toLocaleString("es-AR",{maximumFractionDigits:1}) + (Math.abs(months - 1) < .05 ? " mes" : " meses") : "Sin fijos cargados";
+  $("hFreeTxt").textContent = !isFinite(months) ? "" : months < 1 ? "Primer objetivo: llegar a un mes." : months < 3 ? "Apuntá a 3 meses para dormir tranquilo." : months < 6 ? "Buen colchón. Con 6 tenés libertad real." : "Tenés libertad para elegir sin miedo.";
+  paintAlerts($("hAlerts"), alerts().filter(a => a[0] !== "ok"), 2);
+  renderHabitMini($("hHabit"));
+  const ul = $("hPockets"); ul.innerHTML = "";
+  POCKET_ORDER.forEach(k => {
+    if (k === "deudas" && !pl.hasDebt) return; if (k === "margen" && pl.margenFull) return;
+    const used = st[k], cap = pl.P[k], pct = cap > 0 ? used / cap : 0;
+    const li = document.createElement("li"); li.style.cssText = "display:flex;flex-direction:column;gap:6px";
+    li.innerHTML = '<div class="pocket"><span class="sw"></span><div><div class="name"></div><div class="why"></div></div><div class="amt num"></div></div><div class="meter"><i></i></div>';
+    li.querySelector(".sw").style.background = PCOLOR[k];
+    li.querySelector(".name").textContent = POCKET_INFO[k].n;
+    li.querySelector(".why").textContent = money(used) + (k === "futuro" || k === "margen" ? " apartado de " : " de ") + money(cap);
+    li.querySelector(".amt").textContent = money(cap);
+    const m = li.querySelector(".meter"); m.firstChild.style.width = Math.min(100, pct*100) + "%";
+    if (k === "fijos" || k === "disfrute"){ if (pct > 1) m.classList.add("over"); else if (pct > .85) m.classList.add("warn"); }
+    ul.appendChild(li);
+  });
+  renderSummary();
+  listMovs($("hLast"), S.movs.slice(0,4), "Todavía no anotaste nada. Probá arriba: «gasté 3.000 en un café».");
+}
+const TRAIT_TIP = {
+  impulso:["compras no planeadas", "Antes de la próxima compra que no tenías pensada, mandala a la lista de espera de 48 horas."],
+  ansiedad:["preocupación", "Mirá tu margen para imprevistos: saber cuánto tenés cubierto baja la tensión."],
+  evitacion:["no mirar", "Mirar tus números dos minutos por semana alcanza. Probá el domingo."],
+  comparacion:["gastar para otros", "Antes de comprar, preguntate si lo querrías aunque nadie lo viera."],
+  adoracion:["nunca alcanza", "Ponele un número a \"suficiente\". Sin meta, ningún número alcanza."],
+  control:["culpa al gastar", "Usá tu bolsillo de disfrute sin culpa: también es parte del plan."]
+};
+function renderSummary(){
+  const box = $("hSummary");
+  if (!isPlus()){ lockCard(box, "Tu resumen del mes", "Cómo te fue este mes, en qué se te fue la plata, qué rasgo apareció y un consejo para el que viene."); return; }
+  const pl = plan(), st = monthStats(ym(now())), q = S.quiz;
+  const top = Object.entries(st.cats).sort((a,b) => b[1] - a[1])[0];
+  const dis = pl.P.disfrute > 0 ? Math.round(st.disfrute / pl.P.disfrute * 100) : 0;
+  const imp = S.movs.filter(m => m.date.slice(0,7) === ym(now()) && m.type === "out" && CAT[m.cat] && CAT[m.cat].p === "disfrute").length;
+  const skipped = S.wishes.filter(w => w.status === "skipped" && new Date(w.t).toISOString().slice(0,7) === ym(now()));
+  const lines = [];
+  lines.push(st.in || st.out || st.save ? "Entró " + money(st.in) + ", salió " + money(st.out) + " y apartaste " + money(st.save) + "." : "Todavía no hay movimientos este mes. Anotá unos días y el resumen se arma solo.");
+  if (top) lines.push("Donde más gastaste: " + CAT[top[0]].n.toLowerCase() + " (" + money(top[1]) + ").");
+  if (pl.P.disfrute > 0) lines.push("Usaste el " + dis + "% de tu disfrute" + (imp ? " en " + imp + (imp === 1 ? " gasto." : " gastos.") : "."));
+  if (skipped.length) lines.push("La lista de espera te ahorró " + money(skipped.reduce((a,w) => a + w.amt, 0)) + ".");
+  const tip = TRAIT_TIP[q.dominant];
+  box.innerHTML = '<div class="row"><h3>Tu resumen del mes</h3><span class="soon">Bambú+</span></div><p class="small"></p><div class="whybox"><b></b><br><span></span></div>';
+  box.querySelector("p").textContent = lines.join(" ");
+  box.querySelector(".whybox b").textContent = "Tu rasgo del mes: " + TRAITS[q.dominant].n.toLowerCase() + " (" + tip[0] + ")";
+  box.querySelector(".whybox span").textContent = tip[1];
+}
+function quick(){
+  const r = parseQuick($("qAdd").value);
+  if (!r){ $("qToast").textContent = "No encontré un monto. Probá así: «gasté 2.500 en el colectivo»."; return; }
+  addMov(r); $("qAdd").value = "";
+  const lab = r.type === "out" ? CAT[r.cat].n : r.type === "in" ? "Ingresos" : "Ahorro";
+  renderHome(); updateBell();
+  $("qToast").textContent = "Anotado: " + (r.cur === "USD" ? "US$ " + r.orig.toLocaleString("es-AR") : pesos(r.orig)) + " en " + lab + ".";
+}
+$("qAddBtn").onclick = quick;
+$("qAdd").addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); quick(); } });
+
+/* =========================================================
+   MOVIMIENTOS (pantalla)
+   ========================================================= */
+let movType = "out", movFilter = "all";
+function fillCats(){ const sel = $("mCat"); sel.innerHTML = ""; const opts = movType === "out" ? CATS.map(c => [c[0], c[1]+" "+c[2]]) : movType === "in" ? [["ingreso","💵 Ingreso"]] : [["futuro","🌱 Futuro"],["margen","🛟 Margen para imprevistos"]]; opts.forEach(([v,t]) => sel.add(new Option(t, v))); }
+function fillMethods(){ const sel = $("mMethod"); sel.innerHTML = ""; S.methods.forEach(n => sel.add(new Option(n, n))); }
+$("movType").querySelectorAll("button").forEach(b => b.onclick = () => { movType = b.dataset.v; $("movType").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); fillCats(); });
+$("movFilter").querySelectorAll("button").forEach(b => b.onclick = () => { movFilter = b.dataset.f; $("movFilter").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderMovList(); });
+$("mSearch").addEventListener("input", () => renderMovList());
+$("movForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const orig = parseNum($("mAmt").value);
+  if (!(orig > 0)) return $("mErr").textContent = "Poné un monto mayor a cero.";
+  $("mErr").textContent = "";
+  const cat = $("mCat").value;
+  addMov({type:movType, orig, cur:$("mCur").value, cat, note:$("mNote").value.trim() || (movType === "out" ? CAT[cat].n : movType === "in" ? "Ingreso" : "Ahorro"), method:$("mMethod").value});
+  $("mAmt").value = ""; $("mNote").value = "";
+  renderMovList(); updateBell();
+});
+function renderMovs(){ fillCats(); fillMethods(); renderMovList(); renderFixed(); renderCards(); renderMethods(); }
+function renderMovList(){
+  const q = $("mSearch").value.trim().toLowerCase();
+  const arr = S.movs.filter(m => (movFilter === "all" || m.type === movFilter) && (!q || (m.note + " " + (CAT[m.cat] ? CAT[m.cat].n : "") + " " + m.method).toLowerCase().includes(q)));
+  listMovs($("movList"), arr, q ? "No encontramos nada con eso." : "Nada por acá todavía.");
+}
+function renderFixed(){
+  const ul = $("fixList"); ul.innerHTML = "";
+  $("fixTot").textContent = S.fixed.length ? "Total " + money(S.fixed.reduce((a,f) => a + f.amt, 0)) : "";
+  if (!S.fixed.length){ const li = document.createElement("li"); li.className = "empty"; li.style.display = "block"; li.textContent = "Sin gastos fijos. Cargá el primero arriba."; ul.appendChild(li); return; }
+  S.fixed.slice().sort((a,b) => a.day - b.day).forEach(f => {
+    const paid = f.paid === ym(now()), li = document.createElement("li");
+    li.innerHTML = '<span class="ic" aria-hidden="true">📅</span><div><div class="t"></div><div class="s"></div></div><div class="side"><div class="a num"></div><button class="btn sm pay"></button><button class="del">Borrar</button></div>';
+    li.querySelector(".t").textContent = f.name;
+    li.querySelector(".s").textContent = "Vence el día " + f.day + (paid ? " · pagado" : "");
+    li.querySelector(".a").textContent = money(f.amt);
+    const pay = li.querySelector(".pay"); pay.textContent = paid ? "Pagado" : "Pagar"; pay.disabled = paid; if (paid) pay.classList.add("ghost");
+    pay.onclick = () => { f.paid = ym(now()); addMov({type:"out", orig:f.amt, cur:"ARS", cat:/alquiler/i.test(f.name) ? "alquiler" : /netflix|spotify|disney|max|prime|youtube/i.test(f.name) ? "suscripciones" : "servicios", note:f.name}); save(); renderFixed(); updateBell(); };
+    li.querySelector(".del").onclick = () => { S.fixed = S.fixed.filter(x => x.id !== f.id); save(); renderFixed(); updateBell(); };
+    ul.appendChild(li);
+  });
+}
+$("fixForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const name = $("fxName").value.trim(), amt = parseNum($("fxAmt").value), day = parseInt($("fxDay").value, 10);
+  if (!name) return $("fxErr").textContent = "Poné qué es.";
+  if (!(amt > 0)) return $("fxErr").textContent = "Poné el monto.";
+  if (!(day >= 1 && day <= 31)) return $("fxErr").textContent = "El día tiene que estar entre 1 y 31.";
+  $("fxErr").textContent = "";
+  S.fixed.push({id:uid(), name, amt, day}); touch(); save();
+  $("fxName").value = $("fxAmt").value = $("fxDay").value = "";
+  renderFixed(); updateBell();
+});
+function segbar(pct, cls){ const sb = document.createElement("div"); sb.className = "segbar " + (cls || ""); for (let j = 0; j < 10; j++){ const i = document.createElement("i"); if (j < Math.round(Math.min(1,pct)*10)) i.className = "on"; sb.appendChild(i); } return sb; }
+function renderCards(){
+  const box = $("cardList"); box.innerHTML = "";
+  if (!S.cards.length){ const p = document.createElement("p"); p.className = "empty"; p.textContent = "Sin tarjetas todavía. Cargá la primera abajo."; box.appendChild(p); return; }
+  S.cards.forEach(c => {
+    const {used} = cardCycle(c), pct = c.limit ? used / c.limit : 0, d = daysTo(c.due);
+    const cls = pct > .8 ? "over" : pct > .6 ? "warn" : "";
+    const el = document.createElement("div"); el.className = "cc";
+    el.innerHTML = '<div class="row"><b>💳 <span class="n"></span></b><span class="state"></span></div><div class="sb"></div><div class="item sub" style="padding:0;border:0"><span class="u"></span><span class="dd"></span></div><button class="del" style="align-self:flex-start">Borrar tarjeta</button>';
+    el.querySelector(".n").textContent = c.name;
+    const s = el.querySelector(".state"); s.className = "state " + (cls || "ok"); s.textContent = cls === "over" ? "ojo" : cls === "warn" ? "atención" : "en control";
+    el.querySelector(".sb").replaceWith(segbar(pct, cls));
+    el.querySelector(".u").textContent = money(used) + " consumido de " + money(c.limit) + " · disponible " + money(Math.max(0, c.limit - used));
+    el.querySelector(".dd").textContent = "Cierra el " + c.close + " · vence el " + c.due + (d !== null && d <= 5 ? " (en " + d + " días)" : "");
+    el.querySelector(".del").onclick = () => { S.cards = S.cards.filter(x => x.id !== c.id); save(); renderCards(); updateBell(); };
+    box.appendChild(el);
+  });
+}
+$("cardForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const name = $("cName").value.trim(), limit = parseNum($("cLim").value), close = parseInt($("cClose").value,10), due = parseInt($("cDue").value,10);
+  if (!name) return $("cErr").textContent = "Poné el nombre de la tarjeta.";
+  if (!(limit > 0)) return $("cErr").textContent = "Poné el límite.";
+  if (!(close >= 1 && close <= 31) || !(due >= 1 && due <= 31)) return $("cErr").textContent = "Los días de cierre y vencimiento van del 1 al 31.";
+  $("cErr").textContent = "";
+  S.cards.push({id:uid(), name, limit, close, due}); if (!S.methods.includes(name)) S.methods.push(name);
+  save(); $("cName").value = $("cLim").value = $("cClose").value = $("cDue").value = "";
+  renderCards(); fillMethods(); renderMethods(); updateBell();
+});
+function renderMethods(){
+  const ul = $("methList"); ul.innerHTML = "";
+  S.methods.forEach((n, j) => {
+    const li = document.createElement("li");
+    li.innerHTML = '<span class="ic" aria-hidden="true"></span><div><div class="t"></div><div class="s"></div></div><div class="side"></div>';
+    li.querySelector(".ic").textContent = S.cards.some(c => c.name === n) ? "💳" : n === "Efectivo" ? "💵" : "🏦";
+    li.querySelector(".t").textContent = n;
+    const tot = S.movs.filter(m => m.method === n && m.type === "out" && m.date.slice(0,7) === ym(now())).reduce((a,m) => a + m.amt, 0);
+    li.querySelector(".s").textContent = (j === 0 ? "Por defecto · " : "") + "este mes " + money(tot);
+    const box = li.querySelector(".side");
+    if (j > 0){ const up = document.createElement("button"); up.className = "link"; up.textContent = "Por defecto"; up.onclick = () => { S.methods.splice(j,1); S.methods.unshift(n); save(); renderMethods(); fillMethods(); }; box.appendChild(up); }
+    if (S.methods.length > 1){ const d = document.createElement("button"); d.className = "del"; d.textContent = "Quitar"; d.onclick = () => { S.methods.splice(j,1); save(); renderMethods(); fillMethods(); }; box.appendChild(d); }
+    ul.appendChild(li);
+  });
+  const q = $("methQuick"); q.innerHTML = "";
+  METHOD_QUICK.filter(n => !S.methods.includes(n)).forEach(n => { const b = document.createElement("button"); b.className = "chip"; b.textContent = "+ " + n; b.onclick = () => { S.methods.push(n); save(); renderMethods(); fillMethods(); }; q.appendChild(b); });
+}
+
+/* =========================================================
+   PLAN (pantalla)
+   ========================================================= */
+function renderPlan(){ renderPockets(); renderSim(); renderGoals(); renderWishes(); renderBudgets(); }
+function renderPockets(){
+  const pl = plan();
+  $("pMode").textContent = S.mode === "auto" ? "Automático" : S.mode === "manual" ? "Armado por vos" : "Propuesto y ajustable";
+  $("pBase").textContent = (S.ctx.ingreso === "variable" ? "Calculado sobre tu mes flojo: " + money(pl.inc) + ". " : "Te entran " + money(pl.inc) + ". ") + "Gastos fijos: " + money(S.nums.fijos) + ". Quedan " + money(pl.libre) + " para repartir.";
+  const sp = $("pSplit"); sp.innerHTML = "";
+  const tot = POCKET_ORDER.reduce((a,k) => a + (pl.P[k] || 0), 0) || 1;
+  POCKET_ORDER.forEach(k => { if (!(pl.P[k] > 0)) return; const i = document.createElement("i"); i.style.width = (pl.P[k]/tot*100) + "%"; i.style.background = PCOLOR[k]; i.title = POCKET_INFO[k].n + ": " + money(pl.P[k]); sp.appendChild(i); });
+  pocketRows($("pList"), pl, true);
+  const adj = $("pAdj"); adj.innerHTML = "";
+  if (pl.adj.length){ const a = document.createElement("div"); a.className = "small muted"; a.innerHTML = "<b>Ajustado a vos:</b>"; const ul = document.createElement("ul"); ul.style.margin = "6px 0 0"; ul.style.paddingLeft = "18px"; pl.adj.forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.appendChild(li); }); a.appendChild(ul); adj.appendChild(a); }
+  renderEdit(pl);
+  $("pProj").textContent = projText(pl);
+  // margen
+  $("mgTxt").textContent = money(pl.margenHave) + " de " + money(pl.meta);
+  $("mgMeter").firstChild.style.width = Math.min(100, pl.meta ? pl.margenHave / pl.meta * 100 : 0) + "%";
+  $("mgNote").textContent = "Para el auto, el calefón o el regalo que no viste venir. Tu meta: " + etapa(S.ctx).months + " meses de gastos fijos por tu etapa" + (S.ctx.ingreso !== "fijo" ? ", más 2 porque tu ingreso varía" : "") + (S.ctx.dep === "si" ? ", más 1 porque alguien depende de vos" : "") + ".";
+  // antes y después
+  const cmp = $("pCompare"); cmp.innerHTML = "";
+  if (S.raiseTip){
+    const c = document.createElement("div"); c.className = "card";
+    c.innerHTML = '<h3>Te entra más plata</h3><p class="small"></p><div class="grid2"><button class="btn sm" id="raiseYes">Sí, mandar la mitad al futuro</button><button class="btn sm ghost" id="raiseNo">Ahora no</button></div>';
+    c.querySelector("p").textContent = "Ahora te entran " + money(S.raiseTip.extra) + " más por mes. Si mandás la mitad a tu futuro antes de acostumbrarte a gastarla, casi no lo vas a notar. Es la idea del programa Save More Tomorrow.";
+    cmp.appendChild(c);
+    c.querySelector("#raiseYes").onclick = () => {
+      const base = S.split || recommendedSplit(S.ctx).split, p2 = plan();
+      const extraPct = p2.libre > 0 ? (S.raiseTip.extra / 2) / p2.libre * 100 : 0;
+      const totb = base.disfrute + base.futuro + base.margen;
+      const f = Math.min(85, base.futuro / totb * 100 + extraPct), d = Math.max(15, base.disfrute / totb * 100 - extraPct);
+      S.split = {disfrute: Math.round(d), futuro: Math.round(f), margen: Math.max(0, 100 - Math.round(d) - Math.round(f))};
+      if (S.mode === "auto") S.mode = "editable";
+      S.raiseTip = null; save(); leaves(18); renderPlan();
+    };
+    c.querySelector("#raiseNo").onclick = () => { S.raiseTip = null; save(); renderPlan(); };
+  }
+  if (S.prevPlan){
+    const c = document.createElement("div"); c.className = "card";
+    c.innerHTML = '<div class="row"><h3>Antes y después</h3><button class="link" id="cmpClose">Listo</button></div><div class="compare"><span class="h">Bolsillo</span><span class="h">Antes</span><span class="h">Ahora</span></div>';
+    const g = c.querySelector(".compare");
+    POCKET_ORDER.forEach(k => { const a = S.prevPlan.P[k] || 0, b = pl.P[k] || 0; if (!a && !b) return; [POCKET_INFO[k].n, money(a), money(b)].forEach((t,i) => { const s = document.createElement("span"); s.textContent = t; if (i === 2) s.style.fontWeight = "700"; g.appendChild(s); }); });
+    cmp.appendChild(c);
+    c.querySelector("#cmpClose").onclick = () => { S.prevPlan = null; save(); renderPlan(); };
+  }
+}
+function renderEdit(pl){
+  const box = $("pEdit"); box.innerHTML = "";
+  const head = document.createElement("div"); head.className = "row";
+  head.innerHTML = '<h3>Ajustar el plan</h3>';
+  box.appendChild(head);
+  const modes = document.createElement("div"); modes.className = "seg";
+  [["auto","Automático"],["editable","Propuesto"],["manual","Lo armo yo"]].forEach(([k,n]) => { const b = document.createElement("button"); b.textContent = n; b.classList.toggle("on", S.mode === k); b.onclick = () => { S.mode = k; if (k === "auto" || k === "editable") S.split = null; if (k === "manual" && !S.split) S.split = {disfrute:34, futuro:33, margen:33}; save(); renderPlan(); }; modes.appendChild(b); });
+  box.appendChild(modes);
+  if (S.mode === "auto"){ const p = document.createElement("p"); p.className = "small muted"; p.textContent = "Bambú reparte y ajusta solo, según tus rasgos y tu etapa. Si querés mover algo, pasá a \"Propuesto\"."; box.appendChild(p); return; }
+  const rec = recommendedSplit(S.ctx).split;
+  const cur = Object.assign({}, S.split || rec);
+  const keys = ["disfrute","futuro","margen"];
+  const totc = keys.reduce((a,k) => a + cur[k], 0);
+  keys.forEach(k => cur[k] = Math.round(cur[k] / totc * 100));
+  const sliders = {};
+  keys.forEach(k => {
+    const w = document.createElement("label"); w.className = "slider"; w.htmlFor = "sl-" + k;
+    w.innerHTML = '<span></span><b class="num"></b><input type="range" min="0" max="100" step="1" style="grid-column:1/-1">';
+    w.firstChild.textContent = POCKET_INFO[k].n;
+    const inp = w.querySelector("input"); inp.id = "sl-" + k; inp.value = cur[k];
+    w.querySelector("b").textContent = cur[k] + "%";
+    sliders[k] = {inp, lab: w.querySelector("b")};
+    box.appendChild(w);
+  });
+  const cons = document.createElement("div"); cons.className = "conseq"; box.appendChild(cons);
+  const btns = document.createElement("div"); btns.className = "grid2";
+  btns.innerHTML = '<button class="btn sm">Guardar</button><button class="btn sm ghost">Volver a lo recomendado</button>';
+  box.appendChild(btns);
+  const conseq = () => {
+    const test = planFor(S.ctx, S.nums, cur), recp = planFor(S.ctx, S.nums, null);
+    const p1 = projection(test), p0 = projection(recp);
+    const ta = (test.P.disfrute) / 30;
+    const parts = [];
+    if (cur.disfrute < 15) parts.push("Con menos de 15% para disfrutar, el plan cuesta sostenerlo. Un plan que solo restringe se suele abandonar.");
+    if (!test.margenFull) parts.push(p1.mMonths === null ? "Sin plata para el margen, un imprevisto te obligaría a tocar tu futuro o endeudarte." : "Tu margen se llena en " + p1.mMonths + (p1.mMonths === 1 ? " mes" : " meses") + (p0.mMonths !== null && p0.mMonths !== p1.mMonths ? " (con lo recomendado: " + p0.mMonths + ")" : "") + ".");
+    parts.push("En 12 meses sumás " + money(p1.fut) + " a tu futuro" + (Math.abs(p1.fut - p0.fut) > 1 ? " (con lo recomendado: " + money(p0.fut) + ")" : "") + ".");
+    parts.push("Podrías gastar unos " + money(ta) + " por día sin culpa.");
+    cons.textContent = parts.join(" ");
+  };
+  keys.forEach(k => sliders[k].inp.addEventListener("input", () => {
+    const v = Number(sliders[k].inp.value), others = keys.filter(x => x !== k);
+    const rest = 100 - v, oSum = others.reduce((a,x) => a + cur[x], 0);
+    cur[k] = v;
+    others.forEach((x, i) => { cur[x] = i === others.length - 1 ? rest - others.slice(0, -1).reduce((a,y) => a + cur[y], 0) : Math.round(oSum > 0 ? cur[x] / oSum * rest : rest / others.length); });
+    keys.forEach(x => { cur[x] = Math.max(0, cur[x]); sliders[x].inp.value = cur[x]; sliders[x].lab.textContent = cur[x] + "%"; });
+    conseq();
+  }));
+  btns.children[0].onclick = () => { S.split = Object.assign({}, cur); if (S.mode === "auto") S.mode = "editable"; save(); renderPlan(); };
+  btns.children[1].onclick = () => { S.split = null; if (S.mode === "manual") S.mode = "editable"; save(); renderPlan(); };
+  conseq();
+}
+$("mgBtn").onclick = () => { const v = parseNum($("mgAdd").value); if (!(v > 0)) return; addMov({type:"save", orig:v, cur:"ARS", cat:"margen", note:"Margen para imprevistos"}); $("mgAdd").value = ""; const pl = plan(); if (pl.margenFull) leaves(); renderPlan(); updateBell(); };
+function renderSim(){
+  const plus = isPlus(); $("simCard").hidden = !plus; $("simLock").hidden = plus;
+  if (!plus) lockCard($("simLock"), "¿Y si lo dejás crecer?", "Simulá cuánto puede crecer lo que separás cada mes si lo dejás quieto unos años. Es la idea del interés compuesto que viste en el test.");
+  if (!$("simM").value) $("simM").value = fmtInt(Math.round(plan().P.futuro));
+  const m = parseNum($("simM").value) || 0, y = Math.min(60, parseInt($("simY").value,10) || 0), r = (parseNum($("simR").value) || 0) / 100;
+  const n = y * 12, i = Math.pow(1 + r, 1/12) - 1;
+  const fv = i > 0 ? m * (Math.pow(1+i, n) - 1) / i : m * n;
+  $("simPut").textContent = money(m*n); $("simGot").textContent = money(fv);
+  $("simTxt").textContent = n ? "El tiempo pone " + money(Math.max(0, fv - m*n)) + " de más. Tu yo de dentro de " + y + (y === 1 ? " año" : " años") + " te lo va a agradecer." : "";
+}
+["simM","simY","simR"].forEach(id => $(id).addEventListener("input", renderSim));
+function renderGoals(){
+  $("savTot").textContent = money(savedTotal());
+  $("savTxt").textContent = "Lo que tenías al empezar más todo lo que fuiste apartando. De eso, " + money(margenSaved()) + " es tu margen para imprevistos.";
+  const box = $("goalList"); box.innerHTML = "";
+  if (!S.goals.length){ const d = document.createElement("p"); d.className = "empty"; d.textContent = "Todavía no tenés metas. ¿Un viaje, un auto, tu fondo?"; box.appendChild(d); return; }
+  S.goals.forEach(g => {
+    const pct = Math.min(100, g.saved / g.target * 100), left = Math.max(0, g.target - g.saved);
+    const months = g.monthly > 0 ? Math.ceil(left / g.monthly) : null;
+    const when = months ? new Date(now().getFullYear(), now().getMonth() + months, 1).toLocaleDateString("es-AR",{month:"long", year:"numeric"}) : null;
+    const d = document.createElement("div"); d.className = "item";
+    d.innerHTML = '<div class="top"><span class="n"></span><span class="num p"></span></div><p class="small muted w2" hidden></p><div class="meter"><i></i></div><div class="sub"><span class="a"></span><span class="w"></span></div><div class="inline"><span class="money"><input inputmode="numeric" placeholder="Sumar plata" aria-label="Monto a sumar"></span><button class="btn sm">Sumar</button></div><button class="del" style="align-self:flex-start">Borrar meta</button>';
+    d.querySelector(".n").textContent = "🎯 " + g.name;
+    if (g.why){ const w = d.querySelector(".w2"); w.hidden = false; w.textContent = "Para " + g.why.replace(/^para\s+/i, ""); }
+    d.querySelector(".p").textContent = Math.round(pct) + "%";
+    d.querySelector(".meter i").style.width = pct + "%";
+    d.querySelector(".a").textContent = money(g.saved) + " de " + money(g.target);
+    d.querySelector(".w").textContent = pct >= 100 ? "¡Meta cumplida!" : when ? "Llegás en " + when + " (" + money(g.monthly) + " por mes)" : "Poné cuánto sumás por mes para ver la fecha";
+    const inp = d.querySelector("input");
+    d.querySelector(".btn").onclick = () => { const v = parseNum(inp.value); if (!(v > 0)) return; const was = g.saved >= g.target; g.saved += v; addMov({type:"save", orig:v, cur:"ARS", cat:"futuro", note:"Meta: " + g.name}); if (!was && g.saved >= g.target) leaves(); renderGoals(); };
+    d.querySelector(".del").onclick = () => { S.goals = S.goals.filter(x => x.id !== g.id); save(); renderGoals(); };
+    box.appendChild(d);
+  });
+}
+function addGoal(name, target, monthly, why){ S.goals.push({id:uid(), name, target, saved:0, monthly: monthly > 0 ? monthly : 0, why: why || ""}); touch(); save(); }
+$("goalForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const name = $("gName").value.trim(), target = parseNum($("gTarget").value), monthly = $("gMonthly").value.trim() ? parseNum($("gMonthly").value) : 0;
+  if (!name) return $("gErr").textContent = "Ponele nombre a tu meta.";
+  if (!(target > 0)) return $("gErr").textContent = "Poné cuánto necesitás.";
+  $("gErr").textContent = "";
+  addGoal(name, target, monthly, $("gWhy").value.trim());
+  $("gName").value = $("gTarget").value = $("gMonthly").value = $("gWhy").value = "";
+  renderGoals();
+});
+function renderWishes(){
+  const sk = S.wishes.filter(w => w.status === "skipped");
+  $("wSaved").textContent = money(sk.reduce((a,w) => a + w.amt, 0)); $("wCount").textContent = sk.length;
+  const box = $("wList"); box.innerHTML = "";
+  const act = S.wishes.filter(w => w.status === "wait");
+  if (!act.length){ const p = document.createElement("p"); p.className = "empty"; p.textContent = "Nada en espera. La próxima tentación, anotala acá antes de comprar."; box.appendChild(p); return; }
+  act.forEach(w => {
+    const left = 48*3600e3 - (Date.now() - w.t), ready = left <= 0;
+    const d = document.createElement("div"); d.className = "item";
+    d.innerHTML = '<div class="top"><span class="n"></span><span class="num a"></span></div><div class="sub"><span class="l"></span></div><div class="grid2"><button class="btn sm ghost buy">Lo compro</button><button class="btn sm skip">Ya no lo quiero</button></div>';
+    d.querySelector(".n").textContent = "⏳ " + w.name; d.querySelector(".a").textContent = money(w.amt);
+    d.querySelector(".l").textContent = ready ? "Pasaron las 48 horas. ¿Lo seguís queriendo?" : "Faltan " + Math.ceil(left/3600e3) + " horas para decidir.";
+    const buy = d.querySelector(".buy"); buy.disabled = !ready;
+    buy.onclick = () => { w.status = "bought"; addMov({type:"out", orig:w.amt, cur:"ARS", cat:"otros", note:w.name}); renderWishes(); updateBell(); };
+    d.querySelector(".skip").onclick = () => { w.status = "skipped"; touch(); save(); leaves(20); renderWishes(); updateBell(); };
+    box.appendChild(d);
+  });
+}
+$("wForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const name = $("wName").value.trim(), amt = parseNum($("wAmt").value);
+  if (!name) return $("wErr").textContent = "Poné qué querés comprar.";
+  if (!(amt > 0)) return $("wErr").textContent = "Poné cuánto sale.";
+  $("wErr").textContent = "";
+  S.wishes.unshift({id:uid(), name, amt, t:Date.now(), status:"wait"}); touch(); save();
+  $("wName").value = $("wAmt").value = "";
+  renderWishes();
+});
+function renderBudgets(){
+  const s = $("bCat"); s.innerHTML = ""; CATS.filter(c => !S.budgets.some(b => b.cat === c[0])).forEach(c => s.add(new Option(c[1]+" "+c[2], c[0])));
+  const box = $("budList"), st = monthStats(ym(now())); box.innerHTML = "";
+  if (!S.budgets.length){ const p = document.createElement("p"); p.className = "empty"; p.textContent = "Sin guías este mes. Creá una abajo."; box.appendChild(p); return; }
+  S.budgets.forEach(b => {
+    const cap = budgetCap(b), u = st.cats[b.cat] || 0, pct = cap ? u / cap : 0, cls = pct > 1 ? "over" : pct > .85 ? "warn" : "";
+    const el = document.createElement("div"); el.className = "item";
+    el.innerHTML = '<div class="top"><span class="n"></span><span class="state"></span></div><div class="sb"></div><div class="sub"><span class="u"></span><button class="del">Borrar</button></div>';
+    el.querySelector(".n").textContent = CAT[b.cat].e + " " + CAT[b.cat].n;
+    const s2 = el.querySelector(".state"); s2.className = "state " + (cls || "ok"); s2.textContent = cls === "over" ? "te pasaste" : cls === "warn" ? "atención" : "en control";
+    el.querySelector(".sb").replaceWith(segbar(pct, cls));
+    el.querySelector(".u").textContent = money(u) + " de " + money(cap) + " · " + Math.round(pct*100) + "% usado";
+    el.querySelector(".del").onclick = () => { S.budgets = S.budgets.filter(x => x !== b); save(); renderBudgets(); updateBell(); };
+    box.appendChild(el);
+  });
+}
+$("budForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const cat = $("bCat").value, kind = $("bKind").value, val = parseNum($("bVal").value);
+  if (!cat) return $("bErr").textContent = "Ya tenés una guía para cada categoría.";
+  if (!(val > 0)) return $("bErr").textContent = "Poné un tope mayor a cero.";
+  if (kind === "pct" && val > 100) return $("bErr").textContent = "El porcentaje va de 1 a 100.";
+  $("bErr").textContent = "";
+  S.budgets.push({cat, kind, val}); touch(); save(); $("bVal").value = "";
+  renderBudgets(); updateBell();
+});
+
+/* =========================================================
+   PATRIMONIO
+   ========================================================= */
+const toArs = a => a.cur === "USD" ? a.amt * S.rate : a.amt;
+function worthTotal(){ return S.assets.length ? S.assets.reduce((s,a) => s + toArs(a), 0) : savedTotal(); }
+function renderWorth(){
+  $("wRate").value = fmtInt(S.rate);
+  const total = worthTotal(); S.snaps[ym(now())] = total; save();
+  $("wTotal").textContent = money(total);
+  const prev = S.snaps[ym(new Date(now().getFullYear(), now().getMonth()-1, 1))];
+  $("wSub").textContent = (S.view === "ARS" ? "≈ US$ " + Math.round(total/(S.rate||1)).toLocaleString("es-AR") : "≈ " + pesos(total)) +
+    (prev ? " · " + (total >= prev ? "subió " : "bajó ") + Math.abs((total-prev)/prev*100).toLocaleString("es-AR",{maximumFractionDigits:1}) + "% contra el mes pasado" : "") +
+    (S.assets.length ? "" : " · Por ahora tomamos tu ahorro. Sumá cuentas e inversiones abajo.");
+  const ul = $("assetList"); ul.innerHTML = "";
+  if (!S.assets.length){ const li = document.createElement("li"); li.className = "empty"; li.style.display = "block"; li.textContent = "Sumá lo que tenés: cuentas, dólares, inversiones, el auto."; ul.appendChild(li); }
+  const ICON = {cuenta:"🏦", inversion:"📈", efectivo:"💵", bien:"🚗"}, KIND = {cuenta:"Cuenta o billetera", inversion:"Inversión", efectivo:"Efectivo", bien:"Bien"};
+  S.assets.forEach(a => {
+    const li = document.createElement("li");
+    li.innerHTML = '<span class="ic" aria-hidden="true"></span><div><div class="t"></div><div class="s"></div></div><div class="side"><div class="a num"></div><button class="del">Borrar</button></div>';
+    li.querySelector(".ic").textContent = ICON[a.kind]; li.querySelector(".t").textContent = a.name;
+    li.querySelector(".s").textContent = KIND[a.kind] + (a.cur === "USD" ? " · US$ " + a.amt.toLocaleString("es-AR") : "");
+    li.querySelector(".a").textContent = money(toArs(a));
+    li.querySelector(".del").onclick = () => { S.assets = S.assets.filter(x => x.id !== a.id); save(); renderWorth(); };
+    ul.appendChild(li);
+  });
+  const inf = $("wInfl"); inf.innerHTML = "";
+  if (S.ctx && S.ctx.pais === "Argentina"){
+    inf.innerHTML = '<h3>Tu plata quieta</h3><p class="small muted">En un país con inflación, los pesos que quedan quietos pierden valor: guardar plata deja de ser una forma de cuidarla. Bambú no te recomienda dónde invertir. Si tenés pesos sin usar, consultá con un profesional o preguntale al asistente qué opciones existen en general.</p>';
+  } else inf.hidden = true;
+  renderHist();
+}
+function renderHist(){
+  const box = $("hist"); box.innerHTML = "";
+  const rows = []; for (let k = 5; k >= 0; k--){ const d = new Date(now().getFullYear(), now().getMonth()-k, 1); rows.push([d, monthStats(ym(d))]); }
+  const max = Math.max(1, ...rows.map(([,s]) => Math.max(s.in, s.out, s.save)));
+  rows.forEach(([d,s]) => {
+    const net = s.in - s.out, r = document.createElement("div"); r.className = "mrow";
+    r.innerHTML = '<span class="ml"></span><div class="bars"><i style="background:var(--green)"></i><i style="background:var(--bad)"></i><i style="background:var(--b-futuro)"></i></div><span class="net"></span>';
+    r.querySelector(".ml").textContent = d.toLocaleDateString("es-AR",{month:"short"}).replace(".","");
+    const bars = r.querySelectorAll(".bars i");
+    [[s.in,"Ingresos"],[s.out,"Gastos"],[s.save,"Ahorro"]].forEach(([v,n],j) => { bars[j].style.width = (v/max*100) + "%"; bars[j].title = n + ": " + money(v); });
+    const ne = r.querySelector(".net"); ne.textContent = (net >= 0 ? "+" : "−") + money(Math.abs(net)); ne.classList.add(net >= 0 ? "pos" : "neg");
+    box.appendChild(r);
+  });
+}
+$("wRate").addEventListener("change", () => { const v = parseNum($("wRate").value); if (v > 0){ S.rate = v; save(); renderWorth(); } });
+$("assetForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const name = $("aName").value.trim(), amt = parseNum($("aAmt").value);
+  if (!name) return $("aErr").textContent = "Poné qué es.";
+  if (!(amt > 0)) return $("aErr").textContent = "Poné el valor.";
+  $("aErr").textContent = "";
+  S.assets.push({id:uid(), name, amt, kind:$("aKind").value, cur:$("aCur").value}); touch(); save();
+  $("aName").value = $("aAmt").value = "";
+  renderWorth();
+});
+
+/* =========================================================
+   VOS: rasgos, hábito, creencias, Bambú+
+   ========================================================= */
+function habitSuggestions(){
+  const t = S.quiz.traits, dom = S.quiz.dominant;
+  return [...HABITS].sort((a,b) => (b.t.includes(dom) ? 2 : 0) + Math.max(...b.t.map(x => t[x])) / 100 - ((a.t.includes(dom) ? 2 : 0) + Math.max(...a.t.map(x => t[x])) / 100));
+}
+function habitWeeks(){ if (!S.habit) return 0; return Object.keys(S.habit.checks || {}).filter(k => S.habit.checks[k]).length; }
+function renderHabitMini(box){
+  box.innerHTML = "";
+  if (!S.habit){
+    const h = habitSuggestions()[0];
+    box.innerHTML = '<span class="eyebrow">Un hábito por vez</span><p class="habit"><span class="hint"></span></p><button class="btn sm" style="align-self:flex-start">Empezar este hábito</button>';
+    box.querySelector(".hint").textContent = h.txt;
+    box.querySelector("button").onclick = () => { S.habit = {k:h.k, start:new Date().toISOString(), checks:{}}; touch(); save(); leaves(14); refresh(); };
+    return;
+  }
+  const h = HABITS.find(x => x.k === S.habit.k), w = week(), done = S.habit.checks[w];
+  box.innerHTML = '<div class="row"><span class="eyebrow">Tu hábito</span><span class="small muted wk"></span></div><p class="habit" style="margin:0"><span class="hint"></span></p><div class="hbtns"></div>';
+  box.querySelector(".hint").textContent = h.txt;
+  box.querySelector(".wk").textContent = "Semana " + Math.min(9, habitWeeks() + (done ? 0 : 1)) + " de unas 9";
+  const b = box.querySelector(".hbtns");
+  if (done){ b.innerHTML = '<p class="small" style="color:var(--green);margin:0">Cumplido esta semana. Tu bambú sumó un nudo.</p>'; }
+  else { b.className = "grid2"; b.innerHTML = '<button class="btn sm">Lo cumplí esta semana</button><button class="btn sm ghost">Esta no pude</button>';
+    b.children[0].onclick = () => { S.habit.checks[w] = true; touch(); save(); leaves(18); refresh(); };
+    b.children[1].onclick = () => { S.habit.checks[w] = false; save(); refresh(); $("qToast") && ($("qToast").textContent = "No pasa nada. Un hábito se arma en semanas, no en días."); };
+  }
+}
+function renderHabit(){
+  const card = $("habitCard"); card.innerHTML = "";
+  if (!S.habit){ renderHabitMini(card); }
+  else {
+    const h = HABITS.find(x => x.k === S.habit.k), wks = habitWeeks();
+    card.innerHTML = '<span class="eyebrow">Tu hábito</span><span class="hint"></span><p class="small muted why2"></p><div class="weeks"></div><p class="small">Escrito como "cuando pasa esto, hago aquello". Esa forma simple aumenta mucho las chances de cumplir lo que te proponés (Gollwitzer, 1999). Para que algo se vuelva automático hacen falta unos dos meses (Lally et al., 2010).</p><div class="hm"></div>';
+    card.querySelector(".hint").textContent = h.txt;
+    card.querySelector(".why2").textContent = h.why;
+    const wk = card.querySelector(".weeks"); for (let i = 0; i < 9; i++){ const x = document.createElement("i"); if (i < wks) x.className = "on"; wk.appendChild(x); }
+    renderHabitMini(card.querySelector(".hm"));
+    card.querySelector(".hm").querySelector(".hint") && (card.querySelector(".hm").querySelector(".habit").hidden = true);
+  }
+  const list = $("habitList"); list.innerHTML = "";
+  habitSuggestions().forEach(h => {
+    if (S.habit && S.habit.k === h.k) return;
+    const b = document.createElement("button"); b.type = "button"; b.innerHTML = '<span></span><small></small>';
+    b.firstChild.textContent = h.txt; b.lastChild.textContent = h.why;
+    b.onclick = () => { S.habit = {k:h.k, start:new Date().toISOString(), checks:{}}; touch(); save(); renderHabit(); };
+    list.appendChild(b);
+  });
+}
+function beliefKeys(){
+  const a = S.quiz.answers, t = S.quiz.traits, keys = [];
+  if (a[11] >= 2) keys.push("adoracion1");
+  if (a[12] >= 2) keys.push("adoracion2");
+  if (t.evitacion >= 50) keys.push("evitacion");
+  if (t.comparacion >= 50) keys.push("estatus");
+  if (t.control >= 60 && t.ansiedad >= 40) keys.push("culpa");
+  if (t.impulso >= 60) keys.push("merezco");
+  if (S.ctx && S.ctx.ingreso === "mesada") keys.push("respaldo");
+  keys.push("sufrimiento");
+  return keys.filter(k => S.beliefs[k] !== "no");
+}
+function renderBeliefs(){
+  const box = $("beliefList"); box.innerHTML = "";
+  const keys = beliefKeys();
+  if (!keys.length){ const p = document.createElement("p"); p.className = "empty"; p.textContent = "Descartaste todas las creencias. Si volvés a hacer el test, pueden aparecer otras."; box.appendChild(p); return; }
+  const free = isPlus() ? keys.length : 2;
+  keys.forEach((k, idx) => {
+    if (idx >= free){ if (idx === free){ const l = document.createElement("div"); l.className = "card"; lockCard(l, "Tenés " + (keys.length - free) + (keys.length - free === 1 ? " creencia más" : " creencias más") + " para trabajar", "Salen de tus respuestas al test. Con Bambú+ las ves todas, cada una con su pregunta y su ejercicio."); box.appendChild(l); } return; }
+    const B = BELIEFS[k], done = S.beliefs[k] === "done";
+    const c = document.createElement("div"); c.className = "card belief";
+    c.innerHTML = '<span class="quote"></span><dl><dt>De dónde suele venir</dt><dd class="f"></dd><dt>Una pregunta para vos</dt><dd class="q"></dd><dt>Otra forma de verlo</dt><dd class="a" style="color:var(--green);font-weight:600"></dd><dt>Mini ejercicio</dt><dd class="e"></dd></dl><div class="grid2"><button class="btn sm"></button><button class="btn sm ghost">No me representa</button></div>';
+    c.querySelector(".quote").textContent = B.q; c.querySelector(".f").textContent = B.from; c.querySelector(".q").textContent = B.ask; c.querySelector(".a").textContent = B.alt; c.querySelector(".e").textContent = B.ex;
+    const b1 = c.querySelector(".btn"); b1.textContent = done ? "La estoy trabajando ✓" : "La voy a trabajar"; if (done) b1.classList.add("ghost");
+    b1.onclick = () => { S.beliefs[k] = done ? undefined : "done"; touch(); save(); if (!done) leaves(12); renderBeliefs(); };
+    c.querySelectorAll(".btn")[1].onclick = () => { S.beliefs[k] = "no"; save(); renderBeliefs(); };
+    box.appendChild(c);
+  });
+}
+function plusInfo(){ const start = S.plusStart ? new Date(S.plusStart) : null; const days = start && !S.trialOff ? 30 - Math.floor((Date.now() - start) / DAY) : 0; return {trial: days > 0, days: Math.max(0, days), plus: S.plus}; }
+const isPlus = () => { const p = plusInfo(); return p.plus || p.trial; };
+function lockCard(el, title, text){
+  el.innerHTML = '<div class="row"><h3></h3><span class="soon">Bambú+</span></div><p class="small muted"></p><button class="btn sm" style="align-self:flex-start">Conocé Bambú+</button>';
+  el.querySelector("h3").textContent = title; el.querySelector("p").textContent = text;
+  el.querySelector("button").onclick = openPlus;
+}
+function openPlus(){ go("me"); const b = $("meSeg").querySelector('[data-sub="me-more"]'); b.click(); setTimeout(() => $("plusCard").scrollIntoView({behavior: calm ? "auto" : "smooth", block:"start"}), 50); }
+function renderPlus(){
+  const c = $("plusCard"), p = plusInfo(); c.innerHTML = "";
+  const st = p.plus ? "Tenés Bambú+" : p.trial ? "Prueba gratis: te quedan " + p.days + (p.days === 1 ? " día" : " días") : "Versión gratis";
+  c.innerHTML = '<div class="row"><h3>Bambú+</h3><span class="state ok"></span></div>' +
+    '<p class="small muted">Tu primer mes tenés todo, gratis. Después, lo esencial sigue gratis para siempre: el test, tu plan, los bolsillos, anotar, tarjetas, metas, un hábito, tus dos creencias principales y el asistente con IA (5 mensajes por día).</p>' +
+    '<ul class="sources"><li><b>Asistente a fondo:</b> hasta 20 mensajes por hora, en vez de 5 por día.</li><li><b>Resumen del mes.</b> Cómo te fue, qué rasgo apareció y un consejo para el próximo.</li><li><b>Todas tus creencias</b> para trabajar, no solo las dos principales.</li><li><b>Tu evolución:</b> compará tus tests y mirá cómo cambiaron tus rasgos.</li><li><b>Simulador</b> de cuánto crece tu plata con el tiempo.</li><li><b>Modo emprendedor</b>, cuando salga.</li></ul>' +
+    '<div class="plans"><div class="stat"><span class="l">Mensual</span><span class="v num">US$ 2,99</span><span class="l">por mes</span></div><div class="stat best"><span class="l">Anual · 2 meses gratis</span><span class="v num">US$ 29,90</span><span class="l">por año</span></div></div>' +
+    '<p class="note">Te avisamos antes de que termine la prueba. Si no hacés nada, volvés a la versión gratis sin cargos y no perdés nada de lo que cargaste.</p>' +
+    '<div class="grid2" id="plusBtns"></div><p class="note">Versión de demostración: acá no se cobra nada.</p>';
+  c.querySelector(".state").textContent = st;
+  if (p.trial && p.days <= 3 && !p.plus){ const a = document.createElement("div"); a.className = "alert warn"; a.textContent = "Tu prueba termina en " + p.days + (p.days === 1 ? " día" : " días") + ". Si no hacés nada, volvés a la versión gratis sin cargos."; c.insertBefore(a, c.querySelector(".plans")); }
+  const bx = c.querySelector("#plusBtns");
+  const btn = (t, cls, fn) => { const b = document.createElement("button"); b.className = "btn sm" + (cls ? " " + cls : ""); b.textContent = t; b.onclick = fn; bx.appendChild(b); };
+  if (p.plus) btn("Cancelar Bambú+", "ghost", () => { S.plus = false; save(); paintAiNote(); renderMe(); });
+  else btn("Activar Bambú+", "", () => { S.plus = true; save(); leaves(); paintAiNote(); renderMe(); });
+  if (!p.plus) btn(S.trialOff ? "Volver a la prueba gratis" : "Ver cómo queda sin la prueba", "ghost", () => { S.trialOff = !S.trialOff; save(); paintAiNote(); renderMe(); });
+}
+let bi = 0;
+function renderMe(){
+  const q = S.quiz;
+  $("meName").textContent = S.user.name;
+  $("meDate").textContent = "Test del " + new Date(q.date).toLocaleDateString("es-AR",{day:"numeric", month:"short"});
+  renderTraits($("meTraits"), q);
+  let dom = "Tu rasgo dominante es " + TRAITS[q.dominant].n.toLowerCase() + ". " + TRAITS[q.dominant].power + " Su trampa: " + TRAITS[q.dominant].trap.charAt(0).toLowerCase() + TRAITS[q.dominant].trap.slice(1);
+  if (q.prev && isPlus()){ const d = q.traits[q.dominant] - (q.prev.traits[q.dominant] || 0); if (d) dom += " Desde tu test anterior, este rasgo " + (d > 0 ? "subió " : "bajó ") + Math.abs(d) + " puntos."; }
+  $("meDom").textContent = dom;
+  const mc = $("meCompare"); mc.hidden = !q.prev;
+  if (q.prev){
+    if (!isPlus()) lockCard(mc, "Tu evolución", "Hiciste el test más de una vez. Con Bambú+ comparás tus rasgos de antes y de ahora.");
+    else {
+      mc.innerHTML = '<div class="row"><h3>Tu evolución</h3><span class="small muted"></span></div><div class="compare"><span class="h">Rasgo</span><span class="h">Antes</span><span class="h">Ahora</span></div>';
+      mc.querySelector(".row .small").textContent = "Desde el " + new Date(q.prev.date).toLocaleDateString("es-AR",{day:"numeric", month:"short"});
+      const g = mc.querySelector(".compare");
+      TORDER.forEach(t => { const a = q.prev.traits[t] || 0, b = q.traits[t], d = b - a; [TRAITS[t].n, a + "%", b + "%" + (d ? (d > 0 ? " ▲" : " ▼") : "")].forEach((x,i) => { const sp = document.createElement("span"); sp.textContent = x; if (i === 2) sp.style.fontWeight = "700"; g.appendChild(sp); }); });
+    }
+  }
+  $("meSaber").innerHTML = q.saber + ' <small>de 3</small>'; $("meHacer").innerHTML = q.hacer + ' <small>de 4</small>';
+  $("meCross").textContent = crossText(q);
+  const cur = S.moods[week()];
+  $("mood").querySelectorAll("button").forEach(b => { b.classList.toggle("on", String(cur) === b.dataset.m); b.onclick = () => { const first = !S.moods[week()]; S.moods[week()] = Number(b.dataset.m); touch(); save(); renderMe(); updateBell(); if (first) leaves(12); }; });
+  const vals = Object.values(S.moods);
+  $("moodTxt").textContent = cur ? "Anotado. Llevás " + vals.length + (vals.length === 1 ? " semana registrada." : " semanas registradas.") + (cur >= 3 ? " Si estás tenso, mirá tu margen: suele ayudar." : "") : "Un toque por semana. Medir cómo te sentís también es cuidar tu plata.";
+  // nudos
+  const nudos = habitWeeks() + Object.keys(S.moods).length;
+  let si = 0; STAGES.forEach((s,j) => { if (nudos >= s[2]) si = j; });
+  const stg = $("stages"); stg.innerHTML = "";
+  STAGES.forEach((s,j) => { const d = document.createElement("div"); if (j <= si) d.className = "reached"; if (j === si) d.classList.add("now"); d.innerHTML = '<span class="dot"></span><span></span>'; d.firstChild.textContent = s[1]; d.lastChild.textContent = s[0]; stg.appendChild(d); });
+  const next = STAGES[si+1];
+  $("stageTxt").textContent = "Tu bambú suma un nudo por cada semana que cumplís tu hábito o hacés tu chequeo. Llevás " + nudos + (nudos === 1 ? " nudo." : " nudos.") + (next ? " Te faltan " + (next[2] - nudos) + " para llegar a " + next[0] + "." : "");
+  $("bTitle").textContent = BIASES[bi][0]; $("bText").textContent = BIASES[bi][1];
+  const dd = $("bDots"); dd.innerHTML = ""; BIASES.forEach((_,j) => { const i = document.createElement("i"); if (j === bi) i.className = "on"; dd.appendChild(i); });
+  const nextTest = new Date(new Date(q.date).getTime() + 90*DAY);
+  $("againBtn").textContent = Date.now() >= nextTest ? "Volver a hacer el test: ver cuánto creció tu bambú" : "Volver a hacer el test (sugerido desde el " + nextTest.toLocaleDateString("es-AR",{day:"numeric", month:"short"}) + ")";
+  $("toast2").textContent = "";
+  renderHabit(); renderBeliefs(); renderPlus();
+}
+$("bNext").onclick = () => { bi = (bi + 1) % BIASES.length; renderMe(); };
+$("againBtn").onclick = startQuiz;
+$("wipeBtn").onclick = () => { $("wipeConfirm").hidden = false; };
+$("wipeNo").onclick = () => { $("wipeConfirm").hidden = true; };
+$("wipeYes").onclick = () => { try { localStorage.removeItem(KEY); } catch(_) {} S = blank(); $("wipeConfirm").hidden = true; aiTurns = []; show("welcome"); };
+
+/* =========================================================
+   ASISTENTE (Claude a través del artifact)
+   ========================================================= */
+let sample = null, aiTurns = [], aiCtl = null, aiBusy = false;
+const AI_HOUR = 20, AI_DAY_FREE = 5;
+function webSample(url){
+  const call = async (turns, opts) => {
+    let r;
+    try { r = await fetch(url, {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({messages:turns}), signal:opts && opts.signal}); }
+    catch(e){ throw {code: e && e.name === "AbortError" ? "cancelled" : "network"}; }
+    if (r.status === 429) throw {code:"rate_limited"};
+    if (!r.ok) throw {code:"server"};
+    const d = await r.json(); return d.text || "";
+  };
+  const f = async (i, o) => ({text: await call(i, o), truncated:false});
+  f.json = async (i, o) => { const t = await call(i, o); const m = t.match(/\{[\s\S]*\}/); try { return JSON.parse(m ? m[0] : t); } catch(_) { throw {code:"invalid_json", text:t}; } };
+  return f;
+}
+(async () => {
+  try { sample = window.claude ? await window.claude.use("sample") : null; } catch(_) { sample = null; }
+  if (!sample && window.BAMBU_API) sample = webSample(window.BAMBU_API);
+  paintAiNote();
+})();
+function aiAllowance(){
+  const t = Date.now(); S.aiHits = (S.aiHits || []).filter(x => t - x < DAY);
+  if (isPlus()) return AI_HOUR - S.aiHits.filter(x => t - x < 3600e3).length;
+  const today = new Date().toDateString();
+  return AI_DAY_FREE - S.aiHits.filter(x => new Date(x).toDateString() === today).length;
+}
+function paintAiNote(){
+  const n = $("aiNote"); if (!n) return;
+  if (!sample){ n.textContent = "El asistente funciona cuando abrís Bambú desde Claude. Igual podés anotar gastos desde el Inicio."; return; }
+  const left = aiAllowance();
+  n.textContent = "Asistente con Claude, de Anthropic. Responde con lo que cargaste en Bambú. Antes de cambiar algo, te pide confirmación. No es asesoramiento financiero. " + (isPlus() ? (plusInfo().plus ? "Con Bambú+" : "En tu mes de prueba") + " podés mandar hasta " + AI_HOUR + " mensajes por hora: te quedan " + Math.max(0, left) + "." : "En la versión gratis tenés " + AI_DAY_FREE + " mensajes por día: te quedan " + Math.max(0, left) + ". Con Bambú+, hasta " + AI_HOUR + " por hora.");
+}
+function contextSummary(){
+  const pl = plan(), st = monthStats(ym(now())), q = S.quiz, ta = todayAllowance();
+  const tr = TORDER.map(t => TRAITS[t].n + " " + q.traits[t] + "%").join(", ");
+  const lines = [
+    "Nombre: " + S.user.name,
+    "Rasgos (0 a 100): " + tr + ". Dominante: " + TRAITS[q.dominant].n + ".",
+    "Saber (preguntas de conocimiento correctas): " + q.saber + " de 3. Hacer (hábitos): " + q.hacer + " de 4.",
+    "Etapa: " + etapa(S.ctx).n + ". Ingreso: " + (INGRESOS.find(i => i.k === S.ctx.ingreso) || {}).n + ". Personas a cargo: " + S.ctx.dep + ". Deudas: " + S.ctx.deuda + (S.ctx.deudaMoneda ? " en " + S.ctx.deudaMoneda : "") + ". País: " + S.ctx.pais + ".",
+    "Ingreso usado para el plan: " + pesos(pl.inc) + ". Gastos fijos: " + pesos(S.nums.fijos) + ". Ahorro total: " + pesos(savedTotal()) + (S.nums.deuda ? ". Deuda: " + pesos(S.nums.deuda) : "") + ".",
+    "Modo del plan: " + S.mode + ". Bolsillos por mes: " + POCKET_ORDER.filter(k => pl.P[k] > 0).map(k => POCKET_INFO[k].n + " " + pesos(pl.P[k])).join(", ") + ". Reparto de lo libre: disfrute " + Math.round(pl.split.disfrute) + "%, futuro " + Math.round(pl.split.futuro) + "%, margen " + Math.round(pl.split.margen) + "%.",
+    "Margen para imprevistos: " + pesos(pl.margenHave) + " de una meta de " + pesos(pl.meta) + ".",
+    "Este mes: entró " + pesos(st.in) + ", salió " + pesos(st.out) + ", disfrute usado " + pesos(st.disfrute) + ". Hoy puede gastar sin culpa " + pesos(ta.perDay) + ".",
+    "Metas: " + (S.goals.length ? S.goals.map(g => g.name + " (" + pesos(g.saved) + " de " + pesos(g.target) + ")").join("; ") : "ninguna") + ".",
+    "Hábito actual: " + (S.habit ? HABITS.find(h => h.k === S.habit.k).txt : "ninguno") + ".",
+    "Últimos movimientos: " + (S.movs.slice(0,8).map(m => (m.type === "out" ? "gasto" : m.type === "in" ? "ingreso" : "ahorro") + " " + pesos(m.amt) + " " + (m.note || "")).join("; ") || "ninguno") + "."
+  ];
+  return lines.join("\n");
+}
+const AI_RULES = () => "Sos el asistente de Bambú, una app gratuita que ayuda a las personas a llevarse mejor con su plata, basada en la psicología del dinero (Housel, Eker, Klontz, economía conductual). " +
+  "Hablás en español rioplatense, tuteando con voseo. Tono: cercano y profesional, sin retar, sin sermones y sin culpa. Respuestas cortas: 2 a 5 oraciones, con números concretos cuando sirvan. " +
+  "Reglas: no recomendás inversiones, activos ni productos puntuales; podés explicar conceptos generales. Aclarás que no es asesoramiento financiero cuando des algo parecido a un consejo de inversión. No prometés resultados. Nunca inventes datos de la persona: usá solo los que figuran abajo. " +
+  "Podés proponer acciones, pero la persona las confirma con un botón. Acciones posibles: " +
+  "add_movement {movType: \"out\"|\"in\"|\"save\", amount: número en pesos, category: una de [" + CATS.map(c => c[0]).join(", ") + ", ingreso, futuro, margen], note: texto corto}; " +
+  "set_split {disfrute, futuro, margen: porcentajes enteros de la plata libre que sumen 100}; " +
+  "add_goal {name, target: número en pesos, why: texto corto opcional}. " +
+  "Si la persona cuenta un gasto o ingreso, proponé add_movement. Si pide cambiar el reparto, proponé set_split. Si menciona algo para lo que quiere ahorrar, podés proponer add_goal. " +
+  "Respondé SOLO con un objeto JSON: {\"reply\": \"tu respuesta\", \"actions\": [ ... ]}. actions puede ser una lista vacía.\n\n" +
+  "Datos actuales de la persona:\n" + contextSummary();
+function bubble(cls, text){ const d = document.createElement("div"); d.className = "bubble " + cls; d.textContent = text; $("chatlog").appendChild(d); $("chatlog").scrollTop = $("chatlog").scrollHeight; return d; }
+function actionCard(a){
+  let label = "";
+  if (a.type === "add_movement"){ const amt = Number(a.amount); if (!(amt > 0)) return; const cat = String(a.category || "otros"); label = (a.movType === "in" ? "Anotar ingreso de " : a.movType === "save" ? "Anotar ahorro de " : "Anotar gasto de ") + pesos(amt) + (CAT[cat] ? " en " + CAT[cat].n : "") + (a.note ? " (" + a.note + ")" : ""); }
+  else if (a.type === "set_split"){ const d = Math.round(Number(a.disfrute)), f = Math.round(Number(a.futuro)), m = Math.round(Number(a.margen)); if (![d,f,m].every(x => x >= 0) || d + f + m < 95 || d + f + m > 105) return; label = "Cambiar el reparto: disfrute " + d + "%, futuro " + f + "%, margen " + m + "%"; }
+  else if (a.type === "add_goal"){ const t = Number(a.target); if (!a.name || !(t > 0)) return; label = "Crear la meta \"" + a.name + "\" de " + pesos(t); }
+  else return;
+  const c = document.createElement("div"); c.className = "action";
+  c.innerHTML = '<span></span><div class="btns"><button class="btn sm">Confirmar</button><button class="btn sm ghost">Descartar</button></div>';
+  c.firstChild.textContent = label;
+  const [ok, no] = c.querySelectorAll("button");
+  ok.onclick = () => {
+    if (a.type === "add_movement"){ const mt = ["out","in","save"].includes(a.movType) ? a.movType : "out"; let cat = String(a.category || "otros"); if (mt === "out" && !CAT[cat]) cat = "otros"; if (mt === "in") cat = "ingreso"; if (mt === "save" && cat !== "margen") cat = "futuro"; addMov({type:mt, orig:Number(a.amount), cur:"ARS", cat, note: String(a.note || "").slice(0,60) || (mt === "out" ? CAT[cat].n : mt === "in" ? "Ingreso" : "Ahorro")}); }
+    if (a.type === "set_split"){ const d = Math.round(Number(a.disfrute)), f = Math.round(Number(a.futuro)), m = Math.round(Number(a.margen)), t = d + f + m; S.split = {disfrute: d*100/t, futuro: f*100/t, margen: m*100/t}; if (S.mode === "auto") S.mode = "editable"; save(); }
+    if (a.type === "add_goal"){ addGoal(String(a.name).slice(0,60), Number(a.target), 0, String(a.why || "").slice(0,80)); }
+    c.innerHTML = ""; c.textContent = "Hecho: " + label + ".";
+    refresh();
+  };
+  no.onclick = () => { c.remove(); };
+  $("chatlog").appendChild(c); $("chatlog").scrollTop = $("chatlog").scrollHeight;
+}
+async function askAi(text){
+  if (aiBusy || !text.trim()) return;
+  if (!sample){ bubble("ai", "El asistente funciona cuando abrís Bambú desde Claude. Mientras, podés anotar desde el Inicio escribiendo, por ejemplo, «gasté 5.000 en el súper»."); return; }
+  if (aiAllowance() <= 0){ if (isPlus()){ const h = S.aiHits.filter(x => Date.now() - x < 3600e3); const next = Math.ceil((3600e3 - (Date.now() - h[0])) / 60000); bubble("ai", "Llegaste al tope de " + AI_HOUR + " mensajes por hora. Se libera uno en " + next + (next === 1 ? " minuto." : " minutos.")); }
+    else { bubble("ai", "Por hoy usaste tus " + AI_DAY_FREE + " mensajes gratis. Mañana se renuevan. Con Bambú+ tenés hasta " + AI_HOUR + " por hora."); const b = document.createElement("button"); b.className = "btn sm"; b.style.alignSelf = "flex-start"; b.textContent = "Conocé Bambú+"; b.onclick = () => { $("sheetClose").onclick(); openPlus(); }; $("chatlog").appendChild(b); }
+    return; }
+  aiBusy = true; $("chatSend").disabled = true;
+  bubble("me", text);
+  aiTurns.push({role:"user", content:text});
+  if (aiTurns.length > 12) aiTurns = aiTurns.slice(-12);
+  while (aiTurns.length && aiTurns[0].role !== "user") aiTurns.shift();
+  const wait = bubble("ai wait", "Pensando…");
+  aiCtl = new AbortController();
+  try {
+    const out = await sample.json([{role:"user", content: AI_RULES()}, ...aiTurns], {signal: aiCtl.signal, cache:false, modelTier:"quick"});
+    const reply = out && typeof out.reply === "string" ? out.reply : "No pude armar una respuesta. ¿Probás de nuevo con otras palabras?";
+    wait.className = "bubble ai"; wait.textContent = reply;
+    aiTurns.push({role:"assistant", content: reply});
+    if (out && Array.isArray(out.actions)) out.actions.slice(0,3).forEach(actionCard);
+    S.aiHits.push(Date.now()); save();
+  } catch(e){
+    const code = e && e.code;
+    wait.className = "bubble ai";
+    wait.textContent = code === "not_granted" || code === "sampling_disabled" || code === "capability_disabled" ? "El asistente no está habilitado en esta vista. Podés seguir usando todo lo demás." :
+      code === "rate_limited" ? "Hubo muchas consultas seguidas. Esperá un rato y volvé a preguntar." :
+      code === "cancelled" ? "Cancelado." :
+      code === "invalid_json" && e.text ? e.text.slice(0, 600) :
+      "No pude responder ahora. Probá de nuevo en un momento.";
+    if (code === "not_granted" || code === "sampling_disabled") sample = null;
+    aiTurns.pop();
+  } finally {
+    aiBusy = false; $("chatSend").disabled = false; paintAiNote(); $("chatlog").scrollTop = $("chatlog").scrollHeight;
+  }
+}
+const SUGGEST = ["¿Me alcanza para un viaje de $500.000?","Explicame mi plan","Gasté 8.000 en la farmacia","No sé por dónde empezar","¿Qué es el interés compuesto?"];
+$("fab").onclick = () => {
+  $("sheet").hidden = false; paintAiNote();
+  if (!$("chatlog").children.length) bubble("ai", "Hola, " + S.user.name + ". Soy el asistente de Bambú. Preguntame lo que quieras sobre tu plata, contame un gasto para anotarlo o pedime que ajuste tu plan.");
+  const sg = $("suggest"); sg.innerHTML = ""; SUGGEST.forEach(t => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.onclick = () => askAi(t); sg.appendChild(b); });
+  setTimeout(() => $("chatIn").focus(), 50);
+};
+$("sheetClose").onclick = () => { $("sheet").hidden = true; if (aiCtl) aiCtl.abort(); };
+$("sheet").addEventListener("click", e => { if (e.target === $("sheet")) $("sheetClose").onclick(); });
+$("chatForm").addEventListener("submit", e => { e.preventDefault(); const t = $("chatIn").value; $("chatIn").value = ""; askAi(t); });
+
+/* =========================================================
+   FEEDBACK (versión beta)
+   En la versión web, las respuestas van al Google Form a través de /api/feedback.
+   ========================================================= */
+const FEEDBACK_API = window.BAMBU_FEEDBACK || ""; // en la versión web: "/api/feedback"
+let fb = {};
+function openFeedback(){
+  fb = {}; $("fbForm").reset(); $("fbErr").textContent = "";
+  $("fbRate").querySelectorAll("button").forEach(b => b.classList.remove("on"));
+  $("fbRec").querySelectorAll("button").forEach(b => b.classList.remove("on"));
+  $("fbForm").hidden = false; $("fbThanks").hidden = true; $("fbSend").disabled = false;
+  $("fbSheet").hidden = false;
+}
+const closeFeedback = () => { $("fbSheet").hidden = true; };
+$("betaBtn").onclick = openFeedback; $("fbOpen2").onclick = openFeedback;
+$("fbClose").onclick = closeFeedback; $("fbDone").onclick = closeFeedback;
+$("fbSheet").addEventListener("click", e => { if (e.target === $("fbSheet")) closeFeedback(); });
+[["fbRate","rating"],["fbRec","recommend"]].forEach(([id,key]) => $(id).querySelectorAll("button").forEach(b => b.onclick = () => { fb[key] = b.dataset.v; $(id).querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); }));
+function fbContext(){
+  const parts = ["v1 beta", location.hostname || "claude"];
+  if (S.ctx) parts.push("etapa: " + etapa(S.ctx).n, "ingreso: " + S.ctx.ingreso);
+  if (S.quiz) parts.push("rasgo: " + TRAITS[S.quiz.dominant].n, "saber " + S.quiz.saber + "/3", "hacer " + S.quiz.hacer + "/4");
+  parts.push("movimientos: " + S.movs.length, isPlus() ? "plus/prueba" : "gratis");
+  return parts.join(" · ");
+}
+$("fbForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = {rating: fb.rating ? ["","Poco","Algo","Bastante","Mucho"][fb.rating] : "", like: $("fbLike").value.trim(), improve: $("fbImprove").value.trim(), bug: $("fbBug").value.trim(), recommend: fb.recommend || "", context: fbContext()};
+  if (!data.rating && !data.like && !data.improve && !data.bug) return $("fbErr").textContent = "Contanos aunque sea una cosa: qué tan útil te resultó o qué mejorarías.";
+  if (!FEEDBACK_API) return $("fbErr").textContent = "En esta vista de prueba no se envían opiniones. Probá desde el link web de Bambú.";
+  $("fbErr").textContent = ""; $("fbSend").disabled = true;
+  try {
+    const r = await fetch(FEEDBACK_API, {method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(data)});
+    if (!r.ok) throw new Error(r.status);
+    $("fbForm").hidden = true; $("fbThanks").hidden = false; leaves(16);
+  } catch(_) {
+    $("fbSend").disabled = false;
+    $("fbErr").textContent = "No se pudo enviar. Revisá tu conexión y probá de nuevo.";
+  }
+});
+
+/* =========================================================
+   HOJAS
+   ========================================================= */
+function leaves(n){
+  if (calm) return;
+  const c = $("fx"), x = c.getContext("2d"), dpr = window.devicePixelRatio || 1;
+  c.width = innerWidth*dpr; c.height = innerHeight*dpr; x.setTransform(dpr,0,0,dpr,0,0);
+  const ps = Array.from({length:n||40}, () => ({x:Math.random()*innerWidth, y:-20-Math.random()*innerHeight*.5, vy:2+Math.random()*2.5, vx:-1+Math.random()*2, a:Math.random()*6, va:-.08+Math.random()*.16, s:8+Math.random()*10, c:Math.random() < .7 ? "#4BD583" : "#2E9B5C"}));
+  let f = 0;
+  (function tick(){
+    x.clearRect(0,0,innerWidth,innerHeight);
+    ps.forEach(p => { p.y += p.vy; p.x += p.vx + Math.sin((f+p.s)*.05); p.a += p.va; x.save(); x.translate(p.x,p.y); x.rotate(p.a); x.fillStyle = p.c; x.globalAlpha = .9; x.beginPath(); x.ellipse(0,0,p.s,p.s*.32,0,0,Math.PI*2); x.fill(); x.restore(); });
+    if (++f < 140) requestAnimationFrame(tick); else x.clearRect(0,0,innerWidth,innerHeight);
+  })();
+}
+
+/* =========================================================
+   ARRANQUE
+   ========================================================= */
+paintCur();
+if (S.user && S.quiz && S.nums && S.mode) go("home");
+else if (S.user && S.quiz && S.nums) show("modePick");
+else if (S.user && S.quiz) openMoment(false);
+else if (S.quiz) renderResult();
+else show("welcome");
+})();
+</script></body></html>
