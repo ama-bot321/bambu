@@ -25,7 +25,7 @@ async function entries() {
 module.exports = async function handler(req, res) {
   // Para revisar: abrí /api/feedback en el navegador y muestra qué preguntas encontró
   if (req.method === "GET") {
-    try { cache = null; const map = await entries(); return res.status(200).json({ok: true, preguntas: map}); }
+    try { cache = null; const map = await entries(); res.setHeader("cache-control", "s-maxage=3600"); return res.status(200).json({ok: true, action: BASE + "/formResponse", preguntas: map}); }
     catch (e) { return res.status(200).json({ok: false, error: String(e && e.message || e)}); }
   }
   if (req.method !== "POST") return res.status(405).json({error: "method"});

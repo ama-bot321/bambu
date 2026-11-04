@@ -2326,8 +2326,14 @@ $("fbForm").addEventListener("submit", async e => {
   if (!FEEDBACK_API) return $("fbErr").textContent = "En esta vista de prueba no se envían opiniones. Probá desde el link web de Bambú.";
   $("fbErr").textContent = ""; $("fbSend").disabled = true;
   try {
-    const r = await fetch(FEEDBACK_API, {method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(data)});
-    if (!r.ok){ let d = ""; try { d = (await r.json()).error || ""; } catch(_) {} throw new Error(d || r.status); }
+    // 1) La app pide a Bambú los códigos de las preguntas del formulario
+    const r = await fetch(FEEDBACK_API, {cache:"no-store"});
+    const info = r.ok ? await r.json() : null;
+    if (!info || !info.ok || !info.action) throw new Error((info && info.error) || "formulario no encontrado");
+    // 2) El navegador manda la respuesta directo a Google Forms, como si la persona llenara el formulario
+    const body = new URLSearchParams({fvv:"1", pageHistory:"0"});
+    Object.entries(info.preguntas || {}).forEach(([k, entry]) => { if (entry && data[k]) body.append(entry, data[k]); });
+    await fetch(info.action, {method:"POST", mode:"no-cors", body});
     S.fbSent = true; save(); $("hFeedback").hidden = true; $("fbForm").hidden = true; $("fbThanks").hidden = false; leaves(16);
   } catch(err) {
     $("fbSend").disabled = false;
