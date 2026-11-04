@@ -9,7 +9,9 @@ const hits = new Map();
 
 async function entries() {
   if (cache && Date.now() - cachedAt < 6 * 3600e3) return cache;
-  const html = await (await fetch(BASE + "/viewform")).text();
+  const r = await fetch(BASE + "/viewform", {headers: {"user-agent": "Mozilla/5.0", "accept-language": "es-AR,es;q=0.9"}});
+  const html = await r.text();
+  if (!r.ok) throw new Error("viewform " + r.status);
   const m = html.match(/FB_PUBLIC_LOAD_DATA_\s*=\s*(\[[\s\S]*?\]);\s*<\/script>/);
   if (!m) throw new Error("No encontré los datos del formulario");
   const items = (JSON.parse(m[1])[1] || [])[1] || [];
@@ -21,6 +23,11 @@ async function entries() {
 }
 
 module.exports = async function handler(req, res) {
+  // Para revisar: abrí /api/feedback en el navegador y muestra qué preguntas encontró
+  if (req.method === "GET") {
+    try { cache = null; const map = await entries(); return res.status(200).json({ok: true, preguntas: map}); }
+    catch (e) { return res.status(200).json({ok: false, error: String(e && e.message || e)}); }
+  }
   if (req.method !== "POST") return res.status(405).json({error: "method"});
   const ip = (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "anon";
   const now = Date.now(), h = (hits.get(ip) || []).filter(t => now - t < 3600e3);
@@ -29,10 +36,10 @@ module.exports = async function handler(req, res) {
   const d = req.body || {};
   try {
     const map = await entries();
-    const body = new URLSearchParams();
+    const body = new URLSearchParams({fvv: "1", pageHistory: "0"});
     KEYS.forEach(([k]) => { const v = String(d[k] || "").slice(0, 1000); if (map[k] && v) body.append(map[k], v); });
-    const r = await fetch(BASE + "/formResponse", {method: "POST", headers: {"content-type": "application/x-www-form-urlencoded"}, body});
-    if (!r.ok) { console.error("Form", r.status); return res.status(502).json({error: "form"}); }
+    const r = await fetch(BASE + "/formResponse", {method: "POST", headers: {"content-type": "application/x-www-form-urlencoded", "user-agent": "Mozilla/5.0"}, body});
+    if (!r.ok) { console.error("Form", r.status); return res.status(502).json({error: "form " + r.status}); }
     return res.status(200).json({ok: true});
-  } catch (e) { console.error(e); cache = null; return res.status(502).json({error: "form"}); }
+  } catch (e) { console.error(e); cache = null; return res.status(502).json({error: String(e && e.message || e)}); }
 };

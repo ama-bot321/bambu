@@ -37,7 +37,12 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({model: MODEL, max_tokens: 700, system: SAFETY, messages: clean})
     });
     if (r.status === 429) return res.status(429).json({error: "rate_limited"});
-    if (!r.ok) { console.error("Anthropic", r.status, await r.text()); return res.status(502).json({error: "upstream"}); }
+    if (!r.ok) {
+      const t = await r.text(); console.error("Anthropic", r.status, t);
+      // Clave vencida o borrada, o sin crédito: la app muestra "el asistente llega pronto"
+      if (r.status === 401 || r.status === 403 || (r.status === 400 && /credit/i.test(t))) return res.status(503).json({error: "no_key"});
+      return res.status(502).json({error: "upstream"});
+    }
     const d = await r.json();
     const text = (d.content || []).filter(b => b.type === "text").map(b => b.text).join("");
     return res.status(200).json({text});

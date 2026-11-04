@@ -359,6 +359,36 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
 .locked .preview{position:absolute; inset:0; justify-content:center; opacity:.6}
 .locked .over{position:relative; inset:auto; padding:22px 18px; gap:12px}
 .locked .over p{margin:0}
+
+/* recorrido de bienvenida */
+.tour{align-items:center}
+.tourpanel{height:auto !important; border-radius:24px !important; border-bottom:1.5px solid var(--line) !important; margin:16px; max-width:440px; text-align:center; align-items:center; gap:12px !important; padding:24px 20px !important}
+.tourpanel>b{font-family:var(--display); font-size:26px; line-height:1.15}
+.tourpanel>p{margin:0; font-size:17px; line-height:1.5; color:var(--muted)}
+.tourart{font-size:56px; line-height:1}
+.tourart .mock{font-family:var(--display); font-weight:800; font-size:44px; color:var(--green)}
+.tourart .say{font-size:16px; font-family:inherit; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:12px 14px; color:var(--ink); display:inline-block}
+.tourdots{display:flex; gap:6px}
+.tourdots i{width:8px; height:8px; border-radius:99px; background:var(--line)}
+.tourdots i.on{background:var(--green); width:22px}
+.tourbtns{display:flex; flex-direction:column; gap:10px; width:100%; margin-top:4px}
+.tourbtns .btn{min-height:52px; font-size:17px}
+.tourbtns .choice2{display:flex; flex-direction:column; gap:10px}
+.tourbtns .choice2 button{text-align:left; background:var(--surface); border:2px solid var(--line); border-radius:16px; padding:14px; color:var(--ink); font-size:16px}
+.tourbtns .choice2 button b{display:block; font-size:18px}
+.tourbtns .choice2 button span{color:var(--muted); font-size:14px}
+/* modo simple: solo lo esencial */
+body.simple #tabs [data-tab="worth"], body.simple #movSeg, body.simple #planSeg, body.simple #simCard, body.simple #simLock,
+body.simple #hHabit, body.simple #hSummary, body.simple #curT{display:none !important}
+body.simple .today .val{font-size:60px}
+
+.mini b{white-space:nowrap}
+
+.fbcard{border-color:#4A3C1C; background:linear-gradient(150deg, var(--gold-soft), var(--surface) 70%)}
+
+.beta{white-space:nowrap; letter-spacing:.04em; padding:4px 8px}
+
+@media (max-width:400px){ .logo{gap:6px; font-size:19px} .logo svg{width:22px;height:22px} .beta{margin-left:4px; font-size:10px; padding:3px 6px} .hright{gap:6px} .curt button{padding:5px 7px; font-size:12px} .bell{width:36px;height:36px} }
 </style></head><body>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="app">
@@ -371,7 +401,7 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
         <path d="M19 9c4-4 9-4 11-3-2 4-6 6-11 5z" fill="var(--green)" opacity=".75"/>
       </svg>
       Bambú
-      <button class="beta" id="betaBtn" type="button" aria-label="Versión beta: dejanos tu opinión">Beta</button>
+      <button class="beta" id="betaBtn" type="button" aria-label="Versión beta: dejanos tu opinión">💬 Opiná</button>
     </div>
     <div class="hright">
       <span class="step" id="step"></span>
@@ -390,7 +420,7 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
     <p class="lead">Respondé 16 preguntas cortas y descubrí qué rasgos guían lo que hacés con la plata. Después armamos un plan hecho para vos.</p>
     <div class="facts"><span class="chip">3 minutos</span><span class="chip">Sin cuenta</span><span class="chip">Gratis</span></div>
     <button class="btn" id="startBtn">Empezar</button>
-    <p class="note">Bambú es un proyecto de seminario sobre la psicología del dinero. No es asesoramiento financiero.</p>
+    <p class="note">Bambú te recomienda, pero la decisión es siempre tuya. No es asesoramiento financiero.</p>
   </section>
 
   <!-- ================= TEST ================= -->
@@ -428,7 +458,7 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
       </div>
       <p id="rCross"></p>
     </div>
-    <button class="btn ghost" id="copyBtn">Retá a un amigo</button>
+    <button class="btn ghost" id="copyBtn">Invitá a alguien a hacer el test</button>
     <div class="toast" id="toast" role="status"></div>
     <div class="locked">
       <div class="preview" aria-hidden="true"><div style="width:70%"></div><div></div><div style="width:85%"></div><div style="width:60%"></div></div>
@@ -449,6 +479,7 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
       <label for="fMail">Mail<input id="fMail" type="email" autocomplete="email" placeholder="tu@mail.com"></label>
       <label for="fPass">Contraseña<input id="fPass" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres"></label>
       <label class="chk" for="fAge"><input type="checkbox" id="fAge"> Soy mayor de 18 años o tengo permiso de un adulto responsable.</label>
+      <p class="note">Versión beta: tu cuenta y tus datos se guardan solo en este dispositivo. No te vamos a mandar mails.</p>
       <div class="err" id="err" role="alert"></div>
       <button class="btn" type="submit">Seguir</button>
     </form>
@@ -477,12 +508,12 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
     <h2>Tus números</h2>
     <p class="muted">Aproximado alcanza. Podés cambiarlos cuando quieras.</p>
     <form id="numForm" novalidate>
-      <div id="incFixed"><label for="sIn">¿Cuánto te entra por mes?<span class="hint">Sueldo, mensualidad, changas: todo junto.</span><span class="money"><input id="sIn" inputmode="numeric" placeholder="800.000"></span></label></div>
+      <div id="incFixed"><label for="sIn"><span id="tIn">¿Cuánto te entra por mes?</span><span class="hint" id="hIn">Sueldo, mensualidad, changas: todo junto.</span><span class="money"><input id="sIn" inputmode="numeric" placeholder="800.000"></span></label></div>
       <div id="incVar" class="grid2" hidden>
         <label for="sLow">En un mes flojo<span class="money"><input id="sLow" inputmode="numeric" placeholder="400.000"></span></label>
         <label for="sHigh">En un mes bueno<span class="money"><input id="sHigh" inputmode="numeric" placeholder="1.000.000"></span></label>
       </div>
-      <label for="sOut">¿Cuánto gastás sí o sí por mes?<span class="hint">Alquiler, servicios, súper, transporte, cuotas.</span><span class="money"><input id="sOut" inputmode="numeric" placeholder="450.000"></span></label>
+      <label for="sOut"><span id="tOut">¿Cuánto gastás sí o sí por mes?</span><span class="hint" id="hOut">Alquiler, servicios, súper, transporte, cuotas.</span><span class="money"><input id="sOut" inputmode="numeric" placeholder="450.000"></span></label>
       <label for="sSav">¿Cuánto tenés ahorrado hoy?<span class="hint">En pesos. Si tenés dólares, sumalos convertidos.</span><span class="money"><input id="sSav" inputmode="numeric" placeholder="600.000"></span></label>
       <label for="sDebt" id="debtLbl" hidden>¿Cuánto debés en total?<span class="money"><input id="sDebt" inputmode="numeric" placeholder="300.000"></span></label>
       <div class="err" id="sErr" role="alert"></div>
@@ -496,8 +527,8 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
     <h2>¿Cómo querés armar tu plan?</h2>
     <div class="mode" id="modeList">
       <button data-m="auto"><b>Automático</b><span>Bambú arma el plan y lo ajusta sola cada mes.</span></button>
-      <button data-m="editable" class="on"><span class="rec">Recomendado</span><b>Te lo proponemos y lo ajustás</b><span>Partís del plan de Bambú y movés los porcentajes a tu gusto.</span></button>
-      <button data-m="manual"><b>Lo armo yo</b><span>Repartís tus bolsillos desde cero. Bambú te muestra las consecuencias.</span></button>
+      <button data-m="editable" class="on"><span class="rec">Recomendado</span><b>Te lo proponemos y lo ajustás</b><span>Partís del plan de Bambú y cambiás los montos a tu gusto.</span></button>
+      <button data-m="manual"><b>Lo armo yo</b><span>Ponés cuánta plata va a cada bolsillo. Bambú te muestra cómo te va a ir.</span></button>
     </div>
     <p class="note">Podés cambiar de modo cuando quieras, desde Plan.</p>
     <button class="btn" id="modeBtn">Ver mi plan</button>
@@ -545,6 +576,11 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
       <ul class="pockets" id="hPockets"></ul>
     </div>
     <div class="card" id="hSummary"></div>
+    <div class="card fbcard" id="hFeedback" hidden>
+      <div class="row"><h3>¿Qué te parece Bambú?</h3><span class="soon">Beta</span></div>
+      <p class="small muted">Estamos en versión de prueba. Tu opinión decide qué mejoramos. Te lleva un minuto.</p>
+      <div class="grid2"><button class="btn sm" id="hFbYes">Dejar mi opinión</button><button class="btn sm ghost" id="hFbNo">Ahora no</button></div>
+    </div>
     <div class="card">
       <div class="row"><h3>Últimos movimientos</h3><button class="link" data-go="movs">Ver todo</button></div>
       <ul class="list" id="hLast"></ul>
@@ -609,8 +645,8 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
         <div class="grid2">
           <label for="cName">Nombre<input id="cName" placeholder="Ej: Visa del banco"></label>
           <label for="cLim">Límite<span class="money"><input id="cLim" inputmode="numeric" placeholder="1.500.000"></span></label>
-          <label for="cClose">Día de cierre<input id="cClose" inputmode="numeric" placeholder="25"></label>
-          <label for="cDue">Día de vencimiento<input id="cDue" inputmode="numeric" placeholder="5"></label>
+          <label for="cClose">Día de cierre del resumen<span class="hint">Lo que comprás después de ese día pasa al resumen del mes siguiente.</span><input id="cClose" inputmode="numeric" placeholder="25"></label>
+          <label for="cDue">Día en que la pagás<span class="hint">El vencimiento: hasta ese día tenés para pagar el resumen.</span><input id="cDue" inputmode="numeric" placeholder="5"></label>
         </div>
         <div class="err" id="cErr" role="alert"></div>
         <button class="btn" type="submit">Agregar tarjeta</button>
@@ -619,7 +655,7 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
     <div id="m-methods" class="screen" hidden>
       <p class="muted">Dónde está tu plata. El primero es el que usamos si no elegís otro.</p>
       <div class="card"><ul class="list" id="methList"></ul></div>
-      <div class="card"><h3>Agregar rápido</h3><div class="chips" id="methQuick"></div></div>
+      <div class="card"><h3>Agregar un medio</h3><div class="chips" id="methQuick"></div><form class="inline" id="methForm" novalidate><input id="methName" placeholder="Otro: escribí el nombre" aria-label="Nombre del medio de pago"><button class="btn sm" type="submit">Agregar</button></form></div>
     </div>
   </section>
 
@@ -791,7 +827,7 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
         <p id="bText"></p>
         <div class="row"><div class="dots" id="bDots"></div><button class="btn sm" id="bNext">Siguiente</button></div>
       </div>
-      <button class="btn ghost" id="copyBtn2">Retá a un amigo</button>
+      <button class="btn ghost" id="copyBtn2">Invitá a alguien a hacer el test</button>
       <div class="toast" id="toast2" role="status"></div>
       <button class="btn ghost" id="againBtn"></button>
     </div>
@@ -809,18 +845,22 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
         <p class="small muted">Bambú está en versión de prueba. Contanos qué te gustó, qué no entendiste o qué falló: cada respuesta se lee y sirve para mejorar la app.</p>
         <button class="btn" id="fbOpen2" style="align-self:flex-start">Dejar mi opinión</button>
       </div>
+      <div class="card">
+        <div class="row"><h3>Cómo ves Bambú</h3><span class="state ok" id="simpleState"></span></div>
+        <p class="small muted" id="simpleTxt"></p>
+        <div class="grid2"><button class="btn sm" id="simpleBtn"></button><button class="btn sm ghost" id="tourAgain">Ver el recorrido</button></div>
+      </div>
       <div class="card" id="plusCard"></div>
       <div class="card"><div class="row"><h3>Modo emprendedor</h3><span class="soon">Próximamente</span></div><p class="small muted">Separar la plata personal de la del negocio, ver el flujo de caja y pagarte un sueldo fijo. Mezclar las dos es uno de los errores más comunes de quien emprende.</p></div>
       <div class="card">
-        <h3>En qué se basa Bambú</h3>
+        <h3>Inspiraciones</h3>
+        <p class="small muted">Bambú se apoya en ideas de personas que estudian cómo nos relacionamos con la plata.</p>
         <ul class="sources">
-          <li><b>Saber no alcanza:</b> la educación financiera explica una parte mínima del comportamiento (Fernandes et al., 2014).</li>
-          <li><b>Rasgos y creencias:</b> los guiones del dinero de Klontz et al. (2011) y la programación financiera de Eker (2005).</li>
-          <li><b>Separar antes de gastar:</b> Save More Tomorrow llevó el ahorro de 3,5% a 13,6% (Thaler y Benartzi, 2004).</li>
-          <li><b>Margen para imprevistos:</b> la preocupación por la plata ocupa la cabeza (Mani et al., 2013).</li>
-          <li><b>Hábitos:</b> "cuando pasa X, hago Y" (Gollwitzer, 1999); unos 66 días para que algo se vuelva automático (Lally et al., 2010).</li>
-          <li><b>Bienestar financiero:</b> control, protección, rumbo y libertad (CFPB, 2015).</li>
-          <li><b>Base de la regla de reparto:</b> 50/30/20 (Warren y Warren Tyagi, 2005).</li>
+          <li><b>Morgan Housel:</b> que te vaya bien con la plata tiene más que ver con cómo te comportás que con cuánto sabés.</li>
+          <li><b>T. Harv Eker:</b> lo que aprendimos de chicos sobre la plata sigue decidiendo por nosotros.</li>
+          <li><b>Richard Thaler:</b> separar la plata antes de verla le gana a la fuerza de voluntad.</li>
+          <li><b>Daniel Kahneman:</b> decidimos más rápido y con más emoción de lo que creemos.</li>
+          <li><b>Brad Klontz:</b> cada persona tiene su propia forma de sentir la plata, y se puede cambiar.</li>
         </ul>
       </div>
       <button class="btn ghost" id="wipeBtn">Borrar mis datos</button>
@@ -830,12 +870,21 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
           <div class="grid2"><button class="btn sm ghost" id="wipeNo">Cancelar</button><button class="btn sm danger" id="wipeYes">Borrar todo</button></div>
         </div>
       </div>
-      <p class="foot">Bambú es un proyecto de seminario sobre la psicología del dinero. Recomienda, pero la decisión es siempre tuya. No es asesoramiento financiero.</p>
+      <p class="foot">Bambú te recomienda, pero la decisión es siempre tuya. No es asesoramiento financiero.</p>
     </div>
   </section>
 </div>
 
 <button class="fab" id="fab" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Preguntale a Bambú</button>
+<div class="sheet tour" id="tour" hidden>
+  <div class="panel tourpanel" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+    <div class="tourdots" id="tourDots" aria-hidden="true"></div>
+    <div class="tourart" id="tourArt" aria-hidden="true"></div>
+    <b id="tourTitle"></b>
+    <p id="tourText"></p>
+    <div id="tourBtns" class="tourbtns"></div>
+  </div>
+</div>
 <div class="sheet" id="fbSheet" hidden>
   <div class="panel fbpanel" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
     <div class="top"><b id="fbTitle">Tu opinión sobre Bambú</b><button class="btn sm ghost" id="fbClose" type="button">Cerrar</button></div>
@@ -885,12 +934,12 @@ canvas#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
    CONTENIDO
    ========================================================= */
 const TRAITS = {
-  impulso:{n:"Impulso", tag:"Vivís el presente y te animás.", power:"Disfrutás el presente y te animás a decidir.", trap:"Comprás sin pensarlo y después te arrepentís."},
-  ansiedad:{n:"Ansiedad", tag:"Te tomás la plata en serio, a veces demasiado.", power:"Te tomás la plata en serio.", trap:"La preocupación te ocupa la cabeza."},
-  evitacion:{n:"Evitación", tag:"Preferís no mirar los números.", power:"No vivís pendiente de la plata.", trap:"Lo que no mirás crece sin que lo veas."},
-  comparacion:{n:"Comparación", tag:"Los demás pesan en lo que hacés con la plata.", power:"Te motivan los logros de los demás.", trap:"Gastás para la mirada de otros."},
-  adoracion:{n:"Adoración", tag:"Sentís que con más plata se arreglaría todo.", power:"Tenés ambición y ganas de crecer.", trap:"Ningún número termina de alcanzarte."},
-  control:{n:"Control", tag:"Planificás y cuidás cada peso.", power:"Planificás y cuidás.", trap:"Te cuesta disfrutar lo que juntaste."}
+  impulso:{n:"Impulso", tag:"Cuando algo te gusta, te cuesta esperar.", power:"Disfrutás el momento y te animás a decidir rápido.", trap:"Comprás sin pensarlo dos veces y después te arrepentís."},
+  ansiedad:{n:"Ansiedad", tag:"Te tomás la plata muy en serio, a veces demasiado.", power:"Sos responsable: no dejás que la plata se te descontrole.", trap:"La preocupación te quita tranquilidad, aunque esté todo bien."},
+  evitacion:{n:"Evitación", tag:"Preferís no mirar tus números, aunque sepas que conviene.", power:"La plata no te obsesiona: no vivís pendiente de ella.", trap:"Si no mirás, nunca sabés qué se puede mejorar."},
+  comparacion:{n:"Comparación", tag:"Tu enfoque en los demás y en lo que tienen influye en cómo te manejás con la plata.", power:"Los logros de los demás elevan tus aspiraciones.", trap:"Terminás gastando para mostrar, no para vos."},
+  adoracion:{n:"Adoración", tag:"Sentís que con más plata solucionarías todo.", power:"Tenés ambición y ganas de crecer.", trap:"Por más que ganes, sentís que nunca alcanza."},
+  control:{n:"Control", tag:"Planificás y cuidás cada peso de tu billetera.", power:"Sos ordenado y pensás en el futuro.", trap:"Te cuesta disfrutar de lo que ganás."}
 };
 const TORDER = ["impulso","ansiedad","evitacion","comparacion","adoracion","control"];
 
@@ -931,42 +980,43 @@ const PAISES = ["Argentina","Uruguay","Chile","México","Colombia","Otro país"]
 const GENEROS = ["Mujer","Varón","Otro","Prefiero no decir"];
 
 const HABITS = [
-  {k:"separar", t:["control","adoracion"], txt:"Cuando cobro, separo mi bolsillo de futuro antes de gastar.", why:"Separar antes de ver la plata es atarse al mástil: no depende de la fuerza de voluntad."},
-  {k:"espera", t:["impulso","comparacion"], txt:"Cuando quiero comprar algo que no planeé, lo pongo en la lista de espera 48 horas.", why:"Le da tiempo a la parte lenta y racional del cerebro para alcanzar a la impulsiva."},
+  {k:"separar", t:["control","adoracion"], txt:"Cuando cobro, separo mi bolsillo de futuro antes de gastar.", why:"Si lo separás apenas cobrás, no dependés de la fuerza de voluntad."},
+  {k:"espera", t:["impulso","comparacion"], txt:"Cuando quiero comprar algo que no planeé, lo pongo en la lista de espera 48 horas.", why:"En 48 horas las ganas se enfrían, y decidís con la cabeza fría."},
   {k:"margen", t:["ansiedad"], txt:"Cuando cobro, mando primero una parte a mi margen para imprevistos.", why:"Saber que lo inesperado está cubierto libera la cabeza."},
   {k:"domingo", t:["evitacion"], txt:"Cada domingo miro mi número de la semana en Bambú. Dos minutos, nada más.", why:"Mirar poco pero seguido le gana a no mirar nunca."},
-  {k:"redes", t:["comparacion"], txt:"Cuando algo me tienta por verlo en redes, me pregunto: ¿lo querría si nadie lo viera?", why:"La mayoría de lo que compramos para los demás, los demás ni lo notan."},
+  {k:"redes", t:["comparacion"], txt:"Cuando algo me tienta por verlo en redes, me pregunto: ¿lo querría si nadie lo viera?", why:"Casi todo lo que compramos para que lo vean los demás, los demás ni lo notan."},
   {k:"gusto", t:["control","ansiedad"], txt:"Una vez por semana uso mi bolsillo de disfrute en algo que me guste, sin culpa.", why:"Un plan que solo restringe se abandona. Disfrutar también es parte del plan."},
   {k:"aumento", t:["adoracion"], txt:"Cuando entra plata extra, mando la mitad a mi futuro antes de gastarla.", why:"Ahorrar de lo que todavía no te acostumbraste a gastar duele mucho menos."}
 ];
 
 const BELIEFS = {
-  adoracion1:{q:"\"Con más plata se arreglaría todo.\"", from:"Suele venir de crecer viendo que los problemas de la casa giraban alrededor de la plata.", ask:"¿Qué problema tuyo de hoy seguiría igual aunque ganaras el doble?", alt:"\"La plata resuelve algunas cosas. Las otras las resuelvo yo.\"", ex:"Escribí tres cosas que valorás y que no se compran."},
-  adoracion2:{q:"\"Nunca me va a alcanzar.\"", from:"Aparece cuando la meta se mueve cada vez que te acercás.", ask:"¿Cuánto sería suficiente para vos? Ponele un número.", alt:"\"Tengo un número que es suficiente, y lo voy a reconocer cuando llegue.\"", ex:"Calculá cuánto necesitarías por mes para vivir bien, sin lujos ni privaciones."},
-  evitacion:{q:"\"Mejor no mirar: si no lo veo, no existe.\"", from:"Suele aprenderse en casas donde de la plata no se hablaba, o donde hablar de plata era sinónimo de pelea.", ask:"¿Qué es lo peor que podría pasar si miraras tus números esta semana?", alt:"\"Mirar mis números es cuidarme, no castigarme.\"", ex:"Mirá cuánto gastaste ayer. Solo eso, sin juzgarte."},
-  sufrimiento:{q:"\"Para tener plata hay que sufrir.\"", from:"Es una de las frases más comunes en las casas argentinas. Una entrevistada del seminario la escuchaba de chica: \"el dinero era sufrimiento\".", ask:"¿Conocés a alguien a quien le vaya bien con la plata sin vivir sufriendo?", alt:"\"Puedo trabajar duro y también disfrutar lo que gano.\"", ex:"Anotá una frase sobre la plata que escuchabas en tu casa. ¿La seguís creyendo?"},
-  estatus:{q:"\"Valgo lo que tengo.\"", from:"Crece cuando el éxito se mide por lo que se ve: el auto, la ropa, el viaje.", ask:"De las personas que más admirás, ¿cuánto sabés de su plata?", alt:"\"La riqueza de verdad es la que no se ve.\"", ex:"Pensá en tu última compra grande. ¿La habrías hecho si nadie la viera?"},
-  culpa:{q:"\"Gastar en mí es un desperdicio.\"", from:"Es la otra cara del ahorro: cuidar tanto que disfrutar da culpa.", ask:"¿Para qué estás guardando, si nunca te das permiso de usar nada?", alt:"\"Disfrutar una parte de lo que gano también es cuidarme.\"", ex:"Esta semana, usá algo de tu bolsillo de disfrute y anotá cómo te sentiste."},
-  respaldo:{q:"\"Siempre va a haber alguien que me cubra.\"", from:"Una entrevistada del seminario lo llamó \"una seguridad bastante mentirosa\": saber que alguien te va a salvar hace que te cuides menos.", ask:"¿Qué harías distinto si nadie pudiera cubrirte el mes que viene?", alt:"\"Me ocupo de mi plata como si no hubiera red.\"", ex:"Armá tu margen para imprevistos aunque sea con un monto chico."},
-  merezco:{q:"\"Me lo merezco, y lo merezco ya.\"", from:"Es el yo del presente ganándole al yo del futuro. Todos lo tenemos.", ask:"¿Tu yo de dentro de un mes estaría de acuerdo con esta compra?", alt:"\"Me lo merezco, y por eso me lo regalo bien pensado.\"", ex:"La próxima compra no planeada, mandala a la lista de espera de 48 horas."}
+  adoracion1:{q:"\"Con más plata solucionaría todo.\"", from:"Es lógico pensarlo: muchos problemas cuestan plata. Pero cuando la plata se vuelve la respuesta para todo, ningún monto alcanza.", ask:"¿Qué problema tuyo seguiría igual aunque ganaras el doble?", alt:"\"La plata me ayuda con algunas cosas. Las más importantes dependen de mí.\"", ex:"Anotá tres cosas que te hacen bien y no cuestan plata."},
+  adoracion2:{q:"\"No tengo suficiente.\"", from:"Pasa cuando cada meta que cumplís trae otra más grande. Ganás más, gastás más, y la sensación sigue igual.", ask:"¿Cuánto sería suficiente para vos? Ponele un número.", alt:"\"Sé cuánto necesito para estar bien.\"", ex:"Calculá cuánto necesitás por mes para vivir tranquilo, sin lujos ni privaciones."},
+  evitacion:{q:"\"Prefiero no saber cuánto gasto.\"", from:"Suele aparecer cuando de plata no se hablaba en casa, o se hablaba solo para discutir. Mirar los números quedó asociado a algo feo.", ask:"¿Qué es lo peor que podría pasar si mirás tus gastos de esta semana?", alt:"\"Mirar mis números no es castigarme: es saber dónde estoy parado.\"", ex:"Mirá solo cuánto gastaste ayer. Nada más."},
+  origen:{q:"\"Tener plata no es para mí.\"", from:"Es fácil pensarlo cuando miramos a los que ya tienen. Pero la mayoría de la gente que logra estar tranquila con su plata lo hace con hábitos simples, sostenidos en el tiempo.", ask:"¿Qué hábito chico podrías sostener todo un año?", alt:"\"No elijo de dónde arranco, pero sí qué hago con lo que tengo.\"", ex:"Separá este mes un monto chico, aunque sea poco, y fijate cómo te sentís."},
+  estatus:{q:"\"Lo que tengo muestra cómo me va.\"", from:"Las redes nos muestran todo el tiempo lo que tienen los demás. Comprar para no quedar atrás se vuelve automático.", ask:"Pensá en tu última compra grande: ¿la hubieras hecho si nadie se enteraba?", alt:"\"Compro lo que me suma a mí, no lo que se ve.\"", ex:"La próxima vez que algo te tiente en redes, esperá 48 horas antes de comprarlo."},
+  culpa:{q:"\"Gastar en mí me genera culpa.\"", from:"Es la otra cara de cuidar mucho la plata: ahorrar se vuelve tan importante que darse un gusto parece un error.", ask:"¿Para qué estás ahorrando, si nunca te das un gusto?", alt:"\"Disfrutar una parte de lo que gano también es cuidarme.\"", ex:"Esta semana usá algo de tu bolsillo de disfrute y anotá cómo te sentiste."},
+  respaldo:{q:"\"Total, siempre voy a tener a quien me dé una mano.\"", from:"Cuando siempre hubo alguien que cubrió los baches, cuesta tomarse en serio los propios números.", ask:"¿Qué harías distinto si el mes que viene nadie pudiera ayudarte?", alt:"\"Me ocupo de mi plata como si dependiera solo de mí.\"", ex:"Empezá tu margen para imprevistos, aunque sea con poco."},
+  merezco:{q:"\"Ya fue, me lo compro.\"", from:"Cuando algo nos tienta, el ahora pesa mucho más que el después. Le pasa a todo el mundo.", ask:"Dentro de un mes, ¿vas a seguir contento con esta compra?", alt:"\"Me doy gustos, pero los elijo con la cabeza fría.\"", ex:"La próxima compra que no tenías pensada, mandala a la lista de espera de 48 horas."}
 };
 
 const BIASES = [
-  ["Sesgo del presente","Lo de hoy pesa más que lo de mañana, aunque mañana valga más. En un estudio, entre el 62% y el 82% de los que eligieron fruta para la semana siguiente se pasó al chocolate cuando llegó el día."],
-  ["Aversión a la pérdida","Perder duele más o menos el doble de lo que alegra ganar lo mismo. Por eso nos aferramos a malas decisiones."],
-  ["Contabilidad mental","Tratamos distinto la misma plata según de dónde vino. Por eso ponerle nombre a cada bolsillo ayuda a respetarlo."],
-  ["Comparación social","Medimos lo que tenemos contra lo que muestran otros. Y en redes, todos muestran lo mejor."],
-  ["Mirar demasiado","Quienes miraban su resultado más seguido se asustaban más y arriesgaban menos, aunque les convenía lo contrario (Gneezy y Potters, 1997)."],
-  ["Interés compuesto","Poco, seguido y durante mucho tiempo le gana a mucho de golpe. Casi toda la fortuna de Buffett llegó después de sus 65 años."],
-  ["Hábitos","Casi la mitad de lo que hacemos cada día es automático (Wood et al., 2002). Cambiar un hábito cambia más que una decisión aislada."]
+  ["El ahora pesa más","Lo que querés hoy siempre parece más urgente que lo que vas a necesitar mañana. Por eso ahorrar cuesta: no es falta de ganas, es cómo funciona la cabeza."],
+  ["Perder duele el doble","Perder $10.000 molesta mucho más de lo que alegra ganar $10.000. Por eso cuesta soltar una mala compra o cambiar una mala decisión."],
+  ["La tarjeta no duele","Cuando no ves salir los billetes, gastás más sin darte cuenta. Anotar lo que pagás con tarjeta te devuelve esa sensación."],
+  ["Cada plata en su cajón","Un regalo se gasta más fácil que el sueldo, aunque sea la misma plata. Ponerle nombre a cada bolsillo ayuda a respetarlo."],
+  ["Las redes muestran lo mejor","Todos publican el viaje, nadie publica la cuota. Compararte con eso hace que lo tuyo parezca poco."],
+  ["Mirar todo el tiempo cansa","Revisar tu plata a cada rato te pone más nervioso, no más ordenado. Una mirada por semana alcanza."],
+  ["Poco y seguido gana","Separar un poco todos los meses le gana a separar mucho de vez en cuando. El tiempo hace el resto."],
+  ["En piloto automático","Gran parte de lo que hacés cada día lo hacés sin pensar. Por eso un buen hábito vale más que una buena intención."]
 ];
 
 const POCKET_INFO = {
-  fijos:{n:"Gastos fijos", d:"Lo que pagás sí o sí", why:"Lo que pagás sí o sí va primero. Como referencia, conviene que no pase del 50% de lo que te entra (regla 50/30/20, Warren y Warren Tyagi, 2005)."},
-  deudas:{n:"Salir de deudas", d:"Antes que ahorrar", why:"Una deuda cara crece más rápido que cualquier ahorro, por eso va antes. Y si es en otra moneda que la de tu ingreso, el riesgo es doble: un ejecutivo entrevistado para el seminario lo aprendió a los golpes."},
-  margen:{n:"Margen", d:"Imprevistos y regalos", why:"Tener cubierto lo inesperado libera la cabeza: la preocupación por la plata consume atención (Mani et al., 2013). Cuando se llena, lo que iba acá pasa a tu futuro."},
-  futuro:{n:"Futuro", d:"Metas y retiro", why:"Separarlo apenas cobrás, antes de verlo, multiplica el ahorro: en el programa Save More Tomorrow el ahorro pasó de 3,5% a 13,6% (Thaler y Benartzi, 2004)."},
-  disfrute:{n:"Disfrute", d:"Salidas, gustos, ropa", why:"Un plan que no te deja disfrutar se abandona. Por eso este bolsillo nunca baja de un mínimo. Eker también propone una cuenta solo para disfrutar."}
+  fijos:{n:"Gastos fijos", d:"Lo que pagás sí o sí", why:"Lo que pagás sí o sí va primero. Lo ideal es que no se lleve más de la mitad de lo que te entra: así queda lugar para todo lo demás."},
+  deudas:{n:"Salir de deudas", d:"Antes que ahorrar", why:"Una deuda crece más rápido que cualquier ahorro, por eso va antes. Si además está en otra moneda que tu ingreso, conviene cancelarla cuanto antes: si esa moneda sube, la deuda crece sola."},
+  margen:{n:"Margen", d:"Imprevistos y regalos", why:"Para lo que no ves venir: algo que se rompe, un regalo, un mes flojo. Tenerlo cubierto te saca una preocupación de encima. Cuando se llena, lo que iba acá pasa a tu futuro."},
+  futuro:{n:"Futuro", d:"Metas y retiro", why:"Separarlo apenas cobrás, antes de verlo, es la forma más fácil de ahorrar: lo que no ves, no lo gastás. No depende de la fuerza de voluntad."},
+  disfrute:{n:"Disfrute", d:"Salidas, gustos, ropa", why:"Un plan que no te deja disfrutar se abandona. Por eso este bolsillo nunca baja de un mínimo: darte gustos también es parte del plan."}
 };
 const POCKET_ORDER = ["fijos","deudas","margen","futuro","disfrute"];
 const PCOLOR = {fijos:"var(--b-fijos)", deudas:"var(--bad)", margen:"var(--b-margen)", futuro:"var(--b-futuro)", disfrute:"var(--b-disfrute)"};
@@ -986,7 +1036,7 @@ const KEYWORDS = [
   [/netflix|spotify|disney|hbo|\bmax\b|youtube|prime|suscrip/i,"suscripciones"],[/regalo|cumple/i,"regalos"],[/arregl|rompi|mec[aá]nico|calef[oó]n|plomero|imprevisto/i,"imprevistos"],
   [/tarjeta|cuota|pr[eé]stamo|deuda/i,"deudas"]
 ];
-const METHOD_QUICK = ["Mercado Pago","Ualá","Cuenta DNI","Brubank","Lemon","Naranja X","Galicia","Santander","BBVA","Banco Nación","Macro","Banco Provincia"];
+const METHOD_QUICK = ["Efectivo","Débito","Crédito","Transferencia","Mercado Pago","Ualá","Cuenta DNI","Brubank","Lemon","Naranja X","Galicia","Santander","BBVA","Banco Nación","Macro","Banco Provincia"];
 const STAGES = [["Semilla","🌰",0],["Brote","🌱",2],["Tallo","🎍",4],["Caña","🎋",8],["Bosque","🌳",12]];
 
 /* =========================================================
@@ -1137,11 +1187,12 @@ function reveal(){
 }
 function crossText(q){
   const s = q.saber, h = q.hacer;
-  if (s >= 2 && h <= 2) return "Sabés bastante de plata, pero eso todavía no se convierte en hábitos. Es lo más común: saber no alcanza. Bambú está hecha para cerrar esa brecha.";
-  if (s <= 1 && h >= 3) return "Tenés buenos hábitos aunque no te sientas experto en finanzas. Igual conviene sumar lo básico: el desconocimiento tiene costos ocultos.";
-  if (s >= 2 && h >= 3) return "Sabés y hacés. Bambú te ayuda a sostenerlo en el tiempo y a no aflojar cuando algo cambia.";
-  return "Hay espacio para crecer en las dos cosas. Arrancamos por los hábitos, que son los que más pesan, y el asistente te ayuda con lo básico.";
+  if (s >= 2 && h <= 2) return "Tenés un conocimiento financiero básico, pero todavía no se ve reflejado en tus hábitos. Muchas veces saber no es suficiente. Bambú te ayuda a llevarlo a la práctica.";
+  if (s <= 1 && h >= 3) return "Tus hábitos con la plata son buenos, aunque te faltan algunos conceptos básicos. Sumarlos te va a ayudar a no perder plata sin darte cuenta, por ejemplo con la inflación.";
+  if (s >= 2 && h >= 3) return "Tenés un conocimiento financiero básico y se refleja en tus hábitos. Bambú te ayuda a sostenerlo en el tiempo y a no aflojar cuando algo cambia.";
+  return "Hay espacio para crecer en lo que sabés y en lo que hacés. Arrancamos por los hábitos, que son lo esencial, y en el camino vas incorporando conocimiento.";
 }
+
 function renderTraits(el, q){
   el.innerHTML = "";
   const sorted = [...TORDER].sort((a,b) => q.traits[b] - q.traits[a]);
@@ -1167,11 +1218,14 @@ function renderResult(){
   show("result");
 }
 function shareText(){
-  const q = S.quiz, t = [...TORDER].sort((a,b) => q.traits[b] - q.traits[a]);
-  return "Hice el test de Bambú: soy " + q.traits[t[0]] + "% " + TRAITS[t[0]].n.toLowerCase() + " y " + q.traits[t[1]] + "% " + TRAITS[t[1]].n.toLowerCase() + ". ¿Y vos cómo te llevás con tu plata?";
+  const link = /^https?:/.test(location.protocol) && !/claude/.test(location.hostname) ? " " + location.origin : "";
+  return "Hice el test de Bambú y descubrí cómo me llevo con la plata. Son 3 minutos, ¿lo hacés?" + link;
 }
+
 function copyShare(id){
-  const t = shareText(), ok = () => $(id).textContent = "Copiado. Mandáselo a quien quieras.";
+  const t = shareText();
+  if (navigator.share){ navigator.share({text:t}).catch(() => {}); return; }
+  const ok = () => $(id).textContent = "Invitación copiada. Pegala donde quieras.";
   try { navigator.clipboard.writeText(t).then(ok).catch(() => $(id).textContent = t); } catch(_) { $(id).textContent = t; }
 }
 $("copyBtn").onclick = () => copyShare("toast");
@@ -1236,6 +1290,12 @@ function openNumbers(){
   const variable = S.ctxDraft.ingreso === "variable";
   $("incFixed").hidden = variable; $("incVar").hidden = !variable;
   $("debtLbl").hidden = S.ctxDraft.deuda === "no";
+  const kid = isMesada(S.ctxDraft);
+  $("tIn").textContent = kid ? "¿Cuánto te dan o te entra por mes?" : "¿Cuánto te entra por mes?";
+  $("hIn").textContent = kid ? "Mensualidad, changas, regalos: todo junto." : "Sueldo, changas, otros ingresos: todo junto.";
+  $("tOut").textContent = kid ? "¿Pagás algo vos todos los meses?" : "¿Cuánto gastás sí o sí por mes?";
+  $("hOut").textContent = kid ? "Por ejemplo: el celular, el transporte o una suscripción. Si no pagás nada, poné 0." : "Alquiler, servicios, súper, transporte, cuotas.";
+  $("sOut").placeholder = kid ? "0" : "450.000";
   const n = S.nums;
   if (n){ $("sIn").value = fmtInt(n.inc); $("sLow").value = fmtInt(n.low); $("sHigh").value = fmtInt(n.high); $("sOut").value = fmtInt(n.fijos); $("sSav").value = fmtInt(n.ahorro); $("sDebt").value = fmtInt(n.deuda); }
   $("sErr").textContent = ""; show("numbers");
@@ -1244,7 +1304,7 @@ $("numForm").addEventListener("submit", ev => {
   ev.preventDefault();
   const variable = S.ctxDraft.ingreso === "variable";
   const inc = parseNum($("sIn").value), low = parseNum($("sLow").value), high = parseNum($("sHigh").value);
-  const fijos = parseNum($("sOut").value), ahorro = $("sSav").value.trim() ? parseNum($("sSav").value) : 0, deuda = $("sDebt").value.trim() ? parseNum($("sDebt").value) : 0;
+  const fijos = !$("sOut").value.trim() && isMesada(S.ctxDraft) ? 0 : parseNum($("sOut").value), ahorro = $("sSav").value.trim() ? parseNum($("sSav").value) : 0, deuda = $("sDebt").value.trim() ? parseNum($("sDebt").value) : 0;
   if (variable){
     if (!(low > 0) || !(high > 0)) return $("sErr").textContent = "Poné cuánto te entra en un mes flojo y en uno bueno, aunque sea aproximado.";
     if (high < low) return $("sErr").textContent = "El mes bueno tendría que ser mayor que el flojo.";
@@ -1279,13 +1339,15 @@ $("changeBtn").onclick = () => openMoment(true);
    ========================================================= */
 const etapa = c => ETAPAS.find(e => e.k === (c && c.etapa)) || ETAPAS[1];
 function baseIncome(c, n){ if (!n) return 0; return c && c.ingreso === "variable" ? (n.low || 0) : (n.inc || 0); }
-function margenMeta(c, n){ let m = etapa(c).months; if (c.ingreso !== "fijo") m += 2; if (c.dep === "si") m += 1; return Math.min(12, m) * (n.fijos || 0); }
+const isMesada = c => !!c && c.ingreso === "mesada";
+function margenMeta(c, n){ if (isMesada(c)) return baseIncome(c, n); let m = etapa(c).months; if (c.ingreso !== "fijo") m += 2; if (c.dep === "si") m += 1; return Math.min(12, m) * (n.fijos || 0); }
 const margenSaved = () => S.movs.filter(m => m.type === "save" && m.cat === "margen").reduce((a,m) => a + m.amt, 0);
 const savedTotal = () => (S.nums ? S.nums.ahorro : 0) + S.movs.filter(m => m.type === "save").reduce((a,m) => a + m.amt, 0);
 
 function recommendedSplit(c){
   const t = S.quiz ? S.quiz.traits : {}, adj = [];
   let d = 45, f = 35, m = 20;
+  if (isMesada(c)){ d = 50; f = 35; m = 15; adj.push("Te dan una mensualidad: lo más importante es el hábito de separar una parte apenas te llega, aunque sea poco."); }
   const mv = (from, to, n, why) => { const take = from === "d" ? Math.min(n, d - 15) : n; if (take <= 0) return;
     if (from === "d") d -= take; if (from === "f") f -= take; if (from === "m") m -= take;
     if (to === "d") d += take; if (to === "f") f += take; if (to === "m") m += take; adj.push(why); };
@@ -1295,8 +1357,8 @@ function recommendedSplit(c){
   if (t.adoracion >= 60) mv("d","f",5,"Sentís que nunca alcanza: reforzamos tu futuro y te proponemos definir tu número \"suficiente\".");
   if (c.etapa === "preretiro") mv("d","f",10,"Estás cerca del retiro: tu futuro pesa más.");
   if (c.etapa === "jubilado") mv("f","d",10,"Estás jubilado: tu ahorro está para usarse, con calma.");
-  if (c.etapa === "estudio") adj.push("Estás estudiando: el objetivo principal es el hábito, aunque los montos sean chicos.");
-  if (c.ingreso !== "fijo") mv("d","m",5,"Tu ingreso varía: más margen para los meses flojos.");
+  if (c.etapa === "estudio" && !isMesada(c)) adj.push("Estás estudiando: el objetivo principal es el hábito, aunque los montos sean chicos.");
+  if (c.ingreso === "variable") mv("d","m",5,"Tu ingreso varía: más margen para los meses flojos.");
   if (c.dep === "si") mv("d","m",5,"Alguien depende de vos: más protección.");
   return {split:{disfrute:d, futuro:f, margen:m}, adj};
 }
@@ -1355,28 +1417,39 @@ function pocketRows(box, pl, withWhy){
   POCKET_ORDER.forEach(k => {
     if (k === "deudas" && !pl.hasDebt) return;
     if (k === "margen" && pl.margenFull) return;
+    if (k === "fijos" && !(pl.P.fijos > 0)) return;
     const info = POCKET_INFO[k], v = pl.P[k];
     const row = document.createElement("div"); row.className = "pocketrow";
     row.innerHTML = '<div class="pocket"><span class="sw"></span><div><div class="name"></div><div class="why"></div></div><div class="amt num"></div></div>';
     row.querySelector(".sw").style.background = PCOLOR[k];
     row.querySelector(".name").textContent = info.n;
-    row.querySelector(".why").textContent = info.d + (k === "futuro" && pl.retiro > 0 ? " · " + money(pl.retiro) + " para retiro" : "");
+    row.querySelector(".why").textContent = (k === "futuro" && (isMesada(S.ctx) || S.ctx.etapa === "estudio") ? "Metas y ahorro" : info.d) + (k === "futuro" && pl.retiro > 0 ? " · " + money(pl.retiro) + " para retiro" : "");
     row.querySelector(".amt").innerHTML = money(v) + '<span class="pct">' + (pl.inc ? Math.round(v / pl.inc * 100) : 0) + '% del ingreso</span>';
     if (withWhy){
       const b = document.createElement("button"); b.className = "why"; b.textContent = "¿Por qué este número?";
-      const box2 = document.createElement("div"); box2.className = "whybox"; box2.hidden = true; box2.textContent = info.why + (k === "margen" ? " Tu meta: " + etapa(S.ctx).months + " meses de fijos por tu etapa" + (S.ctx.ingreso !== "fijo" ? ", más 2 por ingreso variable" : "") + (S.ctx.dep === "si" ? ", más 1 porque alguien depende de vos" : "") + "." : "");
+      const box2 = document.createElement("div"); box2.className = "whybox"; box2.hidden = true; box2.textContent = info.why + (k === "margen" ? " " + margenGoalText() : "");
       b.onclick = () => { box2.hidden = !box2.hidden; };
       row.appendChild(b); row.appendChild(box2);
     }
     box.appendChild(row);
   });
 }
+function margenGoalText(){
+  if (isMesada(S.ctx)) return "Tu meta: juntar el equivalente a una mensualidad.";
+  const m = Math.min(12, etapa(S.ctx).months + (S.ctx.ingreso !== "fijo" ? 2 : 0) + (S.ctx.dep === "si" ? 1 : 0));
+  return "Tu meta: " + m + " meses de gastos fijos, según tu etapa" + (S.ctx.ingreso !== "fijo" ? " y porque tu ingreso varía" : "") + (S.ctx.dep === "si" ? " y porque alguien depende de vos" : "") + ".";
+}
+function baseText(pl){
+  if (S.ctx.ingreso === "variable") return "Calculado sobre tu mes flojo (" + money(pl.inc) + "). Después de tus gastos fijos quedan " + money(pl.libre) + " para repartir.";
+  if (isMesada(S.ctx)) return "Te entran " + money(pl.inc) + " por mes. " + (S.nums.fijos > 0 ? "Después de lo que pagás vos todos los meses quedan " + money(pl.libre) + " para repartir." : "Todo eso es para repartir.");
+  return "Te entran " + money(pl.inc) + ". Después de tus gastos fijos quedan " + money(pl.libre) + " para repartir.";
+}
 function renderFirstPlan(){
   const pl = plan();
   $("fpTitle").textContent = "Hola, " + S.user.name + ". Así se reparte tu plata.";
   const c = $("fpCard"); c.innerHTML = "";
   const base = document.createElement("p"); base.className = "small muted";
-  base.textContent = (S.ctx.ingreso === "variable" ? "Calculado sobre tu mes flojo (" + money(pl.inc) + "). " : "Te entran " + money(pl.inc) + ". ") + "Después de tus gastos fijos quedan " + money(pl.libre) + " para repartir.";
+  base.textContent = baseText(pl);
   c.appendChild(base);
   const list = document.createElement("div"); c.appendChild(list); pocketRows(list, pl, true);
   if (pl.adj.length){ const a = document.createElement("div"); a.className = "small muted"; a.innerHTML = "<b>Ajustado a vos:</b>"; const ul = document.createElement("ul"); ul.style.margin = "6px 0 0"; ul.style.paddingLeft = "18px"; pl.adj.forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.appendChild(li); }); a.appendChild(ul); c.appendChild(a); }
@@ -1391,10 +1464,10 @@ $("fpBtn").onclick = () => {
 $("fwYes").onclick = () => {
   const pl = plan();
   if (pl.P.futuro > 0) addMov({type:"save", orig:pl.P.futuro, cur:"ARS", cat:"futuro", note:"Primer bolsillo de futuro"});
-  S.firstWin = true; touch(); save(); leaves(); go("home");
+  S.firstWin = true; touch(); save(); leaves(); go("home"); if (!S.toured) openTour();
   $("qToast").textContent = "Primera misión cumplida. Tu bambú ya echó raíces.";
 };
-$("fwLater").onclick = () => { go("home"); };
+$("fwLater").onclick = () => { go("home"); if (!S.toured) openTour(); };
 
 /* =========================================================
    MOVIMIENTOS (lógica compartida)
@@ -1489,14 +1562,20 @@ function renderHome(){
   $("hTodayTxt").textContent = pl.deficit ? "Este mes tus fijos superan tu ingreso. Mirá tus alertas para ver por dónde empezar." :
     ta.over ? "Este mes ya usaste tu disfrute. No pasa nada: el mes que viene arrancás de cero." :
     "Te quedan " + money(ta.rest) + " de disfrute para " + ta.left + (ta.left === 1 ? " día" : " días") + ". Lo que no gastes hoy se suma a mañana.";
+  if (isMesada(S.ctx)){
+    const inc = baseIncome(S.ctx, S.nums), k = inc > 0 ? savedTotal() / inc : 0;
+    $("hFree").textContent = k.toLocaleString("es-AR",{maximumFractionDigits:1}) + (Math.abs(k - 1) < .05 ? " mensualidad" : " mensualidades");
+    $("hFreeTxt").textContent = k < 1 ? "Lo que ahorraste. Primer objetivo: juntar una mensualidad." : "Lo que ahorraste. ¡Muy bien! Seguí sumando.";
+  } else {
   const months = S.nums.fijos > 0 ? savedTotal() / S.nums.fijos : Infinity;
   $("hFree").textContent = isFinite(months) ? months.toLocaleString("es-AR",{maximumFractionDigits:1}) + (Math.abs(months - 1) < .05 ? " mes" : " meses") : "Sin fijos cargados";
   $("hFreeTxt").textContent = !isFinite(months) ? "" : months < 1 ? "Primer objetivo: llegar a un mes." : months < 3 ? "Apuntá a 3 meses para dormir tranquilo." : months < 6 ? "Buen colchón. Con 6 tenés libertad real." : "Tenés libertad para elegir sin miedo.";
+  }
   paintAlerts($("hAlerts"), alerts().filter(a => a[0] !== "ok"), 2);
   renderHabitMini($("hHabit"));
   const ul = $("hPockets"); ul.innerHTML = "";
   POCKET_ORDER.forEach(k => {
-    if (k === "deudas" && !pl.hasDebt) return; if (k === "margen" && pl.margenFull) return;
+    if (k === "deudas" && !pl.hasDebt) return; if (k === "margen" && pl.margenFull) return; if (k === "fijos" && !(pl.P.fijos > 0)) return;
     const used = st[k], cap = pl.P[k], pct = cap > 0 ? used / cap : 0;
     const li = document.createElement("li"); li.style.cssText = "display:flex;flex-direction:column;gap:6px";
     li.innerHTML = '<div class="pocket"><span class="sw"></span><div><div class="name"></div><div class="why"></div></div><div class="amt num"></div></div><div class="meter"><i></i></div>';
@@ -1509,6 +1588,7 @@ function renderHome(){
     ul.appendChild(li);
   });
   renderSummary();
+  $("hFeedback").hidden = !!S.fbSent || (S.fbSnooze && Date.now() < S.fbSnooze);
   listMovs($("hLast"), S.movs.slice(0,4), "Todavía no anotaste nada. Probá arriba: «gasté 3.000 en un café».");
 }
 const TRAIT_TIP = {
@@ -1630,6 +1710,12 @@ $("cardForm").addEventListener("submit", ev => {
   save(); $("cName").value = $("cLim").value = $("cClose").value = $("cDue").value = "";
   renderCards(); fillMethods(); renderMethods(); updateBell();
 });
+$("methForm").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const n = $("methName").value.trim().slice(0, 30);
+  if (!n || S.methods.some(m => m.toLowerCase() === n.toLowerCase())) return;
+  S.methods.push(n); save(); $("methName").value = ""; renderMethods(); fillMethods();
+});
 function renderMethods(){
   const ul = $("methList"); ul.innerHTML = "";
   S.methods.forEach((n, j) => {
@@ -1655,7 +1741,7 @@ function renderPlan(){ renderPockets(); renderSim(); renderGoals(); renderWishes
 function renderPockets(){
   const pl = plan();
   $("pMode").textContent = S.mode === "auto" ? "Automático" : S.mode === "manual" ? "Armado por vos" : "Propuesto y ajustable";
-  $("pBase").textContent = (S.ctx.ingreso === "variable" ? "Calculado sobre tu mes flojo: " + money(pl.inc) + ". " : "Te entran " + money(pl.inc) + ". ") + "Gastos fijos: " + money(S.nums.fijos) + ". Quedan " + money(pl.libre) + " para repartir.";
+  $("pBase").textContent = baseText(pl);
   const sp = $("pSplit"); sp.innerHTML = "";
   const tot = POCKET_ORDER.reduce((a,k) => a + (pl.P[k] || 0), 0) || 1;
   POCKET_ORDER.forEach(k => { if (!(pl.P[k] > 0)) return; const i = document.createElement("i"); i.style.width = (pl.P[k]/tot*100) + "%"; i.style.background = PCOLOR[k]; i.title = POCKET_INFO[k].n + ": " + money(pl.P[k]); sp.appendChild(i); });
@@ -1667,13 +1753,13 @@ function renderPockets(){
   // margen
   $("mgTxt").textContent = money(pl.margenHave) + " de " + money(pl.meta);
   $("mgMeter").firstChild.style.width = Math.min(100, pl.meta ? pl.margenHave / pl.meta * 100 : 0) + "%";
-  $("mgNote").textContent = "Para el auto, el calefón o el regalo que no viste venir. Tu meta: " + etapa(S.ctx).months + " meses de gastos fijos por tu etapa" + (S.ctx.ingreso !== "fijo" ? ", más 2 porque tu ingreso varía" : "") + (S.ctx.dep === "si" ? ", más 1 porque alguien depende de vos" : "") + ".";
+  $("mgNote").textContent = (isMesada(S.ctx) ? "Para lo que no ves venir: un regalo, algo que se rompe, una salida especial. " : "Para el auto, el calefón o el regalo que no viste venir. ") + margenGoalText();
   // antes y después
   const cmp = $("pCompare"); cmp.innerHTML = "";
   if (S.raiseTip){
     const c = document.createElement("div"); c.className = "card";
     c.innerHTML = '<h3>Te entra más plata</h3><p class="small"></p><div class="grid2"><button class="btn sm" id="raiseYes">Sí, mandar la mitad al futuro</button><button class="btn sm ghost" id="raiseNo">Ahora no</button></div>';
-    c.querySelector("p").textContent = "Ahora te entran " + money(S.raiseTip.extra) + " más por mes. Si mandás la mitad a tu futuro antes de acostumbrarte a gastarla, casi no lo vas a notar. Es la idea del programa Save More Tomorrow.";
+    c.querySelector("p").textContent = "Ahora te entran " + money(S.raiseTip.extra) + " más por mes. Si mandás la mitad a tu futuro antes de acostumbrarte a gastarla, casi no lo vas a notar.";
     cmp.appendChild(c);
     c.querySelector("#raiseYes").onclick = () => {
       const base = S.split || recommendedSplit(S.ctx).split, p2 = plan();
@@ -1705,46 +1791,56 @@ function renderEdit(pl){
   box.appendChild(modes);
   if (S.mode === "auto"){ const p = document.createElement("p"); p.className = "small muted"; p.textContent = "Bambú reparte y ajusta solo, según tus rasgos y tu etapa. Si querés mover algo, pasá a \"Propuesto\"."; box.appendChild(p); return; }
   const rec = recommendedSplit(S.ctx).split;
-  const cur = Object.assign({}, S.split || rec);
+  const start = Object.assign({}, S.split || rec);
   const keys = ["disfrute","futuro","margen"];
-  const totc = keys.reduce((a,k) => a + cur[k], 0);
-  keys.forEach(k => cur[k] = Math.round(cur[k] / totc * 100));
-  const sliders = {};
+  const pool = pl.hasDebt ? pl.libre * 0.8 : pl.libre;
+  const tot0 = keys.reduce((a,k) => a + start[k], 0) || 1;
+  const amt = {}; keys.forEach(k => amt[k] = Math.round(pool * start[k] / tot0));
+  const intro = document.createElement("p"); intro.className = "small muted";
+  intro.textContent = "Tenés " + pesos(pool) + " por mes para repartir" + (pl.hasDebt ? ", después de separar lo de tus deudas" : "") + ". Poné cuánto querés en cada bolsillo.";
+  box.appendChild(intro);
+  if (!(pool > 0)){ const p = document.createElement("p"); p.className = "small"; p.textContent = "Este mes no queda plata para repartir después de tus gastos fijos."; box.appendChild(p); return; }
+  const inputs = {};
   keys.forEach(k => {
-    const w = document.createElement("label"); w.className = "slider"; w.htmlFor = "sl-" + k;
-    w.innerHTML = '<span></span><b class="num"></b><input type="range" min="0" max="100" step="1" style="grid-column:1/-1">';
+    const w = document.createElement("label"); w.htmlFor = "am-" + k;
+    w.innerHTML = '<span></span><span class="hint"></span><span class="money"><input inputmode="numeric"></span>';
     w.firstChild.textContent = POCKET_INFO[k].n;
-    const inp = w.querySelector("input"); inp.id = "sl-" + k; inp.value = cur[k];
-    w.querySelector("b").textContent = cur[k] + "%";
-    sliders[k] = {inp, lab: w.querySelector("b")};
-    box.appendChild(w);
+    w.children[1].textContent = k === "futuro" && (isMesada(S.ctx) || S.ctx.etapa === "estudio") ? "Metas y ahorro" : POCKET_INFO[k].d;
+    const inp = w.querySelector("input"); inp.id = "am-" + k; inp.value = fmtInt(amt[k]) || "0";
+    inputs[k] = inp; box.appendChild(w);
   });
+  const left = document.createElement("div"); left.className = "row small"; box.appendChild(left);
   const cons = document.createElement("div"); cons.className = "conseq"; box.appendChild(cons);
+  const err = document.createElement("div"); err.className = "err"; box.appendChild(err);
   const btns = document.createElement("div"); btns.className = "grid2";
   btns.innerHTML = '<button class="btn sm">Guardar</button><button class="btn sm ghost">Volver a lo recomendado</button>';
   box.appendChild(btns);
-  const conseq = () => {
-    const test = planFor(S.ctx, S.nums, cur), recp = planFor(S.ctx, S.nums, null);
-    const p1 = projection(test), p0 = projection(recp);
-    const ta = (test.P.disfrute) / 30;
-    const parts = [];
-    if (cur.disfrute < 15) parts.push("Con menos de 15% para disfrutar, el plan cuesta sostenerlo. Un plan que solo restringe se suele abandonar.");
+  const read = () => { keys.forEach(k => { const v = parseNum(inputs[k].value); amt[k] = v > 0 ? v : 0; }); return keys.reduce((a,k) => a + amt[k], 0); };
+  const toSplit = () => { const sum = keys.reduce((a,k) => a + amt[k], 0), rest = Math.max(0, pool - sum), o = {}; keys.forEach(k => o[k] = (amt[k] + (k === "futuro" ? rest : 0)) / pool * 100); return o; };
+  const update = () => {
+    const sum = read(), diff = pool - sum;
+    left.innerHTML = "";
+    const l = document.createElement("span"), r = document.createElement("b"); r.className = "num";
+    if (diff > 0.5){ l.textContent = "Sin asignar (va a tu futuro)"; r.textContent = pesos(diff); r.style.color = "var(--muted)"; }
+    else if (diff < -0.5){ l.textContent = "Te pasaste por"; r.textContent = pesos(-diff); r.style.color = "var(--bad)"; }
+    else { l.textContent = "Repartiste todo"; r.textContent = "✓"; r.style.color = "var(--green)"; }
+    left.append(l, r); err.textContent = "";
+    if (diff < -0.5){ cons.textContent = "Lo que pusiste supera lo que tenés para repartir. Bajá algún bolsillo."; return; }
+    const cur = toSplit(), test = planFor(S.ctx, S.nums, cur), recp = planFor(S.ctx, S.nums, null);
+    const p1 = projection(test), p0 = projection(recp), parts = [];
+    if (amt.disfrute < pool * 0.15) parts.push("Con tan poco para disfrutar, el plan cuesta sostenerlo. Un plan que solo restringe se suele abandonar.");
     if (!test.margenFull) parts.push(p1.mMonths === null ? "Sin plata para el margen, un imprevisto te obligaría a tocar tu futuro o endeudarte." : "Tu margen se llena en " + p1.mMonths + (p1.mMonths === 1 ? " mes" : " meses") + (p0.mMonths !== null && p0.mMonths !== p1.mMonths ? " (con lo recomendado: " + p0.mMonths + ")" : "") + ".");
     parts.push("En 12 meses sumás " + money(p1.fut) + " a tu futuro" + (Math.abs(p1.fut - p0.fut) > 1 ? " (con lo recomendado: " + money(p0.fut) + ")" : "") + ".");
-    parts.push("Podrías gastar unos " + money(ta) + " por día sin culpa.");
+    parts.push("Podrías gastar unos " + money(test.P.disfrute / 30) + " por día sin culpa.");
     cons.textContent = parts.join(" ");
   };
-  keys.forEach(k => sliders[k].inp.addEventListener("input", () => {
-    const v = Number(sliders[k].inp.value), others = keys.filter(x => x !== k);
-    const rest = 100 - v, oSum = others.reduce((a,x) => a + cur[x], 0);
-    cur[k] = v;
-    others.forEach((x, i) => { cur[x] = i === others.length - 1 ? rest - others.slice(0, -1).reduce((a,y) => a + cur[y], 0) : Math.round(oSum > 0 ? cur[x] / oSum * rest : rest / others.length); });
-    keys.forEach(x => { cur[x] = Math.max(0, cur[x]); sliders[x].inp.value = cur[x]; sliders[x].lab.textContent = cur[x] + "%"; });
-    conseq();
-  }));
-  btns.children[0].onclick = () => { S.split = Object.assign({}, cur); if (S.mode === "auto") S.mode = "editable"; save(); renderPlan(); };
+  keys.forEach(k => inputs[k].addEventListener("input", update));
+  btns.children[0].onclick = () => {
+    if (read() > pool + 0.5){ err.textContent = "Te pasaste de lo que tenés para repartir. Bajá algún bolsillo."; return; }
+    S.split = toSplit(); if (S.mode === "auto") S.mode = "editable"; save(); renderPlan();
+  };
   btns.children[1].onclick = () => { S.split = null; if (S.mode === "manual") S.mode = "editable"; save(); renderPlan(); };
-  conseq();
+  update();
 }
 $("mgBtn").onclick = () => { const v = parseNum($("mgAdd").value); if (!(v > 0)) return; addMov({type:"save", orig:v, cur:"ARS", cat:"margen", note:"Margen para imprevistos"}); $("mgAdd").value = ""; const pl = plan(); if (pl.margenFull) leaves(); renderPlan(); updateBell(); };
 function renderSim(){
@@ -1911,25 +2007,38 @@ function habitSuggestions(){
   const t = S.quiz.traits, dom = S.quiz.dominant;
   return [...HABITS].sort((a,b) => (b.t.includes(dom) ? 2 : 0) + Math.max(...b.t.map(x => t[x])) / 100 - ((a.t.includes(dom) ? 2 : 0) + Math.max(...a.t.map(x => t[x])) / 100));
 }
-function habitWeeks(){ if (!S.habit) return 0; return Object.keys(S.habit.checks || {}).filter(k => S.habit.checks[k]).length; }
+function habitWeeks(){ if (!S.habit) return 0; return Object.values(S.habit.checks || {}).filter(v => v === true).length; }
+function habitState(){
+  const days = Math.floor((Date.now() - new Date(S.habit.start)) / DAY), done = Math.floor(days / 7);
+  const pending = done > 0 && S.habit.checks[done - 1] === undefined ? done : 0;
+  return {days, done, pending, nextIn: 7 - (days % 7), week: done + 1, last: done > 0 ? S.habit.checks[done - 1] : undefined};
+}
+function startHabit(h){ S.habit = {k:h.k, start:new Date().toISOString(), checks:{}}; touch(); save(); leaves(14); refresh(); }
 function renderHabitMini(box){
-  box.innerHTML = "";
+  box.innerHTML = ""; box.className = box.className.replace(" grid2", "");
   if (!S.habit){
     const h = habitSuggestions()[0];
     box.innerHTML = '<span class="eyebrow">Un hábito por vez</span><p class="habit"><span class="hint"></span></p><button class="btn sm" style="align-self:flex-start">Empezar este hábito</button>';
     box.querySelector(".hint").textContent = h.txt;
-    box.querySelector("button").onclick = () => { S.habit = {k:h.k, start:new Date().toISOString(), checks:{}}; touch(); save(); leaves(14); refresh(); };
+    box.querySelector("button").onclick = () => startHabit(h);
     return;
   }
-  const h = HABITS.find(x => x.k === S.habit.k), w = week(), done = S.habit.checks[w];
+  const h = HABITS.find(x => x.k === S.habit.k), st = habitState();
   box.innerHTML = '<div class="row"><span class="eyebrow">Tu hábito</span><span class="small muted wk"></span></div><p class="habit" style="margin:0"><span class="hint"></span></p><div class="hbtns"></div>';
   box.querySelector(".hint").textContent = h.txt;
-  box.querySelector(".wk").textContent = "Semana " + Math.min(9, habitWeeks() + (done ? 0 : 1)) + " de unas 9";
+  box.querySelector(".wk").textContent = "Semana " + Math.min(9, st.pending || st.week) + " de 9";
   const b = box.querySelector(".hbtns");
-  if (done){ b.innerHTML = '<p class="small" style="color:var(--green);margin:0">Cumplido esta semana. Tu bambú sumó un nudo.</p>'; }
-  else { b.className = "grid2"; b.innerHTML = '<button class="btn sm">Lo cumplí esta semana</button><button class="btn sm ghost">Esta no pude</button>';
-    b.children[0].onclick = () => { S.habit.checks[w] = true; touch(); save(); leaves(18); refresh(); };
-    b.children[1].onclick = () => { S.habit.checks[w] = false; save(); refresh(); $("qToast") && ($("qToast").textContent = "No pasa nada. Un hábito se arma en semanas, no en días."); };
+  if (st.pending){
+    b.innerHTML = '<p class="small" style="margin:0 0 8px"><b></b></p><div class="grid2"><button class="btn sm">Sí, lo cumplí</button><button class="btn sm ghost">Esta no pude</button></div>';
+    b.querySelector("b").textContent = "Terminó tu semana " + st.pending + ". ¿Cumpliste tu hábito?";
+    const [yes, no] = b.querySelectorAll("button");
+    yes.onclick = () => { S.habit.checks[st.pending - 1] = true; touch(); save(); leaves(18); refresh(); };
+    no.onclick = () => { S.habit.checks[st.pending - 1] = false; save(); refresh(); };
+  } else {
+    const p = document.createElement("p"); p.className = "small muted"; p.style.margin = "0";
+    p.textContent = (st.last === true ? "La semana pasada lo cumpliste: tu bambú sumó un nudo. " : st.last === false ? "La semana pasada no salió, y está bien: un hábito se arma en semanas, no en días. " : "") +
+      "En " + st.nextIn + (st.nextIn === 1 ? " día" : " días") + " te preguntamos cómo te fue esta semana.";
+    b.appendChild(p);
   }
 }
 function renderHabit(){
@@ -1937,7 +2046,7 @@ function renderHabit(){
   if (!S.habit){ renderHabitMini(card); }
   else {
     const h = HABITS.find(x => x.k === S.habit.k), wks = habitWeeks();
-    card.innerHTML = '<span class="eyebrow">Tu hábito</span><span class="hint"></span><p class="small muted why2"></p><div class="weeks"></div><p class="small">Escrito como "cuando pasa esto, hago aquello". Esa forma simple aumenta mucho las chances de cumplir lo que te proponés (Gollwitzer, 1999). Para que algo se vuelva automático hacen falta unos dos meses (Lally et al., 2010).</p><div class="hm"></div>';
+    card.innerHTML = '<span class="eyebrow">Tu hábito</span><span class="hint"></span><p class="small muted why2"></p><div class="weeks"></div><p class="small">Cuando lo decís así, "cuando pasa esto, hago aquello", es mucho más fácil cumplirlo. Y en unos dos meses de hacerlo, te sale solo.</p><div class="hm"></div>';
     card.querySelector(".hint").textContent = h.txt;
     card.querySelector(".why2").textContent = h.why;
     const wk = card.querySelector(".weeks"); for (let i = 0; i < 9; i++){ const x = document.createElement("i"); if (i < wks) x.className = "on"; wk.appendChild(x); }
@@ -1949,7 +2058,7 @@ function renderHabit(){
     if (S.habit && S.habit.k === h.k) return;
     const b = document.createElement("button"); b.type = "button"; b.innerHTML = '<span></span><small></small>';
     b.firstChild.textContent = h.txt; b.lastChild.textContent = h.why;
-    b.onclick = () => { S.habit = {k:h.k, start:new Date().toISOString(), checks:{}}; touch(); save(); renderHabit(); };
+    b.onclick = () => startHabit(h);
     list.appendChild(b);
   });
 }
@@ -1962,7 +2071,7 @@ function beliefKeys(){
   if (t.control >= 60 && t.ansiedad >= 40) keys.push("culpa");
   if (t.impulso >= 60) keys.push("merezco");
   if (S.ctx && S.ctx.ingreso === "mesada") keys.push("respaldo");
-  keys.push("sufrimiento");
+  keys.push("origen");
   return keys.filter(k => S.beliefs[k] !== "no");
 }
 function renderBeliefs(){
@@ -2044,13 +2153,13 @@ function renderMe(){
   const nextTest = new Date(new Date(q.date).getTime() + 90*DAY);
   $("againBtn").textContent = Date.now() >= nextTest ? "Volver a hacer el test: ver cuánto creció tu bambú" : "Volver a hacer el test (sugerido desde el " + nextTest.toLocaleDateString("es-AR",{day:"numeric", month:"short"}) + ")";
   $("toast2").textContent = "";
-  renderHabit(); renderBeliefs(); renderPlus();
+  renderHabit(); renderBeliefs(); renderPlus(); paintSimple();
 }
 $("bNext").onclick = () => { bi = (bi + 1) % BIASES.length; renderMe(); };
 $("againBtn").onclick = startQuiz;
 $("wipeBtn").onclick = () => { $("wipeConfirm").hidden = false; };
 $("wipeNo").onclick = () => { $("wipeConfirm").hidden = true; };
-$("wipeYes").onclick = () => { try { localStorage.removeItem(KEY); } catch(_) {} S = blank(); $("wipeConfirm").hidden = true; aiTurns = []; show("welcome"); };
+$("wipeYes").onclick = () => { try { localStorage.removeItem(KEY); } catch(_) {} S = blank(); applySimple(); $("wipeConfirm").hidden = true; aiTurns = []; show("welcome"); };
 
 /* =========================================================
    ASISTENTE (Claude a través del artifact)
@@ -2198,6 +2307,8 @@ function openFeedback(){
 }
 const closeFeedback = () => { $("fbSheet").hidden = true; };
 $("betaBtn").onclick = openFeedback; $("fbOpen2").onclick = openFeedback;
+$("hFbYes").onclick = openFeedback;
+$("hFbNo").onclick = () => { S.fbSnooze = Date.now() + 7 * DAY; save(); $("hFeedback").hidden = true; };
 $("fbClose").onclick = closeFeedback; $("fbDone").onclick = closeFeedback;
 $("fbSheet").addEventListener("click", e => { if (e.target === $("fbSheet")) closeFeedback(); });
 [["fbRate","rating"],["fbRec","recommend"]].forEach(([id,key]) => $(id).querySelectorAll("button").forEach(b => b.onclick = () => { fb[key] = b.dataset.v; $(id).querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); }));
@@ -2216,13 +2327,60 @@ $("fbForm").addEventListener("submit", async e => {
   $("fbErr").textContent = ""; $("fbSend").disabled = true;
   try {
     const r = await fetch(FEEDBACK_API, {method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(data)});
-    if (!r.ok) throw new Error(r.status);
-    $("fbForm").hidden = true; $("fbThanks").hidden = false; leaves(16);
-  } catch(_) {
+    if (!r.ok){ let d = ""; try { d = (await r.json()).error || ""; } catch(_) {} throw new Error(d || r.status); }
+    S.fbSent = true; save(); $("hFeedback").hidden = true; $("fbForm").hidden = true; $("fbThanks").hidden = false; leaves(16);
+  } catch(err) {
     $("fbSend").disabled = false;
-    $("fbErr").textContent = "No se pudo enviar. Revisá tu conexión y probá de nuevo.";
+    $("fbErr").textContent = "No se pudo enviar. Probá de nuevo en un rato. (" + (err && err.message || "sin conexión") + ")";
   }
 });
+
+/* =========================================================
+   MODO SIMPLE Y RECORRIDO DE BIENVENIDA
+   ========================================================= */
+function applySimple(){
+  document.body.classList.toggle("simple", !!S.simple);
+  if (S.simple){
+    ["movSeg","planSeg"].forEach(id => { const first = $(id).querySelector("button"); if (first && !first.classList.contains("on")) first.click(); });
+    if (curTab === "worth") go("home");
+  }
+}
+function paintSimple(){
+  $("simpleState").textContent = S.simple ? "Simple" : "Completa";
+  $("simpleTxt").textContent = S.simple ? "Ves solo lo esencial: cuánto podés gastar hoy, anotar tus gastos y tus bolsillos." : "Ves todas las funciones: tarjetas, metas, lista de espera, lo que tenés, simulador y más.";
+  $("simpleBtn").textContent = S.simple ? "Mostrar todo" : "Pasar a simple";
+}
+$("simpleBtn").onclick = () => { S.simple = !S.simple; save(); applySimple(); paintSimple(); };
+const TOUR = [
+  {art:() => '<span class="mock">' + money(todayAllowance().perDay) + '</span>', t:"Lo que podés gastar hoy", p:"Arriba de todo vas a ver cuánto podés gastar hoy sin culpa. Si un día gastás menos, lo que sobra se suma al día siguiente."},
+  {art:'<span class="say">gasté 5.000 en el súper</span>', t:"Anotá como hablás", p:"Escribí lo que gastaste, como se lo dirías a alguien, y tocá Anotar. Bambú entiende el monto y la categoría solo."},
+  {art:"🌱", t:"Tus bolsillos y tu ayudante", p:"Tu plata se reparte en bolsillos: lo fijo, lo que disfrutás, tu futuro y un margen para imprevistos. Si tenés dudas, tocá el botón verde \"Preguntale a Bambú\"."},
+  {art:"👀", t:"¿Cómo querés ver Bambú?", p:"Podés cambiarlo cuando quieras, desde Vos → Más.", choose:true}
+];
+let tourI = 0;
+function openTour(){ tourI = 0; paintTour(); $("tour").hidden = false; }
+function closeTour(){ $("tour").hidden = true; S.toured = true; save(); }
+function paintTour(){
+  const st = TOUR[tourI];
+  $("tourArt").innerHTML = typeof st.art === "function" ? st.art() : st.art; $("tourTitle").textContent = st.t; $("tourText").textContent = st.p;
+  const d = $("tourDots"); d.innerHTML = ""; TOUR.forEach((_, j) => { const i = document.createElement("i"); if (j === tourI) i.className = "on"; d.appendChild(i); });
+  const bx = $("tourBtns"); bx.innerHTML = "";
+  if (st.choose){
+    const c = document.createElement("div"); c.className = "choice2";
+    [[true,"Simple","Solo lo esencial, con menos pantallas."],[false,"Completa","Todas las funciones a la vista."]].forEach(([v,n,dsc]) => {
+      const b = document.createElement("button"); b.type = "button"; b.innerHTML = "<b></b><span></span>";
+      b.firstChild.textContent = n; b.lastChild.textContent = dsc;
+      b.onclick = () => { S.simple = v; save(); applySimple(); closeTour(); };
+      c.appendChild(b);
+    });
+    bx.appendChild(c);
+  } else {
+    const n = document.createElement("button"); n.className = "btn"; n.textContent = "Siguiente"; n.onclick = () => { tourI++; paintTour(); };
+    const sk = document.createElement("button"); sk.className = "link"; sk.textContent = "Saltar"; sk.onclick = () => { tourI = TOUR.length - 1; paintTour(); };
+    bx.append(n, sk);
+  }
+}
+$("tourAgain").onclick = openTour;
 
 /* =========================================================
    HOJAS
@@ -2243,7 +2401,7 @@ function leaves(n){
 /* =========================================================
    ARRANQUE
    ========================================================= */
-paintCur();
+paintCur(); applySimple();
 if (S.user && S.quiz && S.nums && S.mode) go("home");
 else if (S.user && S.quiz && S.nums) show("modePick");
 else if (S.user && S.quiz) openMoment(false);
