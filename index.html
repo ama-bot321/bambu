@@ -905,7 +905,7 @@ body.simple .today .val{font-size:60px}
       <p class="err" id="fbErr" role="alert"></p>
       <button class="btn" id="fbSend" type="submit">Enviar</button>
     </form>
-    <div id="fbThanks" class="fbthanks" hidden><span aria-hidden="true">🌱</span><b>¡Gracias!</b><p class="small muted">Tu opinión ya está en camino. Si querés, podés volver a escribirnos cuando quieras desde el botón Beta.</p><button class="btn ghost" id="fbDone" type="button">Volver a Bambú</button></div>
+    <div id="fbThanks" class="fbthanks" hidden><span aria-hidden="true">🌱</span><b>¡Gracias por tu opinión!</b><p class="small muted">La vamos a leer para seguir mejorando Bambú. Si se te ocurre algo más, escribinos cuando quieras desde 💬 Opiná.</p><button class="btn ghost" id="fbDone" type="button">Volver a Bambú</button></div>
   </div>
 </div>
 <div class="sheet" id="sheet" hidden>
@@ -2326,14 +2326,8 @@ $("fbForm").addEventListener("submit", async e => {
   if (!FEEDBACK_API) return $("fbErr").textContent = "En esta vista de prueba no se envían opiniones. Probá desde el link web de Bambú.";
   $("fbErr").textContent = ""; $("fbSend").disabled = true;
   try {
-    // 1) La app pide a Bambú los códigos de las preguntas del formulario
-    const r = await fetch(FEEDBACK_API, {cache:"no-store"});
-    const info = r.ok ? await r.json() : null;
-    if (!info || !info.ok || !info.action) throw new Error((info && info.error) || "formulario no encontrado");
-    // 2) El navegador manda la respuesta directo a Google Forms, como si la persona llenara el formulario
-    const body = new URLSearchParams({fvv:"1", pageHistory:"0"});
-    Object.entries(info.preguntas || {}).forEach(([k, entry]) => { if (entry && data[k]) body.append(entry, data[k]); });
-    await fetch(info.action, {method:"POST", mode:"no-cors", body});
+    const r = await fetch(FEEDBACK_API, {method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(data)});
+    if (!r.ok){ let d = ""; try { d = (await r.json()).error || ""; } catch(_) {} throw new Error(d || r.status); }
     S.fbSent = true; save(); $("hFeedback").hidden = true; $("fbForm").hidden = true; $("fbThanks").hidden = false; leaves(16);
   } catch(err) {
     $("fbSend").disabled = false;
