@@ -558,7 +558,7 @@ body.simple .today .val{font-size:60px}
       <div class="avatar" aria-hidden="true">🎋</div>
     </div>
     <div class="today">
-      <span class="lbl">Hoy podés gastar sin culpa</span>
+      <span class="lbl">Esta semana podés gastar sin culpa</span>
       <span class="val" id="hToday"></span>
       <p id="hTodayTxt"></p>
       <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M10 90C30 40 60 15 95 8 88 45 60 78 10 90z" fill="currentColor"/></svg>
@@ -676,6 +676,15 @@ body.simple .today .val{font-size:60px}
         <div class="split" id="pSplit" role="img" aria-label="Reparto del ingreso en bolsillos"></div>
         <div id="pList"></div>
         <div id="pAdj"></div>
+      </div>
+      <div class="card">
+        <h3>Cómo funciona</h3>
+        <ol class="small" style="padding-left:20px; display:grid; gap:8px; margin:8px 0 0">
+          <li><b>Necesarios:</b> lo que pagás sí o sí, como alquiler, servicios, súper o transporte. Aunque varíe de un mes a otro, va acá.</li>
+          <li><b>Futuro y margen:</b> separalos apenas cobrás. Esa plata no se toca.</li>
+          <li><b>Disfrute:</b> lo que podés gastar libre, sin culpa. Es el número de la semana que ves en el Inicio.</li>
+          <li><b>Si te pasás en necesarios</b>, la diferencia se descuenta de tu disfrute. <b>Si te sobra</b>, al empezar el mes te sugerimos pasarlo a tu futuro.</li>
+        </ol>
       </div>
       <div class="card" id="pEdit"></div>
       <div class="card"><h3>Si seguís este plan</h3><p id="pProj"></p></div>
@@ -958,7 +967,7 @@ const Q = [
   // Cómo te sentís
   {s:"🎛️", q:"¿Sentís que vos manejás tu plata o que la plata te maneja a vos?", o:["Yo la manejo","Casi siempre la manejo yo","Mitad y mitad","Casi siempre me maneja ella","La plata me maneja a mí"], t:"ansiedad", sc:[0,.75,1.5,2.25,3]},
   {s:"🌙", q:"¿Qué tan seguido la plata te genera preocupación o estrés?", o:["Nunca","A veces","Seguido","Siempre"], t:"ansiedad", sc:[0,1,2,3]},
-  {s:"💭", q:"¿Qué tan de acuerdo estás con esta frase? \"Si tuviera más plata, se me solucionarían casi todos mis problemas.\"", o:["Nada de acuerdo","Un poco de acuerdo","Bastante de acuerdo","Totalmente de acuerdo"], t:"adoracion", sc:[0,1,2,3]},
+  {s:"💭", q:"\"Si tuviera más plata, se solucionarían casi todos mis problemas.\"", o:["Nada de acuerdo","Un poco de acuerdo","Bastante de acuerdo","Totalmente de acuerdo"], t:"adoracion", sc:[0,1,2,3]},
   {s:"🪜", q:"Cuando conseguís algo que querías comprar, ¿al poco tiempo ya estás pensando en lo próximo?", o:["Nunca","A veces","Seguido","Siempre"], t:"adoracion", sc:[0,1,2,3]},
   // Mini desafío (igual que la encuesta)
   {s:"🧠", q:"Ponés $100.000 en el banco y no sacás nada. Cada año, el banco te suma un 10% de lo que tenés en la cuenta. Después de 5 años, ¿cuánto vas a tener?", o:["Más de $150.000","Exactamente $150.000","Menos de $150.000","No sé"], k:0, quiz:true},
@@ -1012,7 +1021,7 @@ const BIASES = [
 ];
 
 const POCKET_INFO = {
-  fijos:{n:"Gastos fijos", d:"Lo que pagás sí o sí", why:"Lo que pagás sí o sí va primero. Lo ideal es que no se lleve más de la mitad de lo que te entra: así queda lugar para todo lo demás."},
+  fijos:{n:"Necesarios", d:"Lo que pagás sí o sí: súper, transporte, servicios", why:"Lo que pagás sí o sí va primero, aunque el monto varíe de un mes a otro. Lo ideal es que no se lleve más de la mitad de lo que te entra: así queda lugar para todo lo demás."},
   deudas:{n:"Salir de deudas", d:"Antes que ahorrar", why:"Una deuda crece más rápido que cualquier ahorro, por eso va antes. Si además está en otra moneda que tu ingreso, conviene cancelarla cuanto antes: si esa moneda sube, la deuda crece sola."},
   margen:{n:"Margen", d:"Imprevistos y regalos", why:"Para lo que no ves venir: algo que se rompe, un regalo, un mes flojo. Tenerlo cubierto te saca una preocupación de encima. Cuando se llena, lo que iba acá pasa a tu futuro."},
   futuro:{n:"Futuro", d:"Metas y retiro", why:"Separarlo apenas cobrás, antes de verlo, es la forma más fácil de ahorrar: lo que no ves, no lo gastás. No depende de la fuerza de voluntad."},
@@ -1031,7 +1040,7 @@ const CAT = Object.fromEntries(CATS.map(c => [c[0], {e:c[1], n:c[2], p:c[3]}]));
 const KEYWORDS = [
   [/s[uú]per|chino|verdu|almac|carnic/i,"super"],[/uber|taxi|colectivo|bondi|subte|nafta|sube|tren|cabify|didi/i,"transporte"],
   [/luz|\bgas\b|agua|internet|celu|tel[eé]fono|expensa|abl/i,"servicios"],[/alquiler/i,"alquiler"],[/facu|colegio|curso|libro/i,"educacion"],
-  [/farmacia|m[eé]dic|remedio|prepaga|dentista/i,"salud"],[/burga|hamburg|pizza|empanada|caf[eé]|resto|almuerzo|cena|helado|rappi|pedidos/i,"comida"],
+  [/farmacia|m[eé]dic|remedio|prepaga|dentista/i,"salud"],[/burga|hamburg|pizza|empanada|caf[eé]|resto|almuerzo|cena|helado|rappi|pedidos|kiosco|golosina|alfajor|comida/i,"comida"],
   [/boliche|\bbar\b|birra|cerveza|cine|recital|salida|entrada/i,"salidas"],[/ropa|zapatilla|remera|jean|campera/i,"ropa"],
   [/netflix|spotify|disney|hbo|\bmax\b|youtube|prime|suscrip/i,"suscripciones"],[/regalo|cumple/i,"regalos"],[/arregl|rompi|mec[aá]nico|calef[oó]n|plomero|imprevisto/i,"imprevistos"],
   [/tarjeta|cuota|pr[eé]stamo|deuda/i,"deudas"]
@@ -1347,7 +1356,7 @@ const savedTotal = () => (S.nums ? S.nums.ahorro : 0) + S.movs.filter(m => m.typ
 function recommendedSplit(c){
   const t = S.quiz ? S.quiz.traits : {}, adj = [];
   let d = 45, f = 35, m = 20;
-  if (isMesada(c)){ d = 50; f = 35; m = 15; adj.push("Te dan una mensualidad: lo más importante es el hábito de separar una parte apenas te llega, aunque sea poco."); }
+  if (isMesada(c)){ d = 60; f = 25; m = 15; adj.push("Te dan una mensualidad: lo más importante es el hábito de separar una parte apenas te llega, aunque sea poco."); }
   const mv = (from, to, n, why) => { const take = from === "d" ? Math.min(n, d - 15) : n; if (take <= 0) return;
     if (from === "d") d -= take; if (from === "f") f -= take; if (from === "m") m -= take;
     if (to === "d") d += take; if (to === "f") f += take; if (to === "m") m += take; adj.push(why); };
@@ -1360,6 +1369,7 @@ function recommendedSplit(c){
   if (c.etapa === "estudio" && !isMesada(c)) adj.push("Estás estudiando: el objetivo principal es el hábito, aunque los montos sean chicos.");
   if (c.ingreso === "variable") mv("d","m",5,"Tu ingreso varía: más margen para los meses flojos.");
   if (c.dep === "si") mv("d","m",5,"Alguien depende de vos: más protección.");
+  if (isMesada(c) && f > 35){ d += f - 35; f = 35; }
   return {split:{disfrute:d, futuro:f, margen:m}, adj};
 }
 function planFor(c, n, custom){
@@ -1392,8 +1402,10 @@ function monthStats(key){
 function todayAllowance(){
   const pl = plan(), st = monthStats(ym(now()));
   const d = now(), last = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate(), left = last - d.getDate() + 1;
-  const rest = pl.P.disfrute - st.disfrute;
-  return {perDay: Math.max(0, rest) / left, rest, left, over: rest < 0};
+  const extraFijos = Math.max(0, st.fijos - pl.P.fijos);
+  const rest = pl.P.disfrute - st.disfrute - extraFijos;
+  const perDay = Math.max(0, rest) / left;
+  return {perDay, week: Math.min(Math.max(0, rest), perDay * Math.min(7, left)), rest, left, over: rest < 0, extraFijos};
 }
 function projection(pl){
   const mMonthly = pl.P.margen, need = Math.max(0, pl.meta - pl.margenHave);
@@ -1403,7 +1415,7 @@ function projection(pl){
   return {mMonths, fut, mg};
 }
 function projText(pl){
-  if (pl.deficit) return "Hoy tus gastos fijos superan lo que te entra por " + money(pl.deficit) + ". Antes de repartir, el primer paso es bajar fijos o sumar ingresos. Bambú te acompaña en eso.";
+  if (pl.deficit) return "Hoy tus gastos necesarios superan lo que te entra por " + money(pl.deficit) + ". Antes de repartir, el primer paso es bajar gastos o sumar ingresos. Bambú te acompaña en eso.";
   const p = projection(pl);
   const parts = [];
   parts.push(pl.margenFull ? "Tu margen ya está lleno: lo que iba ahí se suma a tu futuro." :
@@ -1437,12 +1449,12 @@ function pocketRows(box, pl, withWhy){
 function margenGoalText(){
   if (isMesada(S.ctx)) return "Tu meta: juntar el equivalente a una mensualidad.";
   const m = Math.min(12, etapa(S.ctx).months + (S.ctx.ingreso !== "fijo" ? 2 : 0) + (S.ctx.dep === "si" ? 1 : 0));
-  return "Tu meta: " + m + " meses de gastos fijos, según tu etapa" + (S.ctx.ingreso !== "fijo" ? " y porque tu ingreso varía" : "") + (S.ctx.dep === "si" ? " y porque alguien depende de vos" : "") + ".";
+  return "Tu meta: " + m + " meses de gastos necesarios, según tu etapa" + (S.ctx.ingreso !== "fijo" ? " y porque tu ingreso varía" : "") + (S.ctx.dep === "si" ? " y porque alguien depende de vos" : "") + ".";
 }
 function baseText(pl){
-  if (S.ctx.ingreso === "variable") return "Calculado sobre tu mes flojo (" + money(pl.inc) + "). Después de tus gastos fijos quedan " + money(pl.libre) + " para repartir.";
+  if (S.ctx.ingreso === "variable") return "Calculado sobre tu mes flojo (" + money(pl.inc) + "). Después de tus gastos necesarios quedan " + money(pl.libre) + " para repartir.";
   if (isMesada(S.ctx)) return "Te entran " + money(pl.inc) + " por mes. " + (S.nums.fijos > 0 ? "Después de lo que pagás vos todos los meses quedan " + money(pl.libre) + " para repartir." : "Todo eso es para repartir.");
-  return "Te entran " + money(pl.inc) + ". Después de tus gastos fijos quedan " + money(pl.libre) + " para repartir.";
+  return "Te entran " + money(pl.inc) + ". Después de tus gastos necesarios quedan " + money(pl.libre) + " para repartir.";
 }
 function renderFirstPlan(){
   const pl = plan();
@@ -1480,7 +1492,7 @@ function addMov(m){
 }
 function parseQuick(txt){
   const t = txt.toLowerCase();
-  const m = t.match(/(\d+(?:[.,]\d+)*)\s*(lucas?|k\b|mil\b|palos?|millones?|usd|u\$s|d[oó]lares?|verdes)?/);
+  const m = t.replace(/\b(una|un)\s+(luca|palo|mil)\b/g, "1 $2").replace(/\bdos\s+(lucas|palos|mil)\b/g, "2 $1").replace(/\btres\s+(lucas|palos|mil)\b/g, "3 $1").replace(/\bcinco\s+(lucas|palos|mil)\b/g, "5 $1").replace(/\bdiez\s+(lucas|palos|mil)\b/g, "10 $1").match(/(\d+(?:[.,]\d+)*)\s*(lucas?|k\b|mil\b|palos?|millones?|mangos?|pesos?|usd|u\$s|d[oó]lares?|verdes)?/);
   if (!m) return null;
   let n = (/,\d{1,2}$/.test(m[1]) || /^\d+[.,]\d$/.test(m[1])) ? Number(m[1].replace(/\./g,"").replace(",",".")) : Number(m[1].replace(/[.,]/g,""));
   const u = m[2] || "";
@@ -1490,7 +1502,7 @@ function parseQuick(txt){
   const type = /cobr|ingres|me pagaron|me entr|sueldo|me dieron|mesada|mensualidad|vend[ií]/.test(t) ? "in" : /ahorr|guard|separ|apart/.test(t) ? "save" : "out";
   let cat = type === "in" ? "ingreso" : type === "save" ? (/margen|imprevist/.test(t) ? "margen" : "futuro") : "otros";
   if (type === "out") for (const [re,c] of KEYWORDS) if (re.test(t)){ cat = c; break; }
-  let note = txt.replace(m[0]," ").replace(/(^|\s)(gast[eé]|cobr[eé]|ahorr[eé]|pagu[eé]|en|el|la|los|las|un|una|de|del|al|por)(?=\s|$)/gi," ").replace(/(^|\s)(gast[eé]|cobr[eé]|ahorr[eé]|pagu[eé]|en|el|la|los|las|un|una|de|del|al|por)(?=\s|$)/gi," ").replace(/\s+/g," ").trim();
+  let note = txt.replace(m[0]," ").replace(/(^|\s)(una|un|dos|tres|cinco|diez)\s+(lucas?|palos?|mil)(?=\s|$)/gi," ").replace(/(^|\s)(lucas?|mangos?|pesos?)(?=\s|$)/gi," ").replace(/(^|\s)(me|garp[eé]|gast[eé]|cobr[eé]|ahorr[eé]|pagu[eé]|en|el|la|los|las|un|una|de|del|al|por)(?=\s|$)/gi," ").replace(/(^|\s)(gast[eé]|cobr[eé]|ahorr[eé]|pagu[eé]|en|el|la|los|las|un|una|de|del|al|por)(?=\s|$)/gi," ").replace(/\s+/g," ").trim();
   note = note ? note.charAt(0).toUpperCase() + note.slice(1) : (type === "out" ? CAT[cat].n : type === "in" ? "Ingreso" : "Ahorro");
   return {type, orig:n, cur: usd ? "USD" : "ARS", cat, note};
 }
@@ -1522,9 +1534,13 @@ function cardCycle(c){
 const budgetCap = b => b.kind === "pct" ? baseIncome(S.ctx, S.nums) * b.val / 100 : b.val;
 function alerts(){
   const A = [], pl = plan(), st = monthStats(ym(now()));
-  if (pl.deficit) A.push(["bad","Ojo: tus gastos fijos superan lo que te entra por " + money(pl.deficit) + ". El primer paso es bajar fijos o sumar ingresos."]);
+  if (pl.deficit) A.push(["bad","Ojo: tus gastos necesarios superan lo que te entra por " + money(pl.deficit) + ". El primer paso es bajar gastos o sumar ingresos."]);
   if (pl.P.disfrute > 0 && st.disfrute > pl.P.disfrute) A.push(["bad","Te pasaste del disfrute por " + money(st.disfrute - pl.P.disfrute) + ". No pasa nada: el mes que viene arrancás de cero."]);
   else if (pl.P.disfrute > 0 && st.disfrute > pl.P.disfrute * .85) A.push(["warn","Atención: usaste el " + Math.round(st.disfrute / pl.P.disfrute * 100) + "% de tu disfrute del mes."]);
+  if (pl.P.fijos > 0 && st.fijos > pl.P.fijos) A.push(["warn","Te pasaste " + money(st.fijos - pl.P.fijos) + " de lo que pagás sí o sí. Lo descontamos de tu disfrute para que el mes cierre."]);
+  { const pd = new Date(now().getFullYear(), now().getMonth()-1, 1), ps = monthStats(ym(pd));
+    if (ps.in > 0 || ps.out > 0){ const left = Math.max(0, pl.P.disfrute - ps.disfrute - Math.max(0, ps.fijos - pl.P.fijos)) + Math.max(0, pl.P.fijos - ps.fijos);
+      if (left > 0 && now().getDate() <= 7) A.push(["ok","El mes pasado te sobraron " + money(left) + ". Si no los vas a usar, pasalos a tu futuro: anotá \"ahorré " + fmtInt(Math.round(left)) + "\"."]); } }
   if (S.ctx && S.ctx.deuda !== "no" && S.ctx.deudaMoneda === "USD" && S.ctx.pais === "Argentina") A.push(["warn","Tenés una deuda en dólares y tu ingreso es en pesos. Si el dólar sube, la deuda crece sola. Conviene priorizar cancelarla."]);
   S.budgets.forEach(b => { const cap = budgetCap(b), u = st.cats[b.cat] || 0;
     if (u > cap) A.push(["bad","Te pasaste de tu guía de " + CAT[b.cat].n.toLowerCase() + " por " + money(u - cap) + ". ¿Querés ajustar el monto?"]);
@@ -1558,17 +1574,17 @@ function renderHome(){
   const pl = plan(), st = monthStats(ym(now())), ta = todayAllowance();
   $("hMonth").textContent = now().toLocaleDateString("es-AR",{weekday:"long", day:"numeric", month:"long"});
   $("hHello").textContent = "Hola, " + S.user.name;
-  $("hToday").textContent = money(ta.perDay);
-  $("hTodayTxt").textContent = pl.deficit ? "Este mes tus fijos superan tu ingreso. Mirá tus alertas para ver por dónde empezar." :
+  $("hToday").textContent = money(ta.week);
+  $("hTodayTxt").textContent = pl.deficit ? "Este mes tus gastos necesarios superan tu ingreso. Mirá tus alertas para ver por dónde empezar." :
     ta.over ? "Este mes ya usaste tu disfrute. No pasa nada: el mes que viene arrancás de cero." :
-    "Te quedan " + money(ta.rest) + " de disfrute para " + ta.left + (ta.left === 1 ? " día" : " días") + ". Lo que no gastes hoy se suma a mañana.";
+    "Unos " + money(ta.perDay) + " por día. Te quedan " + money(ta.rest) + " de disfrute para " + ta.left + (ta.left === 1 ? " día" : " días") + (ta.extraFijos > 0 ? " (ya descontamos " + money(ta.extraFijos) + " que te pasaste en gastos necesarios)" : "") + ". Lo que no gastes se suma a lo que sigue.";
   if (isMesada(S.ctx)){
     const inc = baseIncome(S.ctx, S.nums), k = inc > 0 ? savedTotal() / inc : 0;
     $("hFree").textContent = k.toLocaleString("es-AR",{maximumFractionDigits:1}) + (Math.abs(k - 1) < .05 ? " mensualidad" : " mensualidades");
     $("hFreeTxt").textContent = k < 1 ? "Lo que ahorraste. Primer objetivo: juntar una mensualidad." : "Lo que ahorraste. ¡Muy bien! Seguí sumando.";
   } else {
   const months = S.nums.fijos > 0 ? savedTotal() / S.nums.fijos : Infinity;
-  $("hFree").textContent = isFinite(months) ? months.toLocaleString("es-AR",{maximumFractionDigits:1}) + (Math.abs(months - 1) < .05 ? " mes" : " meses") : "Sin fijos cargados";
+  $("hFree").textContent = isFinite(months) ? months.toLocaleString("es-AR",{maximumFractionDigits:1}) + (Math.abs(months - 1) < .05 ? " mes" : " meses") : "Sin gastos necesarios cargados";
   $("hFreeTxt").textContent = !isFinite(months) ? "" : months < 1 ? "Primer objetivo: llegar a un mes." : months < 3 ? "Apuntá a 3 meses para dormir tranquilo." : months < 6 ? "Buen colchón. Con 6 tenés libertad real." : "Tenés libertad para elegir sin miedo.";
   }
   paintAlerts($("hAlerts"), alerts().filter(a => a[0] !== "ok"), 2);
@@ -1620,7 +1636,7 @@ function renderSummary(){
 }
 function quick(){
   const r = parseQuick($("qAdd").value);
-  if (!r){ $("qToast").textContent = "No encontré un monto. Probá así: «gasté 2.500 en el colectivo»."; return; }
+  if (!r){ const t = $("qAdd").value.trim(); if (t && sample && aiAllowance() > 0){ $("qAdd").value = ""; $("qToast").textContent = ""; $("fab").onclick(); askAi(t); return; } $("qToast").textContent = "No encontré un monto. Probá así: «gasté 2.500 en el colectivo»."; return; }
   addMov(r); $("qAdd").value = "";
   const lab = r.type === "out" ? CAT[r.cat].n : r.type === "in" ? "Ingresos" : "Ahorro";
   renderHome(); updateBell();
@@ -1799,7 +1815,7 @@ function renderEdit(pl){
   const intro = document.createElement("p"); intro.className = "small muted";
   intro.textContent = "Tenés " + pesos(pool) + " por mes para repartir" + (pl.hasDebt ? ", después de separar lo de tus deudas" : "") + ". Poné cuánto querés en cada bolsillo.";
   box.appendChild(intro);
-  if (!(pool > 0)){ const p = document.createElement("p"); p.className = "small"; p.textContent = "Este mes no queda plata para repartir después de tus gastos fijos."; box.appendChild(p); return; }
+  if (!(pool > 0)){ const p = document.createElement("p"); p.className = "small"; p.textContent = "Este mes no queda plata para repartir después de tus gastos necesarios."; box.appendChild(p); return; }
   const inputs = {};
   keys.forEach(k => {
     const w = document.createElement("label"); w.htmlFor = "am-" + k;
@@ -2177,7 +2193,7 @@ function webSample(url){
     const d = await r.json(); return d.text || "";
   };
   const f = async (i, o) => ({text: await call(i, o), truncated:false});
-  f.json = async (i, o) => { const t = await call(i, o); const m = t.match(/\{[\s\S]*\}/); try { return JSON.parse(m ? m[0] : t); } catch(_) { throw {code:"invalid_json", text:t}; } };
+  f.json = async (i, o) => { const t = await call(i, o); const m = t.match(/\{[\s\S]*\}/); try { return JSON.parse(m ? m[0] : t); } catch(_) { const clean = t.replace(/```(json)?/g, "").trim(); if (clean && !clean.startsWith("{")) return {reply: clean, actions: []}; throw {code:"invalid_json", text:t}; } };
   return f;
 }
 (async () => {
@@ -2205,10 +2221,10 @@ function contextSummary(){
     "Rasgos (0 a 100): " + tr + ". Dominante: " + TRAITS[q.dominant].n + ".",
     "Saber (preguntas de conocimiento correctas): " + q.saber + " de 3. Hacer (hábitos): " + q.hacer + " de 4.",
     "Etapa: " + etapa(S.ctx).n + ". Ingreso: " + (INGRESOS.find(i => i.k === S.ctx.ingreso) || {}).n + ". Personas a cargo: " + S.ctx.dep + ". Deudas: " + S.ctx.deuda + (S.ctx.deudaMoneda ? " en " + S.ctx.deudaMoneda : "") + ". País: " + S.ctx.pais + ".",
-    "Ingreso usado para el plan: " + pesos(pl.inc) + ". Gastos fijos: " + pesos(S.nums.fijos) + ". Ahorro total: " + pesos(savedTotal()) + (S.nums.deuda ? ". Deuda: " + pesos(S.nums.deuda) : "") + ".",
+    "Ingreso usado para el plan: " + pesos(pl.inc) + ". Gastos necesarios (lo que paga sí o sí, aunque varíe): " + pesos(S.nums.fijos) + ". Ahorro total: " + pesos(savedTotal()) + (S.nums.deuda ? ". Deuda: " + pesos(S.nums.deuda) : "") + ".",
     "Modo del plan: " + S.mode + ". Bolsillos por mes: " + POCKET_ORDER.filter(k => pl.P[k] > 0).map(k => POCKET_INFO[k].n + " " + pesos(pl.P[k])).join(", ") + ". Reparto de lo libre: disfrute " + Math.round(pl.split.disfrute) + "%, futuro " + Math.round(pl.split.futuro) + "%, margen " + Math.round(pl.split.margen) + "%.",
     "Margen para imprevistos: " + pesos(pl.margenHave) + " de una meta de " + pesos(pl.meta) + ".",
-    "Este mes: entró " + pesos(st.in) + ", salió " + pesos(st.out) + ", disfrute usado " + pesos(st.disfrute) + ". Hoy puede gastar sin culpa " + pesos(ta.perDay) + ".",
+    "Este mes: entró " + pesos(st.in) + ", salió " + pesos(st.out) + ", disfrute usado " + pesos(st.disfrute) + ". Esta semana puede gastar sin culpa " + pesos(ta.week) + " (unos " + pesos(ta.perDay) + " por día).",
     "Metas: " + (S.goals.length ? S.goals.map(g => g.name + " (" + pesos(g.saved) + " de " + pesos(g.target) + ")").join("; ") : "ninguna") + ".",
     "Hábito actual: " + (S.habit ? HABITS.find(h => h.k === S.habit.k).txt : "ninguno") + ".",
     "Últimos movimientos: " + (S.movs.slice(0,8).map(m => (m.type === "out" ? "gasto" : m.type === "in" ? "ingreso" : "ahorro") + " " + pesos(m.amt) + " " + (m.note || "")).join("; ") || "ninguno") + "."
@@ -2217,6 +2233,10 @@ function contextSummary(){
 }
 const AI_RULES = () => "Sos el asistente de Bambú, una app gratuita que ayuda a las personas a llevarse mejor con su plata, basada en la psicología del dinero (Housel, Eker, Klontz, economía conductual). " +
   "Hablás en español rioplatense, tuteando con voseo. Tono: cercano y profesional, sin retar, sin sermones y sin culpa. Respuestas cortas: 2 a 5 oraciones, con números concretos cuando sirvan. " +
+  "Entendés el lenguaje coloquial y el lunfardo argentino: luca = mil pesos, palo = un millón, mango o mangos = pesos, guita, morlacos o tarasca = plata, garpar = pagar, quedar seco o fundirse = quedarse sin plata, bondi, birra, finde, abreviaturas y errores de tipeo. " +
+  "Si un mensaje es ambiguo, interpretalo de la forma más razonable o hacé una pregunta corta; nunca contestes que no entendiste sin intentarlo. " +
+  "Los temas son amplios: todo lo que tenga que ver con la plata, el trabajo, las compras, las deudas, las metas o cómo se siente la persona con su plata. Si te preguntan algo totalmente ajeno, respondé en una frase y volvé a la plata con amabilidad. " +
+  "Cómo funciona el plan de Bambú: primero se cubren los gastos necesarios (lo que se paga sí o sí, como alquiler, servicios, súper o transporte, aunque varíen); lo que queda se reparte en futuro, margen para imprevistos y disfrute. Futuro y margen se separan apenas se cobra y no se tocan. El disfrute es lo que se puede gastar libre y es el número de la semana del Inicio. Si la persona se pasa en necesarios, la diferencia se descuenta del disfrute; si le sobra, al empezar el mes se le sugiere pasarlo al futuro. Cuando el margen llega a su meta, su parte pasa al futuro. " +
   "Reglas: no recomendás inversiones, activos ni productos puntuales; podés explicar conceptos generales. Aclarás que no es asesoramiento financiero cuando des algo parecido a un consejo de inversión. No prometés resultados. Nunca inventes datos de la persona: usá solo los que figuran abajo. " +
   "Podés proponer acciones, pero la persona las confirma con un botón. Acciones posibles: " +
   "add_movement {movType: \"out\"|\"in\"|\"save\", amount: número en pesos, category: una de [" + CATS.map(c => c[0]).join(", ") + ", ingreso, futuro, margen], note: texto corto}; " +
@@ -2347,14 +2367,14 @@ function applySimple(){
 }
 function paintSimple(){
   $("simpleState").textContent = S.simple ? "Simple" : "Completa";
-  $("simpleTxt").textContent = S.simple ? "Ves solo lo esencial: cuánto podés gastar hoy, anotar tus gastos y tus bolsillos." : "Ves todas las funciones: tarjetas, metas, lista de espera, lo que tenés, simulador y más.";
+  $("simpleTxt").textContent = S.simple ? "Ves solo lo esencial: cuánto podés gastar esta semana, anotar tus gastos y tus bolsillos." : "Ves todas las funciones: tarjetas, metas, lista de espera, lo que tenés, simulador y más.";
   $("simpleBtn").textContent = S.simple ? "Mostrar todo" : "Pasar a simple";
 }
 $("simpleBtn").onclick = () => { S.simple = !S.simple; save(); applySimple(); paintSimple(); };
 const TOUR = [
-  {art:() => '<span class="mock">' + money(todayAllowance().perDay) + '</span>', t:"Lo que podés gastar hoy", p:"Arriba de todo vas a ver cuánto podés gastar hoy sin culpa. Si un día gastás menos, lo que sobra se suma al día siguiente."},
+  {art:() => '<span class="mock">' + money(todayAllowance().week) + '</span>', t:"Lo que podés gastar esta semana", p:"Arriba de todo vas a ver cuánto podés gastar esta semana sin culpa. Si gastás menos, lo que sobra se suma a lo que sigue."},
   {art:'<span class="say">gasté 5.000 en el súper</span>', t:"Anotá como hablás", p:"Escribí lo que gastaste, como se lo dirías a alguien, y tocá Anotar. Bambú entiende el monto y la categoría solo."},
-  {art:"🌱", t:"Tus bolsillos y tu ayudante", p:"Tu plata se reparte en bolsillos: lo fijo, lo que disfrutás, tu futuro y un margen para imprevistos. Si tenés dudas, tocá el botón verde \"Preguntale a Bambú\"."},
+  {art:"🌱", t:"Tus bolsillos y tu ayudante", p:"Tu plata se reparte en bolsillos: lo necesario, lo que disfrutás, tu futuro y un margen para imprevistos. Si tenés dudas, tocá el botón verde \"Preguntale a Bambú\"."},
   {art:"👀", t:"¿Cómo querés ver Bambú?", p:"Podés cambiarlo cuando quieras, desde Vos → Más.", choose:true}
 ];
 let tourI = 0;

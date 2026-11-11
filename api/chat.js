@@ -4,7 +4,7 @@ const MODEL = process.env.BAMBU_MODEL || "claude-haiku-5-5";
 const hits = new Map(); // límite simple por IP (se reinicia cuando Vercel recicla la función)
 const LIMIT = 20, WINDOW = 60 * 60 * 1000;
 
-const SAFETY = "Sos el asistente de Bambú, una app sobre psicología del dinero. Respondé solo sobre plata personal, hábitos y el uso de la app. " +
+const SAFETY = "Sos el asistente de Bambú, una app sobre psicología del dinero. Respondé sobre plata personal en sentido amplio (gastos, ahorro, trabajo, compras, deudas, metas, emociones con la plata) y el uso de la app. Entendés lenguaje coloquial argentino. " +
   "No des asesoramiento financiero personalizado ni recomiendes inversiones o productos puntuales. Si te piden algo fuera de tema, redirigí con amabilidad. " +
   "Respondé siempre con un único objeto JSON como pide el mensaje del usuario.";
 
@@ -34,7 +34,7 @@ module.exports = async function handler(req, res) {
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {"content-type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY || "", "anthropic-version": "2023-06-01"},
-      body: JSON.stringify({model: MODEL, max_tokens: 700, system: SAFETY, messages: clean})
+      body: JSON.stringify({model: MODEL, max_tokens: 1000, system: SAFETY, messages: clean})
     });
     if (r.status === 429) return res.status(429).json({error: "rate_limited"});
     if (!r.ok) {
